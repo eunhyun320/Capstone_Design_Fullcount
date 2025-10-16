@@ -1,6 +1,7 @@
 // // 즉시 실행 함수로 전체 코드를 감싸서 전역 변수 충돌을 방지합니다.
 // api 호출 횟수 제한 이슈로 실제 서비스 전까지 주석 처리
 // 기상청 오류 나요ㅠㅠ
+// ㅠㅠ
 //         (function() {
 //             // 1. DOM 요소 가져오기
 //             const weatherInfo = document.getElementById('weather-info');
