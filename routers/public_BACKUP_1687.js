@@ -219,6 +219,7 @@ router.get(['/rules', '/rules.html'], (req, res) => res.render('rules/rules.html
 
 /* ===== 위치 안내 ===== */
 router.get(['/location_come', '/location_come.html'], (req, res) => res.render('location/location_come.html'));
+<<<<<<< HEAD
 router.get(['/location', '/location.html'],           (req, res) => res.render('location/location.html'));
 router.get('/poi', async (req, res) => {
   try {
@@ -229,6 +230,9 @@ router.get('/poi', async (req, res) => {
     res.status(500).send('DB 오류 발생');
   }
 });
+=======
+router.get(['/location', '/location.html'], (req, res) => res.render('location/location.html'));
+>>>>>>> origin/feature/eunhyun
 
 /* ===== 고객지원 루트 ===== */
 router.get(['/support', '/support.html'], (req, res) => res.render('support/support.html'));

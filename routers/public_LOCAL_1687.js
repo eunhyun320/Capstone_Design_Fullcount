@@ -13,39 +13,9 @@ router.get(
 );
 
 /* ===== 선수단 정보 ===== */
-router.get(['/teaminfo_coach', '/teaminfo_coach.html'], (req, res) => res.render('teaminfo/teaminfo_coach.html'));
+router.get(['/teaminfo_coach', '/teaminfo_coach.html'],   (req, res) => res.render('teaminfo/teaminfo_coach.html'));
 router.get(['/teaminfo_hitter', '/teaminfo_hitter.html'], (req, res) => res.render('teaminfo/teaminfo_hitter.html'));
 router.get(['/teaminfo_pitcher', '/teaminfo_pitcher.html'], (req, res) => res.render('teaminfo/teaminfo_pitcher.html'));
-router.get(['/teaminfo_main', '/teaminfo_main.html'], (req, res) => res.render('teaminfo/teaminfo_main.html'));
-router.get('/playerinfodetail', async (req, res, next) => {
-  try {
-    const playerId = req.query.player_id && Number(req.query.player_id);
-    if (!playerId) return res.status(400).send('player_id가 필요합니다.');
-
-    const [rows] = await pool.query(
-      `
-      SELECT 
-        pi.*,
-        DATE_FORMAT(pi.birthdate, '%Y년 %c월 %e일') AS birthdate_kr
-      FROM player_info pi
-      WHERE pi.player_id = ?
-      LIMIT 1
-      `,
-      [playerId]
-    );
-
-    if (!rows.length) {
-      return res.status(404).send(`선수를 찾을 수 없습니다. (player_id=${playerId})`);
-    }
-
-    const p = { ...rows[0], birthdate: rows[0].birthdate_kr };
-    delete p.birthdate_kr;
-
-    res.render('teaminfo/playerinfodetail.html', { p });
-  } catch (err) {
-    next(err);
-  }
-});
 
 /* ===== 경기정보 ===== */
 router.get(['/game_match_list', '/game_match_list.html'], (req, res) => res.render('gameinfo/game_match_list.html'));
@@ -69,7 +39,7 @@ pool.query(`
 /** 생성: POST /api/game  → { ok:true, id } */
 router.post('/api/game', async (req, res) => {
   try {
-    const payload = req.body || {};
+    const payload  = req.body || {};
     const gameDate = payload.gameDate || null; // 'YYYY-MM-DD'
     const [r] = await pool.query(
       `INSERT INTO \`${DB}\`.game_page (game_date, payload) VALUES (?, ?)`,
@@ -78,7 +48,7 @@ router.post('/api/game', async (req, res) => {
     res.json({ ok: true, id: r.insertId });
   } catch (e) {
     console.error('[POST /api/game]', e);
-    res.status(500).json({ ok: false, error: e.sqlMessage || e.message });
+    res.status(500).json({ ok:false, error: e.sqlMessage || e.message });
   }
 });
 
@@ -86,20 +56,20 @@ router.post('/api/game', async (req, res) => {
 router.put('/api/game/:id', async (req, res) => {
   try {
     const id = Number(req.params.id);
-    if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'invalid id' });
+    if (!Number.isFinite(id)) return res.status(400).json({ ok:false, error:'invalid id' });
 
-    const payload = req.body || {};
+    const payload  = req.body || {};
     const gameDate = payload.gameDate || null;
 
     const [r] = await pool.query(
       `UPDATE \`${DB}\`.game_page SET game_date=?, payload=? WHERE game_id=?`,
       [gameDate, JSON.stringify(payload), id]
     );
-    if (r.affectedRows === 0) return res.status(404).json({ ok: false, error: 'not_found' });
-    res.json({ ok: true, updated: true });
+    if (r.affectedRows === 0) return res.status(404).json({ ok:false, error:'not_found' });
+    res.json({ ok:true, updated:true });
   } catch (e) {
     console.error('[PUT /api/game/:id]', e);
-    res.status(500).json({ ok: false, error: e.sqlMessage || e.message });
+    res.status(500).json({ ok:false, error: e.sqlMessage || e.message });
   }
 });
 // 최신 한 건
@@ -111,10 +81,10 @@ router.get('/api/game/latest', async (req, res, next) => {
         ORDER BY updated_at DESC, game_id DESC
         LIMIT 1`
     );
-    if (!rows.length) return res.status(404).json({ ok: false, error: 'not_found' });
+    if (!rows.length) return res.status(404).json({ ok:false, error:'not_found' });
     const row = rows[0];
     const payload = typeof row.payload === 'string' ? JSON.parse(row.payload) : row.payload;
-    res.json({ ok: true, id: row.game_id, gameDate: row.game_date, ...payload });
+    res.json({ ok:true, id: row.game_id, gameDate: row.game_date, ...payload });
   } catch (e) { next(e); }
 });
 
@@ -122,17 +92,17 @@ router.get('/api/game/latest', async (req, res, next) => {
 router.get('/api/game/:id', async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'invalid id' });
+    if (!Number.isFinite(id)) return res.status(400).json({ ok:false, error:'invalid id' });
     const [rows] = await pool.query(
       `SELECT game_id, game_date, payload
          FROM \`${DB}\`.game_page
         WHERE game_id=? LIMIT 1`,
       [id]
     );
-    if (!rows.length) return res.status(404).json({ ok: false, error: 'not_found' });
+    if (!rows.length) return res.status(404).json({ ok:false, error:'not_found' });
     const row = rows[0];
     const payload = typeof row.payload === 'string' ? JSON.parse(row.payload) : row.payload;
-    res.json({ ok: true, id: row.game_id, gameDate: row.game_date, ...payload });
+    res.json({ ok:true, id: row.game_id, gameDate: row.game_date, ...payload });
   } catch (e) { next(e); }
 });
 
@@ -187,7 +157,7 @@ router.get('/game_player_lineup', async (req, res) => {
     const [awayLineup] = await pool.query(lineupSQL, [g.game_id, g.away_team_id]);
 
     const isAnnounced = Number(g.is_lineup_announced) === 1 ||
-      (homeLineup.length > 0 && awayLineup.length > 0);
+                        (homeLineup.length > 0 && awayLineup.length > 0);
 
     res.render('gameinfo/game_player_lineup.html', {
       game: {
@@ -215,7 +185,7 @@ router.get(['/gameinfo/schedule', '/gameinfo/schedule.html'], (req, res) => res.
 
 /* ===== 야구 규칙 ===== */
 router.get(['/rules_attack', '/rules_attack.html'], (req, res) => res.render('rules/rules_attack.html'));
-router.get(['/rules', '/rules.html'], (req, res) => res.render('rules/rules.html'));
+router.get(['/rules', '/rules.html'],               (req, res) => res.render('rules/rules.html'));
 
 /* ===== 위치 안내 ===== */
 router.get(['/location_come', '/location_come.html'], (req, res) => res.render('location/location_come.html'));
@@ -312,11 +282,11 @@ router.get([
     if (!item) return res.status(404).send('공지를 찾을 수 없습니다.');
 
     // 조회수 +1 (실패 무시)
-    pool.query(`UPDATE \`${DB}\`.notices SET view_count=view_count+1 WHERE notice_id=?`, [id]).catch(() => { });
+    pool.query(`UPDATE \`${DB}\`.notices SET view_count=view_count+1 WHERE notice_id=?`, [id]).catch(()=>{});
 
     res.render('support/announcement_detail.html', {
       notice: item,
-      item: item // 호환용
+      item   : item // 호환용
     });
   } catch (e) { next(e); }
 });

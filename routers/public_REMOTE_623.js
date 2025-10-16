@@ -219,16 +219,7 @@ router.get(['/rules', '/rules.html'], (req, res) => res.render('rules/rules.html
 
 /* ===== 위치 안내 ===== */
 router.get(['/location_come', '/location_come.html'], (req, res) => res.render('location/location_come.html'));
-router.get(['/location', '/location.html'],           (req, res) => res.render('location/location.html'));
-router.get('/poi', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM poi');
-    res.json(rows);
-  } catch (err) {
-    console.error('[GET /api/poi]', err);
-    res.status(500).send('DB 오류 발생');
-  }
-});
+router.get(['/location', '/location.html'], (req, res) => res.render('location/location.html'));
 
 /* ===== 고객지원 루트 ===== */
 router.get(['/support', '/support.html'], (req, res) => res.render('support/support.html'));
