@@ -115,7 +115,7 @@ const express = require('express');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
 const morgan = require('morgan');
-
+const axios = require('axios');
 const app = express();
 
 // ---------------------------------------------------------------------
@@ -130,7 +130,124 @@ app.use(session({
   saveUninitialized: false,
   cookie: { httpOnly: true, sameSite: 'lax' }
 }));
+// // ★★★ 안정성을 위해 '두 단계 이전' 발표 자료를 사용하는 코드 ★★★
+// app.use(async (req, res, next) => {
+//     const cacheDuration = 30 * 60 * 1000;
 
+//     if (req.session.weatherInfo && req.session.weatherTimestamp) {
+//         const age = Date.now() - req.session.weatherTimestamp;
+//         if (age < cacheDuration) {
+//             res.locals.weatherInfo = req.session.weatherInfo;
+//             return next();
+//         }
+//     }
+
+//     try {
+//         console.log("\n-----------------------------------------");
+//         console.log("[🚀 API 호출 시작] 새로운 날씨 정보를 가져옵니다...");
+
+//         const authKey = '94LfPg3YQdaC3z4N2JHWbA';
+//         const daeguLionsPark = { nx: 89, ny: 90 };
+        
+//         // ★★★ 여기가 핵심: '두 단계 이전' 발표 시각을 사용하도록 로직 변경 ★★★
+//         const getUltraStableForecastTime = () => {
+//             const now = new Date();
+//             const nextHourDate = new Date(now);
+//             nextHourDate.setHours(now.getHours() + 1);
+
+//             let dateForFcst = new Date(now);
+//             const currentHour = now.getHours();
+//             const availableTimes = [2, 5, 8, 11, 14, 17, 20, 23];
+//             let latestTmfcHour;
+
+//             for (let i = availableTimes.length - 1; i >= 0; i--) {
+//                 if (currentHour >= availableTimes[i]) {
+//                     latestTmfcHour = availableTimes[i];
+//                     break;
+//                 }
+//             }
+//             if (latestTmfcHour === undefined) {
+//                  latestTmfcHour = 23;
+//                  dateForFcst.setDate(dateForFcst.getDate() - 1);
+//             }
+
+//             // 안정성을 위해, 찾은 최신 발표 시각보다 '두 단계 이전' 시각을 사용
+//             const latestTmfcIndex = availableTimes.indexOf(latestTmfcHour);
+//             let ultraStableTmfcHour;
+
+//             if (latestTmfcIndex > 1) {
+//                 // 두 단계 이전 발표 시각이 있다면 그것을 사용 (예: 23시 -> 17시)
+//                 ultraStableTmfcHour = availableTimes[latestTmfcIndex - 2];
+//             } else {
+//                 // 그럴 수 없다면, 어제의 마지막에서 세 번째 발표(17시)를 사용
+//                 ultraStableTmfcHour = 17;
+//                 dateForFcst.setDate(dateForFcst.getDate() - 1);
+//             }
+            
+//             const year = dateForFcst.getFullYear();
+//             const month = String(dateForFcst.getMonth() + 1).padStart(2, '0');
+//             const day = String(dateForFcst.getDate()).padStart(2, '0');
+            
+//             return {
+//                 tmfc: `${year}${month}${day}${String(ultraStableTmfcHour).padStart(2, '0')}`,
+//                 tmef: `${nextHourDate.getFullYear()}${String(nextHourDate.getMonth() + 1).padStart(2, '0')}${String(nextHourDate.getDate()).padStart(2, '0')}${String(nextHourDate.getHours()).padStart(2, '0')}`
+//             };
+//         };
+
+//         const { tmfc, tmef } = getUltraStableForecastTime();
+//         console.log(`[로그 1] 계산된 API 요청 시간: tmfc=${tmfc}, tmef=${tmef}`);
+        
+//         // --- 이하 로직은 동일 ---
+//         const vars = ['TMP', 'SKY', 'PTY', 'POP'];
+//         const promises = vars.map(v => {
+//             const url = `https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_shrt_grd?tmfc=${tmfc}&tmef=${tmef}&vars=${v}&nx=${daeguLionsPark.nx}&ny=${daeguLionsPark.ny}&authKey=${authKey}`;
+//             return axios.get(url).then(response => response.data);
+//         });
+
+//         const results = await Promise.all(promises);
+
+//         const temperatureRaw = results[0].split('\n')[4].split(',')[2].trim();
+//         const skyCode = results[1].split('\n')[4].split(',')[2].trim();
+//         const ptyCode = results[2].split('\n')[4].split(',')[2].trim();
+//         const precipitationRaw = results[3].split('\n')[4].split(',')[2].trim();
+//         console.log(`[로그 4] 파싱된 데이터: 기온=${temperatureRaw}, 하늘=${skyCode}, 강수=${ptyCode}, 확률=${precipitationRaw}`);
+
+//         const temperature = parseFloat(temperatureRaw) < -90 ? "정보 없음" : `${temperatureRaw}℃`;
+//         const precipitation = parseFloat(precipitationRaw) < -90 ? "정보 없음" : `${precipitationRaw}%`;
+        
+//         const getSkyState = (sky, pty) => {
+//             const skyStr = String(parseInt(sky));
+//             const ptyStr = String(parseInt(pty));
+//             if (parseFloat(pty) < 0 || parseFloat(sky) < 0) return "정보 없음";
+//             if (ptyStr !== '0') {
+//                 if (ptyStr === '1') return '비'; if (ptyStr === '2') return '비/눈';
+//                 if (ptyStr === '3') return '눈'; if (ptyStr === '4') return '소나기';
+//             }
+//             if (skyStr === '1') return '맑음'; if (skyStr === '3') return '구름많음';
+//             if (skyStr === '4') return '흐림'; return '정보 없음';
+//         };
+//         const skyState = getSkyState(skyCode, ptyCode);
+        
+//         const nextHourForDisplay = new Date();
+//         nextHourForDisplay.setHours(nextHourForDisplay.getHours() + 1);
+//         const month = String(nextHourForDisplay.getMonth() + 1).padStart(2, '0');
+//         const day = String(nextHourForDisplay.getDate()).padStart(2, '0');
+//         const hours = String(nextHourForDisplay.getHours()).padStart(2, '0');
+
+//         const weatherText = `대구 삼성 라이온즈 파크 ${month}월 ${day}일 ${hours}시 예보 : 기온 ${temperature}, 하늘 ${skyState}, 강수확률 ${precipitation}`;
+//         console.log(`[✅ 최종 결과] 생성된 날씨 정보: ${weatherText}`);
+        
+//         req.session.weatherInfo = weatherText;
+//         req.session.weatherTimestamp = Date.now();
+//         res.locals.weatherInfo = weatherText;
+
+//     } catch (error) {
+//         console.error("날씨 정보 조회 실패:", error.message);
+//         res.locals.weatherInfo = "날씨 정보를 불러올 수 없습니다.";
+//     }
+    
+//     next();
+// });
 // ---------------------------------------------------------------------
 // 2) 뷰 엔진 / 정적파일
 // ---------------------------------------------------------------------
