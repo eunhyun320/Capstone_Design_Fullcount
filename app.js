@@ -121,7 +121,7 @@ const app = express();
 // ---------------------------------------------------------------------
 // 1) 공통 미들웨어
 // ---------------------------------------------------------------------
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
