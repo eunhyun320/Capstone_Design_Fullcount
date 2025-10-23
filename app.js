@@ -154,7 +154,7 @@ app.use(session({
 //         // ★★★ 1. 'nph-dfs_vsrt_grd' (초단기)용 시간 계산 (70분 전 기준) ★★★
 //         const getUltraShortTermTime = () => {
 //             // 안정성을 위해 70분 전 시간을 기준으로 계산
-//             const availableDate = new Date(new Date().getTime() - 70 * 60 * 1000); 
+//             const availableDate = new Date(new Date().getTime() - 60 * 60 * 1000); 
 
 //             // 1. tmfc (발표시간): 연월일시분
 //             const tmfcYear = availableDate.getFullYear();

@@ -428,6 +428,75 @@ router.get('/api/inquiries', async (req, res) => {
   }
 });
 
+
+/* ===== 경기결과 API (날짜별 조회) ===== */
+
+/* ===== 경기결과 API (날짜별 조회) - 2안 (임시) ===== */
+router.get('/api/game-by-date', async (req, res) => {
+  try {
+    // 1. URL에서 ?date=... 값 가져오기
+    const { date } = req.query; // (여기엔 'Thu Oct 16 2025...'가 들어옴)
+
+    if (!date) {
+      return res.status(400).json({ ok: false, error: '필수 입력 누락 (date)' });
+    }
+
+    // --- ★★★★★ 이 부분이 수정/추가되어야 합니다 ★★★★★ ---
+
+    // 2. 받은 긴 문자열을 JavaScript 날짜 객체로 변환
+    const dateObj = new Date(date);
+
+    // 3. 'YYYY-MM-DD' 형식으로 포맷팅 (예: 2025-10-16)
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // (0~11이라 +1 필요)
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    
+    // 이 변수에 '2025-10-16'이 담깁니다.
+    const formattedDate = `${year}-${month}-${day}`; 
+
+    // --- ★★★★★ 여기까지 ★★★★★ ---
+
+
+    // 4. SQL 쿼리
+    const sql = `
+      SELECT 
+          g.game_date, 
+          g.game_day, 
+          SUBSTRING(g.game_time, 1, 5) AS game_time,
+          g.score_home, 
+          g.score_away,
+          g.result,
+          '정보가 없습니다' AS win_pitcher, 
+          '정보가 없습니다' AS lose_pitcher, 
+          '정보가 없습니다' AS save_pitcher,
+          g.team_home AS home_team_name,
+          g.team_away AS away_team_name,
+          '#' AS home_team_logo,
+          '#' AS away_team_logo
+      FROM 
+          ${DB}.game_schedule_list g 
+      WHERE 
+          g.game_date = ?  -- (여기에 ?만 둡니다)
+      LIMIT 1;
+    `;
+    
+    // 5. 쿼리 실행 시, 포맷팅된 날짜 변수를 전달
+    const [rows] = await pool.query(sql, [formattedDate]); // <-- [date]가 아닌 [formattedDate]
+
+    // 6. 결과 반환
+    if (rows && rows.length > 0) {
+      res.json({ ok: true, game: rows[0] });
+    } else {
+      res.status(404).json({ ok: false, error: '해당 날짜의 경기가 없습니다.' });
+    }
+
+  } catch (e) {
+    console.error('[GET /api/game-by-date] (2안)', e);
+    res.status(500).json({ ok: false, error: e.sqlMessage || e.message });
+  }
+});
+
+
 /* ===== 루트 ===== */
 router.get(['/', '/index', '/index.html'], (req, res) => res.render('index.html'));
 

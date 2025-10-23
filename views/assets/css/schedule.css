@@ -23,6 +23,7 @@
 .result {
   width: 50%; /* 오른쪽 절반 차지 */
   margin: 50px;
+  height: 500px;
 }
 
 /* 달력  */
@@ -339,6 +340,10 @@ div.pitcher-results p{
 
 /* ===== '경기 종료' 전용 스타일 ===== */
 
+.team-info p {
+    font-size: 14px !important;
+}
+
 .match-header {
     text-align: center;
     padding: 12px;
@@ -370,7 +375,9 @@ div.pitcher-results p{
 
 .pitcher-results p {
     margin: 0;
+    font-size: 14px;
 }
+
 
 .result-label {
     display: inline-block;
