@@ -91,7 +91,7 @@ body {
     /* background-color: aqua; */
     box-sizing: border-box;
     overflow: hidden;
-    padding-top: 50px;
+    /* padding-top: 50px; */
   }
 
   .legnedPlayer, .winText{
