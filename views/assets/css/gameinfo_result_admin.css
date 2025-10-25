@@ -49,7 +49,7 @@ main {
   }
 
   /* 상단 텍스트/표 블록은 한 줄 전체 차지 */
-  .scoreboard>.result,
+  .scoreboard>.result_admin,
   .scoreboard>.result_table,
   .scoreboard>.result_table_bottom {
     flex: 1 1 100%;
@@ -57,10 +57,16 @@ main {
   }
 
   /* 제목 */
-  .result p {
+
+  
+  .result_admin p {
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 12px;
+    text-align: left;
+    
+    background-color: aqua;
+    
   }
 
   .scoreboard .review {

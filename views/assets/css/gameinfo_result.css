@@ -24,22 +24,22 @@ main {
 
 
 /* 스코어보드 전체 */
-.scoreboard {
-  margin: 0 200px;          /* 좌우 여백 고정 */
-  padding: 20px 24px;       /* 내부 여백 */
+/* .scoreboard {
+  margin: 0 200px;          /* 좌우 여백 고정 
+  padding: 20px 24px;       /* 내부 여백 
   border-radius: 8px;
   min-height: 100px;
   display: flex;
-  flex-wrap: wrap;          /* 줄바꿈 허용 */
-  gap: 16px;                /* 블록 간격 */
-  align-items: flex-start;  /* 상단 정렬 */
+  flex-wrap: wrap;          /* 줄바꿈 허용 
+  gap: 16px;                /* 블록 간격 
+  align-items: flex-start;  /* 상단 정렬 
   justify-content: space-between;
-  overflow-anchor: none;    /* 새로고침 시 점프 방지 */
+  overflow-anchor: none;    /* 새로고침 시 점프 방지 
   text-align: center;
-}
+} */
 
 /* 상단 텍스트/표 블록은 한 줄 전체 차지 */
-.scoreboard > .result,
+/* .scoreboard > .result,
 .scoreboard > .result_table,
 .scoreboard > .result_table_bottom {
   flex: 1 1 100%;
@@ -47,11 +47,13 @@ main {
 }
 
 /* 제목 */
-.result p {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 12px;
-}
+/* .result p { */
+  /* font-size: 32px; */
+  /* font-weight: bold; */
+  /* margin-bottom: 12px; 
+  text-align: left;
+  background-color: red;
+} */
 
 /* =========================
    1. 상단 스코어 테이블
@@ -255,6 +257,8 @@ main {
     gap: 16px;
     align-items: flex-start;
     justify-content: space-between;
+    margin: 0;
+ 
   }
 
   .scoreboard > .result,
@@ -264,6 +268,18 @@ main {
     max-width: 100%;
   }
 
+  
+  .result p { 
+    font-size: 32px; 
+    text-align: left;
+    font-weight: bold;
+    position: relative;
+    transform: translateX(-50%);
+    /* background-color: aqua; */
+    width: 100vw;  /*아니 이거 안쓰면 양옆에 이상한 여백 때문에 이상함*/
+    left: 75%;
+  }
+
   .teamA_hitter_result,
   .teamB_hitter_result {
     flex: 0 0 48%;
@@ -271,13 +287,15 @@ main {
     padding: 0 1%;
   }
 
-  .result p { font-size: 32px; }
+  
   .scoreboard .review,
   .teamA_hitter_result > p,
   .teamB_hitter_result > p,
   .teamA_pitcher_result > p,
   .teamB_pitcher_result > p { font-size: 22px; }
 }
+
+
 
 /* ✅ 모바일 버전 (≤768px) */
 @media (max-width: 768px) {
