@@ -138,7 +138,7 @@ router.put('/api/game/:id', async (req, res) => {
     const body = req.body || {};
     const incomingDate = body.gameDate || body.game_date || null; // 혹시 섞여 들어오면 확인
     // 날짜가 들어왔고, DB의 날짜와 다르면 업데이트 거부
-    if (incomingDate && String(incomingDate).slice(0,10) !== String(currentDate).slice(0,10)) {
+    if (incomingDate && String(incomingDate).slice(0, 10) !== String(currentDate).slice(0, 10)) {
       return res.status(409).json({ ok: false, error: 'date_mismatch' });
     }
 
@@ -201,6 +201,36 @@ router.get('/api/game/:id', async (req, res, next) => {
     res.json({ ok: true, id: row.game_id, gameDate: row.game_date, ...payload });
   } catch (e) { next(e); }
 });
+
+/* 날짜 가져오기 */
+router.get('/api/game/:id/date', async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) {
+      return res.status(400).json({ ok: false, error: 'invalid id' });
+    }
+
+    // ✅ SQL에서 문자열로 강제 변환
+    const [rows] = await pool.execute(
+      `SELECT DATE_FORMAT(game_date, '%Y-%m-%d') AS game_date 
+         FROM \`${DB}\`.game_page 
+        WHERE game_id = ? LIMIT 1`,
+      [id]
+    );
+
+    if (!rows.length) {
+      return res.status(404).json({ ok: false, error: 'not_found' });
+    }
+
+    const gameDate = rows[0].game_date; // 이미 문자열 형태 (예: '2025-10-03')
+    res.json({ ok: true, game_date: gameDate });
+  } catch (e) {
+    console.error('[GET /api/game/:id/date] error', e);
+    res.status(500).json({ ok: false, error: e.sqlMessage || e.message });
+  }
+});
+
+
 
 
 /* ===== 라인업: 파일형 → 표준 경로 리다이렉트 ===== */

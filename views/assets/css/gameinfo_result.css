@@ -12,7 +12,7 @@
    헤더 높이 
   --header-height: 100px;  
   /* 스코어보드 상단 Team 칸 전체 폭 */
-  /* --team-width: 250px;      
+/* --team-width: 250px;      
 } */
 
 /* 메인 구조 */
@@ -48,9 +48,9 @@ main {
 
 /* 제목 */
 /* .result p { */
-  /* font-size: 32px; */
-  /* font-weight: bold; */
-  /* margin-bottom: 12px; 
+/* font-size: 32px; */
+/* font-weight: bold; */
+/* margin-bottom: 12px; 
   text-align: left;
   background-color: red;
 } */
@@ -80,9 +80,17 @@ main {
 }
 
 /* 열 비율 */
-.result_table col.col-1 { width: calc(var(--team-width) * 0.30); }
-.result_table col.col-2 { width: calc(var(--team-width) * 0.70); }
-.result_table col.col-rest { width: calc((100% - var(--team-width)) / 16); }
+.result_table col.col-1 {
+  width: calc(var(--team-width) * 0.30);
+}
+
+.result_table col.col-2 {
+  width: calc(var(--team-width) * 0.70);
+}
+
+.result_table col.col-rest {
+  width: calc((100% - var(--team-width)) / 16);
+}
 
 /* 셀 공통 스타일 */
 .result_table td,
@@ -155,8 +163,13 @@ main {
   margin-bottom: 50px;
 }
 
-.teamA_hitter_result { padding-right: 1%; }
-.teamB_hitter_result { padding-left: 1%; }
+.teamA_hitter_result {
+  padding-right: 1%;
+}
+
+.teamB_hitter_result {
+  padding-left: 1%;
+}
 
 .teamA_hitter_result table,
 .teamB_hitter_result table {
@@ -174,8 +187,8 @@ main {
   word-break: keep-all;
 }
 
-.teamA_hitter_result > p,
-.teamB_hitter_result > p {
+.teamA_hitter_result>p,
+.teamB_hitter_result>p {
   font-size: 23px;
   font-weight: bold;
   margin-bottom: 12px;
@@ -203,8 +216,8 @@ main {
   margin-bottom: 30px;
 }
 
-.teamA_pitcher_result > p,
-.teamB_pitcher_result > p {
+.teamA_pitcher_result>p,
+.teamB_pitcher_result>p {
   font-size: 23px;
   font-weight: bold;
   margin-bottom: 12px;
@@ -221,8 +234,10 @@ main {
   height: 200px;
 }
 
-.teamA_pitcher_result td, .teamA_pitcher_result th,
-.teamB_pitcher_result td, .teamB_pitcher_result th {
+.teamA_pitcher_result td,
+.teamA_pitcher_result th,
+.teamB_pitcher_result td,
+.teamB_pitcher_result th {
   border: 1px solid #000;
   padding: 8px 12px;
   text-align: center;
@@ -258,24 +273,14 @@ main {
     align-items: flex-start;
     justify-content: space-between;
     margin: 0;
- 
+
   }
 
-  .scoreboard > .result,
-  .scoreboard > .result_table,
-  .scoreboard > .result_table_bottom {
+
+  .scoreboard>.result_table,
+  .scoreboard>.result_table_bottom {
     flex: 1 1 100%;
     max-width: 100%;
-  }
-
-  
-  .result p { 
-    font-size: 32px; 
-    text-align: left;
-    font-weight: bold;
-    position: relative;
-    transform: translateX(-50%);
-    left: 75%;
   }
 
   .teamA_hitter_result,
@@ -285,12 +290,52 @@ main {
     padding: 0 1%;
   }
 
-  
-  .scoreboard .review,
-  .teamA_hitter_result > p,
-  .teamB_hitter_result > p,
-  .teamA_pitcher_result > p,
-  .teamB_pitcher_result > p { font-size: 22px; }
+
+
+  .teamA_hitter_result>p,
+  .teamB_hitter_result>p,
+  .teamA_pitcher_result>p,
+  .teamB_pitcher_result>p {
+    font-size: 22px;
+  }
+
+  .date_review_group {
+    display: flex;
+    flex-direction: column;
+    /* 세로 스택 */
+    gap: 12px;
+    /* 블록 사이 간격 */
+    width: 100%;
+
+    /* 부모가 flex(row)일 때 한 줄 전체 확보 */
+    flex: 1 1 100%;
+    max-width: 100%;
+
+    /* 부모가 grid일 때 한 줄 전체 확보 */
+    grid-column: 1 / -1;
+
+  }
+
+  .result_date {
+    text-align: center;
+  }
+
+  .result {
+    font-size: 32px;
+    font-weight: bold;
+    /* background-color: red; */
+    margin-left: -15px;
+    width: calc(100% + 15px);
+  }
+
+  .result p {
+    margin: 0;
+    /* p 기본 마진 제거 */
+    padding: 8px 12px;
+    /* 텍스트 여백 */
+    
+    
+  }
 }
 
 
@@ -298,7 +343,7 @@ main {
 /* ✅ 모바일 버전 (≤768px) */
 @media (max-width: 768px) {
   main {
-    padding-top: 0; 
+    padding-top: 0;
   }
 
   .scoreboard {
@@ -311,9 +356,9 @@ main {
     justify-content: flex-start;
   }
 
-  .scoreboard > .result,
-  .scoreboard > .result_table,
-  .scoreboard > .result_table_bottom {
+  .scoreboard>.result,
+  .scoreboard>.result_table,
+  .scoreboard>.result_table_bottom {
     flex: 1 1 100%;
     max-width: 100%;
   }
@@ -341,37 +386,62 @@ main {
   }
 
   /* 최소 폭 확보 */
-  .result_table table            { min-width: 920px; }
-  .result_table_bottom table     { min-width: 520px; }
+  .result_table table {
+    min-width: 920px;
+  }
+
+  .result_table_bottom table {
+    min-width: 520px;
+  }
+
   .teamA_hitter_result table,
-  .teamB_hitter_result table     { min-width: 720px; }
+  .teamB_hitter_result table {
+    min-width: 720px;
+  }
+
   .teamA_pitcher_result table,
-  .teamB_pitcher_result table    { min-width: 980px; }
+  .teamB_pitcher_result table {
+    min-width: 980px;
+  }
 
   /* Team 열 폭 조정 */
-  .result_table col.col-1 { width: 64px; }
-  .result_table col.col-2 { width: 120px; }
+  .result_table col.col-1 {
+    width: 64px;
+  }
+
+  .result_table col.col-2 {
+    width: 120px;
+  }
 
   /* 폰트 및 패딩 축소 */
-  .result p { 
-    
+  .result p {
+
     font-size: 32px;
-    font-weight: bold; 
+    font-weight: bold;
     text-align: left;
   }
-  .scoreboard .review,
-  .teamA_hitter_result > p,
-  .teamB_hitter_result > p,
-  .teamA_pitcher_result > p,
-  .teamB_pitcher_result > p { font-size: 22px; }
 
-  .result_table td, .result_table th,
-  .result_table_bottom td, .result_table_bottom th,
-  .teamA_hitter_result td, .teamB_hitter_result td,
-  .teamA_pitcher_result td, .teamB_pitcher_result td {
+  .scoreboard .review,
+  .teamA_hitter_result>p,
+  .teamB_hitter_result>p,
+  .teamA_pitcher_result>p,
+  .teamB_pitcher_result>p {
+    font-size: 22px;
+  }
+
+  .result_table td,
+  .result_table th,
+  .result_table_bottom td,
+  .result_table_bottom th,
+  .teamA_hitter_result td,
+  .teamB_hitter_result td,
+  .teamA_pitcher_result td,
+  .teamB_pitcher_result td {
     padding: 6px 8px;
     font-size: 13px;
   }
 
-  .result_table_bottom tr td:first-child { width: 160px; }
+  .result_table_bottom tr td:first-child {
+    width: 160px;
+  }
 }
