@@ -179,7 +179,7 @@ main {
   main {
     margin: 60px auto;
     /* 상하 여백 줄이기 */
-    padding: 0 4vw;
+    /* padding: 0 4vw; */
     /* 좌우 약간의 여백 */
   }
 
