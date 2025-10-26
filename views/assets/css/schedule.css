@@ -20,10 +20,10 @@
     align-items: center;
 }
 
-.result {
+.result_schedule {
   width: 50%; /* 오른쪽 절반 차지 */
   margin: 50px;
-  height: 500px;
+  /* height: 500px; */
 }
 
 /* 달력  */
