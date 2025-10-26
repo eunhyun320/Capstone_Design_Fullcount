@@ -428,9 +428,6 @@ router.get('/api/inquiries', async (req, res) => {
   }
 });
 
-
-/* ===== 경기결과 API (날짜별 조회) ===== */
-
 /* ===== 경기결과 API (날짜별 조회) - 2안 (임시) ===== */
 router.get('/api/game-by-date', async (req, res) => {
   try {
@@ -457,7 +454,7 @@ router.get('/api/game-by-date', async (req, res) => {
     // --- ★★★★★ 여기까지 ★★★★★ ---
 
 
-    // 4. SQL 쿼리
+    // 4. SQL 쿼리 수정 (game_status 필드 추가)
     const sql = `
       SELECT 
           g.game_date, 
@@ -466,6 +463,11 @@ router.get('/api/game-by-date', async (req, res) => {
           g.score_home, 
           g.score_away,
           g.result,
+          -- result 값에 따라 game_status 결정
+          CASE
+            WHEN g.result IN ('win', 'lose', 'draw') THEN 1  -- 1: 경기 종료
+            ELSE 2  -- 2: 경기 예정/진행 중 (g.result가 NULL 또는 다른 값일 경우)
+          END AS game_status,
           '정보가 없습니다' AS win_pitcher, 
           '정보가 없습니다' AS lose_pitcher, 
           '정보가 없습니다' AS save_pitcher,
@@ -476,18 +478,20 @@ router.get('/api/game-by-date', async (req, res) => {
       FROM 
           ${DB}.game_schedule_list g 
       WHERE 
-          g.game_date = ?  -- (여기에 ?만 둡니다)
+          g.game_date = ?
       LIMIT 1;
     `;
-    
-    // 5. 쿼리 실행 시, 포맷팅된 날짜 변수를 전달
-    const [rows] = await pool.query(sql, [formattedDate]); // <-- [date]가 아닌 [formattedDate]
+
+    // 5. 쿼리 실행
+    const [rows] = await pool.query(sql, [formattedDate]);
 
     // 6. 결과 반환
     if (rows && rows.length > 0) {
-      res.json({ ok: true, game: rows[0] });
+        // game_status가 포함된 결과 반환
+        res.json({ ok: true, game: rows[0] });
     } else {
-      res.status(404).json({ ok: false, error: '해당 날짜의 경기가 없습니다.' });
+        // 404 응답 (경기 정보 없음)
+        res.status(404).json({ ok: false, error: '해당 날짜의 경기가 없습니다.' });
     }
 
   } catch (e) {
