@@ -275,9 +275,6 @@ main {
     font-weight: bold;
     position: relative;
     transform: translateX(-50%);
-    /* background-color: aqua; */
-    /*width: 100vw;  아니 이거 안쓰면 양옆에 이상한 여백 때문에 이상함*/
-    /* 개판나서 일단 삭젠 */
     left: 75%;
   }
 
