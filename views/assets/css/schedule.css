@@ -23,7 +23,8 @@
 .result {
   width: 50%; /* 오른쪽 절반 차지 */
   margin: 50px;
-  height: 500px;
+  height: auto;
+  position: relative;
 }
 
 /* 달력  */
@@ -223,7 +224,17 @@ font-weight: bold;
     font-family: 'Noto Sans KR', sans-serif; /* 폰트 (예시) */
     width: 100%;
     max-width: 450px; /* 카드의 최대 너비 */
-    margin: 0 auto; /* 부모 요소 안에서 가운데 정렬 */
+    
+    /* border: 3px solid salmon ; */
+    position: absolute; /* 절대 위치를 지정하여 다른 카드와 겹치게 만듭니다. */
+    min-height: 150px;
+    z-index: 10;
+    /* 💡 이 한 줄이 문제 해결의 핵심입니다. */
+    /* result-header의 높이(약 40px) + 아래쪽 여백을 고려하여 60px 지정 */
+    top: 60px; /* <--- 이 값을 추가해야 합니다! */
+    left: 50%; /* 가운데 정렬을 위해 추가 */
+    transform: translateX(-50%); /* 가운데 정렬을 위해 추가 */
+    
 }
 
 .result-header {
