@@ -480,6 +480,7 @@ router.get('/api/game-by-date', async (req, res) => {
     
     // 이 변수에 '2025-10-16'이 담깁니다.
     const formattedDate = `${year}-${month}-${day}`; 
+    console.log("문지열"+formattedDate);
 
     // --- ★★★★★ 여기까지 ★★★★★ ---
 
