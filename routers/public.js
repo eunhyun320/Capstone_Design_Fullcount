@@ -477,52 +477,65 @@ router.get('/api/game-by-date', async (req, res) => {
     const year = dateObj.getFullYear();
     const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // (0~11이라 +1 필요)
     const day = dateObj.getDate().toString().padStart(2, '0');
-    
+
     // 이 변수에 '2025-10-16'이 담깁니다.
-    const formattedDate = `${year}-${month}-${day}`; 
-    console.log("문지열"+formattedDate);
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log("문지열" + formattedDate);
 
     // --- ★★★★★ 여기까지 ★★★★★ ---
 
 
-    // 4. SQL 쿼리 수정 (game_status 필드 추가)
+    // 4. SQL 쿼리 수정 (조인 조건을 팀 이름으로 변경)
     const sql = `
-      SELECT 
-          g.game_date, 
-          g.game_day, 
-          SUBSTRING(g.game_time, 1, 5) AS game_time,
-          g.score_home, 
-          g.score_away,
-          g.result,
-          -- result 값에 따라 game_status 결정
-          CASE
-            WHEN g.result IN ('win', 'lose', 'draw') THEN 1  -- 1: 경기 종료
-            ELSE 2  -- 2: 경기 예정/진행 중 (g.result가 NULL 또는 다른 값일 경우)
-          END AS game_status,
-          '정보가 없습니다' AS win_pitcher, 
-          '정보가 없습니다' AS lose_pitcher, 
-          '정보가 없습니다' AS save_pitcher,
-          g.team_home AS home_team_name,
-          g.team_away AS away_team_name,
-          '#' AS home_team_logo,
-          '#' AS away_team_logo
-      FROM 
-          ${DB}.game_schedule_list g 
-      WHERE 
-          g.game_date = ?
-      LIMIT 1;
+        SELECT
+            g.game_date,
+            g.game_day,
+            SUBSTRING(g.game_time, 1, 5) AS game_time,
+            g.score_home,
+            g.score_away,
+            g.result,
+            
+            COALESCE(th.home_stadium, ta.home_stadium) AS game_venue,
+            
+            -- DB 기록 유무에 따른 game_status (간단 구현)
+            CASE
+                WHEN g.result IS NOT NULL THEN 1  -- 결과 값이 있으면 종료 (가장 안전한 방식)
+                ELSE 2
+            END AS game_status,
+            
+            -- 투수 정보: 필드가 없으므로 임시 문자열 반환
+            '투수 정보' AS win_pitcher, 
+            '투수 정보' AS lose_pitcher,
+            '투수 정보' AS save_pitcher,
+            
+            g.team_home AS home_team_name_in_list, -- List에 저장된 한글 이름 그대로 유지
+            g.team_away AS away_team_name_in_list,
+            
+            th.team_name AS home_team_name,       -- t_team_info의 공식 이름
+            ta.team_name AS away_team_name,       
+            th.logo_path AS home_team_logo,       -- 로고 경로 가져오기 성공 기대!
+            ta.logo_path AS away_team_logo,
+            th.season_record AS home_team_record,
+            ta.season_record AS away_team_record
+        FROM
+        ${DB}.game_schedule_list g
+    -- 🚨 조인 조건을 g.team_home (한글 약어)와 th.short_name으로 변경
+    LEFT JOIN ${DB}.t_team_info th ON g.team_home = th.short_name 
+    LEFT JOIN ${DB}.t_team_info ta ON g.team_away = ta.short_name 
+    WHERE
+            g.game_date = ?
+        LIMIT 1;
     `;
-
     // 5. 쿼리 실행
     const [rows] = await pool.query(sql, [formattedDate]);
 
-    // 6. 결과 반환
+    // 6. 결과 반환: 데이터가 있으면 무조건 경기 종료로 간주
     if (rows && rows.length > 0) {
-        // game_status가 포함된 결과 반환
-        res.json({ ok: true, game: rows[0] });
+      // 'game_status' 필드가 없으므로, game: rows[0]을 반환하면 JS에서 데이터 존재 여부로 판단함
+      res.json({ ok: true, game: rows[0] });
     } else {
-        // 404 응답 (경기 정보 없음)
-        res.status(404).json({ ok: false, error: '해당 날짜의 경기가 없습니다.' });
+      // 404 응답 (경기 정보 없음)
+      res.status(404).json({ ok: false, error: '해당 날짜의 경기가 없습니다.' });
     }
 
   } catch (e) {
