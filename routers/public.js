@@ -458,6 +458,10 @@ router.get('/api/inquiries', async (req, res) => {
   }
 });
 
+
+
+
+// 여기서 부터 추가한거  
 /* ===== 경기결과 API (날짜별 조회) - 2안 (임시) ===== */
 router.get('/api/game-by-date', async (req, res) => {
   try {
@@ -544,6 +548,36 @@ router.get('/api/game-by-date', async (req, res) => {
   }
 });
 
+router.get('/poi', async (req, res) => {
+  const q = (req.query.q || '').trim();
+  const type = (req.query.type || '').trim(); // 'food' | 'toilet' | ''
+
+  const params = [];
+  let sql = `
+    SELECT id, type, name, items, image, lat, lng
+    FROM poi
+    WHERE 1=1
+  `;
+
+  if (q) {
+    sql += ` AND (name LIKE ? OR items LIKE ?)`;
+    params.push(`%${q}%`, `%${q}%`);
+  }
+  if (type && (type === 'food' || type === 'toilet')) {
+    sql += ` AND type = ?`;
+    params.push(type);
+  }
+
+  sql += ` ORDER BY id DESC LIMIT 200`;
+
+  try {
+    const [rows] = await db.query(sql, params);
+    res.json(rows);
+  } catch (e) {
+    console.error('/poi error:', e);
+    res.status(500).json({ error: 'DB error' });
+  }
+});
 
 /* ===== 루트 ===== */
 router.get(['/', '/index', '/index.html'], (req, res) => res.render('index.html'));
