@@ -154,9 +154,14 @@
             }
             return;
         }
-        
+        const data = await response.json(); // 응답 데이터 전체를 일단 'data' 변수에 저장
+        console.log("--- API 응답 데이터 전체 ---");
+        console.log(data); // 데이터 구조 확인 (e.g., { game: {...} } 형태인지)
+        console.log("----------------------------");
+
+        const { game } = data; // 'data'에서 'game' 객체를 비구조화
         // --- ★ 데이터가 존재하면 무조건 경기 종료로 간주 (200 OK) ★ ---
-        const { game } = await response.json();
+        // const { game } = await response.json();
         
         statusChip.textContent = '경기 종료'; 
         statusChip.classList.add('finished');
@@ -179,9 +184,9 @@
         }
 
         // 스코어 바인딩 및 클래스 적용
-        finishedAwayScore.textContent = game.score_away || 0; // 스코어가 없으면 0으로 표시
+        finishedAwayScore.textContent = game.score_away;
         finishedAwayScore.className = `final-score ${awayScoreClass}`;
-        finishedHomeScore.textContent = game.score_home || 0;
+        finishedHomeScore.textContent = game.score_home;
         finishedHomeScore.className = `final-score ${homeScoreClass}`;
         finishedVsText.textContent = 'VS';
 
