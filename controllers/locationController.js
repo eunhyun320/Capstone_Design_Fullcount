@@ -21,6 +21,7 @@ exports.listPoi = async (req, res) => {
     res.json(rows);
   } catch (e) {
     console.error('[GET /poi]', e);
-    res.status(500).send('DB 오류 발생');
+    // 항상 JSON을 반환하도록 변경: 클라이언트에서 JSON.parse 에러 방지
+    res.status(500).json({ ok: false, error: 'DB 오류 발생' });
   }
 };

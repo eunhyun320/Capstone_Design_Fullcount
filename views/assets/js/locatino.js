@@ -131,6 +131,20 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
     try {
       listEl.innerHTML = '<p class="loading">불러오는 중...</p>';
       const res = await fetch("/poi");
+      // 서버 오류(비정상 응답)가 올 수 있으므로 res.ok 검사
+      if (!res.ok) {
+        // 시도: 응답이 JSON이면 그 내용을 읽어 에러 메시지를 사용
+        let errText = `HTTP ${res.status}`;
+        try {
+          const body = await res.json();
+          if (body && body.error) errText = body.error;
+        } catch (e) {
+          // 파싱 실패 시 텍스트로 읽어본다
+          try { errText = await res.text(); } catch (_) {}
+        }
+        throw new Error(errText);
+      }
+
       const rows = await res.json();
       state.rows = Array.isArray(rows) ? rows : [];
       render(state.rows);

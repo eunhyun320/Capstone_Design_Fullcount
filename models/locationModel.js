@@ -20,13 +20,36 @@ exports.getPoiList = async ({ type, q } = {}) => {
     params.push(`%${q}%`, `%${q}%`);
   }
 
+  // 안전한 정렬 컬럼 선택: 테이블에 존재하는 후보 컬럼 중 하나를 사용
+  const candidates = ['poi_id', 'id', 'created_at', 'updated_at'];
+  const colsQuery = `
+    SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+     WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME IN (${candidates.map(()=>'?').join(',')})
+  `;
+  const colsParams = [DB, 'poi', ...candidates];
+  const [cols] = await pool.query(colsQuery, colsParams);
+  const present = new Set((cols || []).map(c => c.COLUMN_NAME));
+  const orderCol = candidates.find(c => present.has(c));
+
   const sql = `
-    SELECT poi_id, name, type, description, lat, lng, image_url, created_at, updated_at
+    SELECT *
       FROM \`${DB}\`.poi
      ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-     ORDER BY poi_id DESC
+     ${orderCol ? 'ORDER BY ' + orderCol + ' DESC' : ''}
   `;
 
   const [rows] = await pool.query(sql, params);
-  return rows;
+  // Map DB columns to frontend-friendly keys expected by locatino.js:
+  // { id, type, name, items, image, lat, lng, floor }
+  return rows.map(r => ({
+    // handle multiple possible column names to be robust against schema differences
+    id: r.poi_id || r.id,
+    type: r.type || r.category || '',
+    name: r.name || r.title || '',
+    items: r.description || r.desc || r.items || '',
+    image: r.image_url || r.image || r.img || '',
+    lat: r.lat || r.latitude || null,
+    lng: r.lng || r.longitude || null,
+    floor: r.floor || r.level || ''
+  }));
 };
