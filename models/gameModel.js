@@ -17,22 +17,43 @@ exports.getGameById = async (id) => {
 
 exports.getGameByDate = async (date) => {
     const sql = `
-        SELECT 
-          g.game_date, 
-          SUBSTRING(g.game_time, 1, 5) AS game_time,
-          g.score_home, 
-          g.score_away,
-          g.result,
-          CASE
-            WHEN g.result IN ('win', 'lose', 'draw') THEN 1
-            ELSE 2
-          END AS game_status,
-          g.team_home AS home_team_name,
-          g.team_away AS away_team_name
-        FROM \`${DB}\`.game_schedule_list g 
+        SELECT
+            g.game_date,
+            g.game_day,
+            SUBSTRING(g.game_time, 1, 5) AS game_time,
+            g.score_home,
+            g.score_away,
+            g.result,
+
+            COALESCE(th.home_stadium, ta.home_stadium) AS game_venue,
+
+            -- DB 기록 유무에 따른 game_status (간단 구현)
+            CASE
+                WHEN g.result IS NOT NULL THEN 1
+                ELSE 2
+            END AS game_status,
+
+            -- 투수 정보: 필드가 없으므로 임시 문자열 반환
+            '투수 정보' AS win_pitcher,
+            '투수 정보' AS lose_pitcher,
+            '투수 정보' AS save_pitcher,
+
+            g.team_home AS home_team_name_in_list,
+            g.team_away AS away_team_name_in_list,
+
+            th.team_name AS home_team_name,
+            ta.team_name AS away_team_name,
+            th.logo_path AS home_team_logo,
+            ta.logo_path AS away_team_logo,
+            th.season_record AS home_team_record,
+            ta.season_record AS away_team_record
+        FROM \`${DB}\`.game_schedule_list g
+        LEFT JOIN \`${DB}\`.t_team_info th ON g.team_home = th.short_name
+        LEFT JOIN \`${DB}\`.t_team_info ta ON g.team_away = ta.short_name
         WHERE g.game_date = ?
         LIMIT 1
     `;
+
     const [rows] = await pool.query(sql, [date]);
     return rows[0] || null;
 };
@@ -75,6 +96,18 @@ exports.getSchedules = async (month) => {
     `;
     const [rows] = await pool.query(sql, [month]);
     return rows;
+};
+
+exports.getLineup = async (gameId, teamId) => {
+    const sql = `
+        SELECT l.order_num,
+               CASE WHEN l.order_num=10 THEN 'P' ELSE CAST(l.order_num AS CHAR) END AS order_label,
+               l.player_name, COALESCE(l.position_kr,'') AS position_kr
+          FROM \`${DB}\`.lineups l
+         WHERE l.game_id=? AND l.team_id=?
+         ORDER BY l.order_num
+    `;
+    return pool.query(sql, [gameId, teamId]);
 };
 
 /* ===== game_page 관련 유틸 (admin에서 사용하는 JSON 블롭 저장소) ===== */

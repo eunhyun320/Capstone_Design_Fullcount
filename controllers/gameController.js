@@ -10,24 +10,24 @@ const DB = process.env.SVR_DB_NAME || process.env.DB_NAME || 'myapp_db';
 
 /* ====== API ====== */
 exports.getSchedules = async (req, res) => {
-    try {
-        const month = req.query.month; // YYYY-MM 형식
-        if (!month || !/^\d{4}-\d{2}$/.test(month)) {
-            return res.status(400).json({ 
-                error: '월 정보가 필요합니다. (형식: YYYY-MM)' 
-            });
-        }
-
-        const schedules = await gameModel.getSchedules(month);
-        // 클라이언트가 기대하는 형식으로 응답
-        res.json({ 
-            data: schedules,
-            month: month
-        });
-    } catch (e) {
-        console.error('[GET /api/schedules]', e);
-        res.status(500).json({ error: '서버 오류가 발생했습니다.' });
+  try {
+    const month = req.query.month; // YYYY-MM 형식
+    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+      return res.status(400).json({
+        error: '월 정보가 필요합니다. (형식: YYYY-MM)'
+      });
     }
+
+    const schedules = await gameModel.getSchedules(month);
+    // 클라이언트가 기대하는 형식으로 응답
+    res.json({
+      data: schedules,
+      month: month
+    });
+  } catch (e) {
+    console.error('[GET /api/schedules]', e);
+    res.status(500).json({ error: '서버 오류가 발생했습니다.' });
+  }
 };
 
 /* ====== 뷰 ====== */
@@ -183,7 +183,7 @@ exports.getGameByDate = async (req, res) => {
     // console.log('[DEBUG formattedDate]', formatted);
 
     // 3) DB 조회
-    const game = await gameModel.findScheduleByDate(formatted);
+  const game = await gameModel.getGameByDate(formatted);
     // console.log('[DEBUG game]', game);
     if (!game)
       return res.status(404).json({ ok: false, error: `해당 날짜(${formatted})의 경기가 없습니다.` });
@@ -217,9 +217,18 @@ exports.getGameByDate = async (req, res) => {
     };
     // -----------------------------------
 
-    const dateKr   = toKoreanDate(game.game_date);
-    const timeFull = toTimeHHMMSS(game.game_time);
-    const display  = `${dateKr}  ${timeFull} | ${game.venue || ''}`;
+
+  const dateKr   = toKoreanDate(game.game_date);
+  const timeFull = toTimeHHMMSS(game.game_time);
+  // new model returns game_venue (COALESCE of home/away stadium); fall back to venue if present
+  const venue    = game.game_venue || game.venue || '';
+  const display  = `${dateKr}  ${timeFull} | ${venue}`;
+
+
+    // 기본 로고(플레이스홀더) 경로 지정: 뷰 정적 디렉토리(/assets) 기준
+    const placeholderLogo = '/assets/img/original_logo.png';
+    if (!game.home_team_logo) game.home_team_logo = placeholderLogo;
+    if (!game.away_team_logo) game.away_team_logo = placeholderLogo;
 
     res.json({ ok: true, display, game });
   } catch (e) {
