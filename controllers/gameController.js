@@ -33,32 +33,42 @@ exports.getSchedules = async (req, res) => {
 /* ====== 뷰 ====== */
 exports.showMatchList = (req, res) => res.render('gameinfo/game_match_list.html');
 exports.showResult = async (req, res) => {
-    // 쿼리 파라미터 (?id=9) 또는 경로 파라미터 (/:id)에서 ID를 가져와 변수를 선언합니다.
-    const gameId = req.query.id || req.params.id; 
+    try {
+        let gameId = req.query.id;
 
-    // 템플릿에 전달할 기본 데이터 객체
-    let renderData = { gameDetails: null, gameId: null };
-
-    if (gameId) {
-        try {
-            // ID로 상세 데이터를 조회합니다. (game_page ID 사용)
-            const gameDetails = await gameModel.getGameDetailsById(gameId);
-            
-            // 데이터가 있을 경우 렌더링 데이터에 할당
-            renderData = { 
-                gameDetails: gameDetails, 
-                gameId: gameId // 프론트에서 재활용할 수 있도록 ID도 전달
-            };
-        } catch (e) {
-            console.error(`[showResult] 데이터 조회 오류 (ID: ${gameId})`, e);
-            // 오류 발생 시에도 일단 페이지는 렌더링하고, 에러 메시지를 전달할 수 있습니다.
-            renderData.error = '데이터 조회 중 오류 발생';
+        // ID가 없으면 가장 최신 경기 ID 조회
+        if (!gameId) {
+            const latest = await gameModel.findLatest();
+            if (!latest) {
+                return res.render('gameinfo/gameinfo_result.html', {
+                    gameDetails: null,
+                    gameId: null,
+                    error: '등록된 경기 데이터가 없습니다.'
+                });
+            }
+            // 최신 ID로 리다이렉트
+            return res.redirect(`/gameinfo_result?id=${latest.game_id}`);
         }
-    }
 
-    // 렌더링할 때 'gameinfo/' 경로를 포함하여 템플릿을 찾습니다.
-    res.render('gameinfo/gameinfo_result.html', renderData);
+        // ID가 있으면 상세 데이터 조회
+        const gameDetails = await gameModel.getGameDetailsById(gameId);
+
+        res.render('gameinfo/gameinfo_result.html', {
+            gameDetails,
+            gameId,
+            error: null
+        });
+
+    } catch (e) {
+        console.error('[showResult] 데이터 조회 오류', e);
+        res.render('gameinfo/gameinfo_result.html', {
+            gameDetails: null,
+            gameId: null,
+            error: '데이터 조회 중 오류가 발생했습니다.'
+        });
+    }
 };
+
 exports.showSchedule = (req, res) => res.render('gameinfo/schedule.html');
 
 /* 라인업 보기 */
