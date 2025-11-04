@@ -32,7 +32,33 @@ exports.getSchedules = async (req, res) => {
 
 /* ====== 뷰 ====== */
 exports.showMatchList = (req, res) => res.render('gameinfo/game_match_list.html');
-exports.showResult = (req, res) => res.render('gameinfo/gameinfo_result.html');
+exports.showResult = async (req, res) => {
+    // 쿼리 파라미터 (?id=9) 또는 경로 파라미터 (/:id)에서 ID를 가져와 변수를 선언합니다.
+    const gameId = req.query.id || req.params.id; 
+
+    // 템플릿에 전달할 기본 데이터 객체
+    let renderData = { gameDetails: null, gameId: null };
+
+    if (gameId) {
+        try {
+            // ID로 상세 데이터를 조회합니다. (game_page ID 사용)
+            const gameDetails = await gameModel.getGameDetailsById(gameId);
+            
+            // 데이터가 있을 경우 렌더링 데이터에 할당
+            renderData = { 
+                gameDetails: gameDetails, 
+                gameId: gameId // 프론트에서 재활용할 수 있도록 ID도 전달
+            };
+        } catch (e) {
+            console.error(`[showResult] 데이터 조회 오류 (ID: ${gameId})`, e);
+            // 오류 발생 시에도 일단 페이지는 렌더링하고, 에러 메시지를 전달할 수 있습니다.
+            renderData.error = '데이터 조회 중 오류 발생';
+        }
+    }
+
+    // 렌더링할 때 'gameinfo/' 경로를 포함하여 템플릿을 찾습니다.
+    res.render('gameinfo/gameinfo_result.html', renderData);
+};
 exports.showSchedule = (req, res) => res.render('gameinfo/schedule.html');
 
 /* 라인업 보기 */
@@ -219,6 +245,37 @@ exports.getGameByDate = async (req, res) => {
     };
     // -----------------------------------
 
+    
+
+// /game/details?gameId=123 요청을 처리합니다.
+exports.getGameDetails = async (req, res) => {
+    // 쿼리 파라미터에서 gameId를 추출합니다. (예: /game/details?gameId=123)
+    const gameId = req.query.gameId; 
+
+    if (!gameId) {
+        // 상세 페이지 이동 시 gameId가 없으면 400 에러
+        return res.status(400).send('게임 ID가 필요합니다.'); 
+    }
+
+    try {
+        // gameModel에서 해당 ID의 상세 데이터를 조회하는 함수 호출
+        // 이 함수는 gameModel에 정의되어 있어야 합니다.
+        const details = await gameModel.getGameDetailsById(gameId); 
+        
+        if (!details) {
+             // 데이터가 없으면 404 에러 또는 상세 정보 없음 페이지 렌더링
+             return res.status(404).send('해당 경기의 상세 정보를 찾을 수 없습니다.');
+        }
+
+        // TODO: 상세 페이지를 렌더링하거나 (HTML 응답), JSON으로 상세 데이터를 반환합니다 (API 응답).
+        // 여기서는 예시로 JSON 데이터를 반환합니다.
+        res.json({ gameId: gameId, details: details }); 
+        
+    } catch (error) {
+        console.error(`경기 상세 정보 조회 오류 (ID: ${gameId}):`, error);
+        res.status(500).send('서버 오류 발생');
+    }
+};
 
   const dateKr   = toKoreanDate(game.game_date);
   const timeFull = toTimeHHMMSS(game.game_time);
@@ -238,3 +295,57 @@ exports.getGameByDate = async (req, res) => {
     res.status(500).json({ ok: false, error: e.message });
   }
 };
+exports.getGameDetails = async (req, res) => {
+    // 쿼리 파라미터에서 gameId를 추출합니다. (예: /game/details?gameId=123)
+    const gameId = req.query.gameId; 
+
+    if (!gameId) {
+        // 상세 페이지 이동 시 gameId가 없으면 400 에러
+        return res.status(400).send('게임 ID가 필요합니다.'); 
+    }
+
+    try {
+        // gameModel에서 해당 ID의 상세 데이터를 조회하는 함수 호출
+        // 이 함수는 gameModel에 정의되어 있어야 합니다.
+        const details = await gameModel.getGameDetailsById(gameId); 
+        
+        if (!details) {
+             // 데이터가 없으면 404 에러 또는 상세 정보 없음 페이지 렌더링
+             return res.status(404).send('해당 경기의 상세 정보를 찾을 수 없습니다.');
+        }
+
+        // TODO: 상세 페이지를 렌더링하거나 (HTML 응답), JSON으로 상세 데이터를 반환합니다 (API 응답).
+        // 현재 라우트는 API (router.get('/game/details', ...))로 등록되어 있을 가능성이 높으므로 JSON 응답을 유지합니다.
+        res.json({ gameId: gameId, details: details }); 
+        
+    } catch (error) {
+        console.error(`경기 상세 정보 조회 오류 (ID: ${gameId}):`, error);
+        res.status(500).send('서버 오류 발생');
+    }
+};
+
+exports.getGameIdByDate = async (req, res) => {
+    const { date } = req.query;
+
+    if (!date) {
+        return res.status(400).json({ ok: false, error: "date required" });
+    }
+
+    try {
+        const [rows] = await pool.query(
+            "SELECT game_id FROM game_page WHERE DATE(game_date) = DATE(?) LIMIT 1",
+            [date]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ ok: false, message: "not found" });
+        }
+
+        return res.json({ ok: true, gameId: rows[0].game_id });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ ok: false, error: "server error" });
+    }
+};
+
