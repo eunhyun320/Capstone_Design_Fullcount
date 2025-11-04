@@ -121,6 +121,10 @@
                     <td></td>
                 </tr>
                 <tr>
+                    <td>폭투</td>
+                    <td></td>
+                </tr>
+                <tr>
                     <td>심판</td>
                     <td></td>
                 </tr>
@@ -627,18 +631,48 @@
         function getPitcherB(d) { return pick(d, 'tables.pitcherB.rows') ?? pick(d, 'payload.tables.pitcherB.rows'); }
 
         // ---------- 팀명: payload 우선, 없으면 스코어보드에서 추출 ----------
+        // function getTeamNames(data) {
+        //     let A = data?.teamAName || '';
+        //     let B = data?.teamBName || '';
+        //     if (!A || !B) {
+        //         const tbl = $('.result_table table');
+        //         if (tbl) {
+        //             const trs = qsa('tr', tbl);
+        //             // 2행 2열 / 3행 2열
+        //             A = A || (trs[1]?.cells?.[1]?.textContent || '').trim();
+        //             B = B || (trs[2]?.cells?.[1]?.textContent || '').trim();
+        //         }
+        //     }
+        //     return { A: A || 'TeamA', B: B || 'TeamB' };
+        // }
+
+        
+        // ---------- 팀명: data → payload → scoreTable 순으로 탐색 ----------
         function getTeamNames(data) {
+            // 1) 루트에 바로 있는 경우
             let A = data?.teamAName || '';
             let B = data?.teamBName || '';
+
+            // 2) payload 안에 있는 경우
             if (!A || !B) {
-                const tbl = $('.result_table table');
-                if (tbl) {
-                    const trs = qsa('tr', tbl);
-                    // 2행 2열 / 3행 2열
-                    A = A || (trs[1]?.cells?.[1]?.textContent || '').trim();
-                    B = B || (trs[2]?.cells?.[1]?.textContent || '').trim();
+                A = A || data?.payload?.teamAName || '';
+                B = B || data?.payload?.teamBName || '';
+            }
+
+            // 3) scoreTable에서 추출 (루트 → payload 순)
+            const stRoot = data?.scoreTable;
+            const stPayload = data?.payload?.scoreTable;
+
+            if (!A || !B) {
+                if (stRoot?.[1]?.[1] && stRoot?.[2]?.[1]) {
+                    A = A || String(stRoot[1][1]).trim();
+                    B = B || String(stRoot[2][1]).trim();
+                } else if (stPayload?.[1]?.[1] && stPayload?.[2]?.[1]) {
+                    A = A || String(stPayload[1][1]).trim();
+                    B = B || String(stPayload[2][1]).trim();
                 }
             }
+
             return { A: A || 'TeamA', B: B || 'TeamB' };
         }
 
