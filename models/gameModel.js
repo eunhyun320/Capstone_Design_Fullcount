@@ -38,14 +38,9 @@ exports.getGameByDate = async (date) => {
             MAX(CASE WHEN jt_pitcher.result_type = '승' THEN jt_pitcher.pitcher_name ELSE NULL END) AS win_pitcher,
             MAX(CASE WHEN jt_pitcher.result_type = '세' THEN jt_pitcher.pitcher_name ELSE NULL END) AS save_pitcher,
             
-            -- 패전 투수 정보 추출 (JSON_EXTRACT 결과에도 MAX() 적용)
-            MAX(SUBSTRING_INDEX(
-                SUBSTRING_INDEX(
-                    JSON_UNQUOTE(JSON_EXTRACT(gp.payload, '$.summaryTable[1][1]')), 
-                    ' ', -1
-                ),
-                ')', 1
-            )) AS lose_pitcher,
+            -- 패전 투수 정보 추출 
+            
+            MAX(CASE WHEN jt_pitcher.result_type = '패' THEN jt_pitcher.pitcher_name ELSE NULL END) AS lose_pitcher,
 
             g.team_home AS home_team_name_in_list,
             g.team_away AS away_team_name_in_list,
@@ -64,14 +59,33 @@ exports.getGameByDate = async (date) => {
         LEFT JOIN \`${DB}\`.game_page gp ON g.game_date = gp.game_date 
         
         -- 2. JSON_TABLE을 사용하여 승리팀 투수 기록 배열을 행으로 변환
-        LEFT JOIN JSON_TABLE(
-            gp.payload, 
-            '$.tables.pitcherA.rows[*]' 
-            COLUMNS(
-                pitcher_name VARCHAR(50) PATH '$[0]', 
-                result_type VARCHAR(10) PATH '$[2]'  
-            )
-        ) AS jt_pitcher ON 1 = 1
+        LEFT JOIN LATERAL (
+            -- pitcherA의 투수 기록
+            SELECT 
+                pitcher_name, result_type
+            FROM JSON_TABLE(
+                gp.payload, 
+                '$.tables.pitcherA.rows[*]' 
+                COLUMNS(
+                    pitcher_name VARCHAR(50) PATH '$[0]', 
+                    result_type VARCHAR(10) PATH '$[2]'  
+                )
+            ) AS p_a
+            
+            UNION ALL
+            
+            -- pitcherB의 투수 기록
+            SELECT 
+                pitcher_name, result_type
+            FROM JSON_TABLE(
+                gp.payload, 
+                '$.tables.pitcherB.rows[*]' 
+                COLUMNS(
+                    pitcher_name VARCHAR(50) PATH '$[0]', 
+                    result_type VARCHAR(10) PATH '$[2]'  
+                )
+            ) AS p_b
+        ) AS jt_pitcher ON 1 = 1  -- LATERAL 조인을 위한 구문
         
         WHERE g.game_date = ?
         
