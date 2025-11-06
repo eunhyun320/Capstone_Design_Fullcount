@@ -1,14 +1,14 @@
 {%include "include/header.html"%}
 <main class="announcement_list_container">
     <div class="page-head">
-        <h1 class="page-title">공지사항</h1>
+        <p class="page-title">공지사항</p>
         <form class="notice-search" method="get" action="/support/announcement_list.html">
             <input type="text" name="keyword" placeholder="검색어를 입력하세요" />
-            <button type="submit">검색</button>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         </form>
 
     </div>
-
+    <div class="line1"></div>
     <!-- 목록 영역: 실제 서비스에선 서버/JS로 동적 채움 -->
     <ul class="notice-list" id="noticeList">
         {% for n in notices %}
