@@ -104,8 +104,22 @@ exports.showPlayerLineup = async (req, res) => {
     const [awayLineup] = await pool.query(lineupSQL, [g.game_id, g.away_team_id]);
     const isAnnounced = Number(g.is_lineup_announced) === 1 || (homeLineup.length && awayLineup.length);
 
+    // 날짜 포맷팅
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+      const weekday = weekdays[d.getDay()];
+      return `${year}.${month}.${day} (${weekday})`;
+    };
+
     res.render('gameinfo/game_player_lineup.html', {
-      game: g,
+      game: {
+        ...g,
+        game_date: formatDate(g.game_date)
+      },
       home: { team_name: g.home_name, team_logo: g.home_logo },
       away: { team_name: g.away_name, team_logo: g.away_logo },
       home_lineup: homeLineup,
