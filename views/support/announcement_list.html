@@ -2,8 +2,8 @@
 <main class="announcement_list_container">
     <div class="page-head">
         <p class="page-title">공지사항</p>
-        <form class="notice-search" method="get" action="/support/announcement_list.html">
-            <input type="text" name="keyword" placeholder="검색어를 입력하세요" />
+        <form class="notice-search" method="get" action="/announcements">
+            <input type="text" name="keyword" placeholder="검색어를 입력하세요" value="{{ keyword or '' }}" />
             <button type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
         </form>
 
