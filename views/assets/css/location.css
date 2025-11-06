@@ -340,7 +340,7 @@ body {
     font-size: 16px !important;
   }
 
-  .icon-search {
+  .icon-search { 
     left: 16px !important;
     width: 22px !important;
     height: 22px !important;
@@ -408,9 +408,9 @@ body {
 }
 
 /* 2) 본문 시작점을 헤더 아래로 내리기 (헤더 안 건드림) */
-body {
-  /* padding-top: var(--offset-top); */
-}
+/* body {
+  /* padding-top: var(--offset-top);
+} */
 
 /* 3) 위치페이지 레이아웃 높이 계산 */
 .page {
