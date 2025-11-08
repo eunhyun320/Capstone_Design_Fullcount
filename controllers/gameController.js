@@ -78,12 +78,43 @@ exports.showPlayerLineup = async (req, res) => {
     const baseSQL = `
       SELECT g.game_id, g.game_date, g.game_time, g.venue,
              g.home_team_id, g.away_team_id, IFNULL(g.is_lineup_announced,0) AS is_lineup_announced,
-             ht.team_name AS home_name, ht.team_logo AS home_logo, ht.color_primary AS home_color,
-             at.team_name AS away_name, at.team_logo AS away_logo, at.color_primary AS away_color
+             ht.team_code AS home_code, ht.team_name AS home_name, ht.logo_path AS home_logo, 
+             ht.team_color AS home_color, ht.home_stadium AS home_stadium, 
+             ht.season_record AS home_record, ht.short_name AS home_short, ht.team_rank AS home_rank,
+             at.team_code AS away_code, at.team_name AS away_name, at.logo_path AS away_logo, 
+             at.team_color AS away_color, at.home_stadium AS away_stadium,
+             at.season_record AS away_record, at.short_name AS away_short, at.team_rank AS away_rank
         FROM \`${DB}\`.games g
-        JOIN \`${DB}\`.teams ht ON ht.team_id = g.home_team_id
-        JOIN \`${DB}\`.teams at ON at.team_id = g.away_team_id
-    `;
+        JOIN \`${DB}\`.t_team_info ht ON (
+          CASE g.home_team_id 
+            WHEN 1 THEN ht.team_code = 'E'
+            WHEN 2 THEN ht.team_code = 'LG'
+            WHEN 3 THEN ht.team_code = 'KIA'
+            WHEN 4 THEN ht.team_code = 'SS'
+            WHEN 5 THEN ht.team_code = 'NC'
+            WHEN 6 THEN ht.team_code = 'KT'
+            WHEN 7 THEN ht.team_code = 'LT'
+            WHEN 8 THEN ht.team_code = 'OB'
+            WHEN 9 THEN ht.team_code = 'HT'
+            WHEN 10 THEN ht.team_code = 'WO'
+            ELSE ht.team_code = 'E'
+          END
+        )
+        JOIN \`${DB}\`.t_team_info at ON (
+          CASE g.away_team_id 
+            WHEN 1 THEN at.team_code = 'E'
+            WHEN 2 THEN at.team_code = 'LG'
+            WHEN 3 THEN at.team_code = 'KIA'
+            WHEN 4 THEN at.team_code = 'SS'
+            WHEN 5 THEN at.team_code = 'NC'
+            WHEN 6 THEN at.team_code = 'KT'
+            WHEN 7 THEN at.team_code = 'LT'
+            WHEN 8 THEN at.team_code = 'OB'
+            WHEN 9 THEN at.team_code = 'HT'
+            WHEN 10 THEN at.team_code = 'WO'
+            ELSE at.team_code = 'LG'
+          END
+        )`;
     const [gameRows] = gameId
       ? await pool.query(baseSQL + ' WHERE g.game_id=?', [gameId])
       : await pool.query(baseSQL + ' ORDER BY g.game_date DESC, g.game_time DESC LIMIT 1');
@@ -120,8 +151,26 @@ exports.showPlayerLineup = async (req, res) => {
         ...g,
         game_date: formatDate(g.game_date)
       },
-      home: { team_name: g.home_name, team_logo: g.home_logo },
-      away: { team_name: g.away_name, team_logo: g.away_logo },
+      home: { 
+        team_code: g.home_code,
+        team_name: g.home_name, 
+        team_logo: g.home_logo,
+        color_primary: g.home_color,
+        home_stadium: g.home_stadium,
+        season_record: g.home_record,
+        short_name: g.home_short,
+        team_rank: g.home_rank
+      },
+      away: { 
+        team_code: g.away_code,
+        team_name: g.away_name, 
+        team_logo: g.away_logo,
+        color_primary: g.away_color,
+        home_stadium: g.away_stadium,
+        season_record: g.away_record,
+        short_name: g.away_short,
+        team_rank: g.away_rank
+      },
       home_lineup: homeLineup,
       away_lineup: awayLineup,
       error: null
