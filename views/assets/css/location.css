@@ -182,14 +182,21 @@ body {
   font-size: 12px;
 }
 
+
 .badge {
   margin-left: auto;
+  display: inline-block;
+  width: 60px;
+  text-align: center;
+  flex-shrink: 0;
   padding: 4px 8px;
   border-radius: 8px;
   background: #eef3ff;
   color: var(--brand);
   font-size: 12px;
   border: 1px solid #dbe7ff;
+  box-sizing: border-box;
+  margin-left:auto;
 }
 
 /* 지도 */
