@@ -2,6 +2,10 @@
 // 모달 토글 + 메인과 동일한 대화 이벤트(ensureStart/greet/ask) + quick/links 렌더
 
 (() => {
+
+
+  console.log('[fullcount_main_chat] loaded v4');
+
   // 동적 import로 모듈/비모듈 어디서든 동작
   let ensureStart, ask, greet;
   const importCore = async () => {
@@ -12,34 +16,66 @@
     greet = core.greet;
   };
 
-  const modal    = document.getElementById('chatModal');
-  const fab      = document.getElementById('fabBtn');
+  const modal = document.getElementById('chatModal');
+  const fab = document.getElementById('fabBtn');
   const closeBtn = document.getElementById('chatClose');
-  const $wrap    = document.getElementById('fcChat');     // 메인과 동일 컨테이너(로그 오픈용)
-  const $log     = document.getElementById('chatLog');
-  const $input   = document.getElementById('chatInput');
-  const $send    = document.getElementById('chatSend');
+  const $wrap = document.getElementById('fcChat');     // 메인과 동일 컨테이너(로그 오픈용)
+  const $log = document.getElementById('chatLog');
+  const $input = document.getElementById('chatInput');
+  const $send = document.getElementById('chatSend');
 
   if (!modal || !fab || !$log || !$input) return;
 
   /* ===== 공통 렌더(메인과 동일한 마크업) ===== */
+  // function row(role, text) {
+  //   const wrap = document.createElement('div');
+  //   wrap.className = `fc-row ${role}`;
+  //   if (role === 'bot') {
+  //     const avatar = document.createElement('div');
+  //     avatar.className = 'fc-avatar';
+  //     wrap.appendChild(avatar);
+  //   }
+  //   const bubble = document.createElement('div');
+  //   bubble.className = 'fc-bubble';
+  //   bubble.innerHTML  = text || '';
+  //   wrap.appendChild(bubble);
+  //   $log.appendChild(wrap);
+  //   $log.scrollTop = $log.scrollHeight;
+
+  //   return wrap;
+  // }
+
+
+
+
+
   function row(role, text) {
     const wrap = document.createElement('div');
     wrap.className = `fc-row ${role}`;
+
     if (role === 'bot') {
       const avatar = document.createElement('div');
       avatar.className = 'fc-avatar';
       wrap.appendChild(avatar);
     }
+
     const bubble = document.createElement('div');
     bubble.className = 'fc-bubble';
-    bubble.textContent = text || '';
+
+    if (role === 'bot') {
+      // ✅ 링크 포함 HTML 그대로 렌더
+      bubble.innerHTML = text || '';
+    } else {
+      bubble.textContent = text || '';
+    }
+
     wrap.appendChild(bubble);
     $log.appendChild(wrap);
     $log.scrollTop = $log.scrollHeight;
-    
     return wrap;
   }
+
+
 
   function renderExtras(r) {
     // 빠른질문
@@ -68,6 +104,8 @@
         a.href = link.href;
         a.textContent = link.label || link.href;
         a.className = 'fc-link';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
         wrap.appendChild(a);
       });
       $log.appendChild(wrap);
@@ -76,27 +114,78 @@
   }
 
   /* ===== 모달 토글 ===== */
+  // function openModal() {
+  //   modal.hidden = false;
+  //   modal.classList.add('show');
+  //   fab.setAttribute('aria-expanded', 'true');
+  //   setTimeout(() => ($input || closeBtn || fab)?.focus(), 0);
+  //   greetOnce().catch(() => { });   // 열릴 때 1회 인사 시도
+  // }
+  // function closeModal() {
+  //   modal.classList.remove('show');
+  //   modal.hidden = true;
+  //   fab.setAttribute('aria-expanded', 'false');
+  //   fab.focus();
+  // }
+
+  // // fab.addEventListener('click', openModal);
+
+  // closeBtn?.addEventListener('click', closeModal);
+  // modal.addEventListener('click', (e) => {
+  //   if (e.target.matches('[data-dismiss="modal"], .modal__backdrop')) closeModal();
+  // });
+  // window.addEventListener('keydown', (e) => {
+  //   if (e.key === 'Escape' && !modal.hidden) closeModal();
+  // });
+  /* ===== 모달 토글 ===== */
+  // 모달 열려있는지 여부를 JS가 직접 기억
+  let isOpen = false;
+
   function openModal() {
+    if (isOpen) return;      // 이미 열려있으면 또 열지 않음
+    isOpen = true;
+
     modal.hidden = false;
     modal.classList.add('show');
     fab.setAttribute('aria-expanded', 'true');
     setTimeout(() => ($input || closeBtn || fab)?.focus(), 0);
-    greetOnce().catch(() => {});   // 열릴 때 1회 인사 시도
+    greetOnce().catch(() => { });   // 열릴 때 1회 인사 시도
   }
+
   function closeModal() {
+    if (!isOpen) return;     // 이미 닫혀있으면 무시
+    isOpen = false;
+
     modal.classList.remove('show');
     modal.hidden = true;
     fab.setAttribute('aria-expanded', 'false');
     fab.focus();
   }
 
-  fab.addEventListener('click', openModal);
-  closeBtn?.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
-    if (e.target.matches('[data-dismiss="modal"], .modal__backdrop')) closeModal();
+  // ✅ fab 버튼 클릭 시 토글
+  fab.addEventListener('click', () => {
+    if (isOpen) {
+      closeModal();  // 열려 있으면 닫기
+    } else {
+      openModal();   // 닫혀 있으면 열기
+    }
   });
+
+  // X 버튼으로 닫기
+  closeBtn?.addEventListener('click', closeModal);
+
+  // 배경 클릭으로 닫기
+  modal.addEventListener('click', (e) => {
+    if (e.target.matches('[data-dismiss="modal"], .modal__backdrop')) {
+      closeModal();
+    }
+  });
+
+  // ESC 키로 닫기
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) closeModal();
+    if (e.key === 'Escape' && isOpen && !modal.hidden) {
+      closeModal();
+    }
   });
 
   /* ===== 대화 이벤트(메인과 동일 플로우) ===== */
@@ -140,6 +229,8 @@
 
     busy = true;
     try {
+      // const r = await ask(text);
+      // row('bot', r.reply, true);
       const r = await ask(text);
       row('bot', r.reply);
       renderExtras(r);
@@ -153,8 +244,8 @@
   }
 
   // 입력 포커스/클릭 시 1회 인사
-  $input.addEventListener('focus', () => { greetOnce().catch(() => {}); });
-  $input.addEventListener('click',  () => { greetOnce().catch(() => {}); });
+  $input.addEventListener('focus', () => { greetOnce().catch(() => { }); });
+  $input.addEventListener('click', () => { greetOnce().catch(() => { }); });
 
   // Enter 전송: 인사 전이면 먼저 인사 후 전송
   $input.addEventListener('keydown', (e) => {

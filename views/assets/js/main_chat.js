@@ -25,11 +25,20 @@ import { ensureStart, ask, greet } from '/assets/js/aiCore.js';
     }
     const bubble = document.createElement('div');
     bubble.className = 'fc-bubble';
-    bubble.textContent = text;
+
+    if (role === 'bot') {
+      // ✅ AI 응답은 HTML 그대로 렌더 → <a> 링크 살아남
+      bubble.innerHTML = text || '';
+    } else {
+      // 사용자 메시지는 그냥 텍스트로
+      bubble.textContent = text || '';
+    }
+
     wrap.appendChild(bubble);
     $log.appendChild(wrap);
     $log.scrollTop = $log.scrollHeight;
   }
+
 
   function renderExtras(r) {
     // 빠른질문
