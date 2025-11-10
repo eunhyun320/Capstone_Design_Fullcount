@@ -270,3 +270,25 @@ exports.findScheduleByDate = async (date) => {
     );
     return rows[0] || null;
 };
+
+
+/*스코어보드 달력 선택 */
+exports.findGameByDate = async (date) => {
+    console.log('findGameByDate 파라미터 date:', date);
+
+    const [rows] = await pool.query(
+        `SELECT g.* 
+         FROM game_page g 
+         WHERE g.game_date = ? 
+         LIMIT 1`,
+        [date]
+    );
+
+    console.log('findGameByDate rows.length:', rows.length);
+    if (rows[0]) {
+        console.log('findGameByDate 첫 번째 row:', rows[0]);
+    }
+
+    return rows[0] || null;
+};
+

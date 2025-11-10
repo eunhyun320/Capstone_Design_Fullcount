@@ -422,3 +422,37 @@ exports.getGameIdByDate = async (req, res) => {
   }
 };
 
+
+
+
+// 날짜로 경기 검색 (GET /game/findByDate)
+// controllers/gameController.js
+
+
+exports.findByDate = async (req, res) => {
+  const { date } = req.query;
+  console.log('요청 받은 날짜:', date);
+
+  try {
+    const gameData = await gameModel.findGameByDate(date);
+    console.log('DB에서 찾은 gameData:', gameData);
+
+    if (gameData) {
+      res.json({
+        success: true,
+        id: gameData.game_id,   // PK 컬럼명이 game_id인 거 반영
+      });
+    } else {
+      res.json({
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.error('findByDate 오류:', error);
+    res.status(500).json({
+      success: false,
+      error: 'DB Error',
+    });
+  }
+};
+

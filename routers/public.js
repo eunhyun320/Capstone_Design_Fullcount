@@ -64,6 +64,9 @@ router.get('/api/game-by-date', gameController.getGameByDate);
 router.get('/api/game-id-by-date', gameController.getGameIdByDate);
 router.get('/api/schedules', gameController.getSchedules);
 
+router.get('/game/findByDate', gameController.findByDate);
+
+
 // 고객지원 API
 router.get('/api/faq', supportController.faqList);
 router.get('/faq', supportController.faqList); // 구버전 호환
