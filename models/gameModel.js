@@ -242,7 +242,8 @@ exports.update = async (id, payload) => {
 
 exports.findLatest = async () => {
     const [rows] = await pool.query(
-        `SELECT game_id, game_date, payload FROM \`${DB}\`.game_page ORDER BY updated_at DESC, game_id DESC LIMIT 1`
+        // 클릭 시 최신 날짜 보이게 수정
+        `SELECT game_id, game_date, payload FROM \`${DB}\`.game_page ORDER BY game_date DESC, game_id DESC LIMIT 1`
     );
     return rows[0] || null;
 };
