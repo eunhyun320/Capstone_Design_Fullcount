@@ -80,10 +80,10 @@ const getSkyState = (sky, pty) => {
     
     // PTY(강수형태)가 우선
     if (p > 0) { 
-        return {1: '비', 2: '비/눈', 3: '눈', 4: '소나기'}[p] || '강수';
+        return {1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기⛆'}[p] || '강수';
     }
     // SKY(하늘상태)
-    return {1: '맑음', 3: '구름많음', 4: '흐림'}[s] || '정보 없음';
+    return {1: '맑음🌞', 2: '구름 조금⛅',3: '구름많음🌥️', 4: '흐림☁️'}[s] || '정보 없음';
 };
 
 /**
@@ -149,9 +149,9 @@ const fetchWeatherInfo = async () => {
             if (popNum < 0 || isNaN(popNum)) { 
                 precipitationText = "정보 없음";
             } else if (popNum === 0) {
-                precipitationText = "강수없음 (0%)";
+                precipitationText = "강수 없음 (0%)";
             } else {
-                precipitationText = `강수확률 ${popNum}%`;
+                precipitationText = `강수 확률🌧️ ${popNum}%`;
             }
             
             const skyState = getSkyState(SKY, PTY);
@@ -161,7 +161,7 @@ const fetchWeatherInfo = async () => {
             const finalDisplayMonth = pad(nextTmefDate.getMonth() + 1);
             const finalDisplayDay = pad(nextTmefDate.getDate());
 
-            return `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, 강수 ${precipitationText}`;
+            return `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
             
         } catch (e) { 
             console.error(`[예상치 못한 오류] ${e.message}. 3시간 전 데이터로 재시도합니다.`);

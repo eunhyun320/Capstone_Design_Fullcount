@@ -18,13 +18,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .result_schedule {
   width: 50%; /* 오른쪽 절반 차지 */
-  margin: 50px;
+  /* margin: 50px; */
+  margin-top: 80px;
   /* height: 500px; */
+  margin-left: 45px;
+  margin-right: 45px;
+  
 }
+
 
 /* 달력  */
 
@@ -156,7 +162,7 @@
     border-radius: 18px;
     background: #ffffff;
     /* 상우하좌 */
-    padding: 20px 10px 0px 20px ;
+    padding: 20px 20px 20px 20px ;
     border: 1px solid #e0e0e0;
     user-select: none;
 }
@@ -171,9 +177,11 @@
     width: 300px;
     color: #262626;
 }
-
+.header{
+    /* background-color: red; */
+    width: 95%;
+}
 .icon {
-    padding: 10px;
     font-size: 1em;
     margin: 0 0 0 5px;
     background: #ffffff;
@@ -181,6 +189,9 @@
     border: none;
     cursor: pointer;
     outline: 0;
+}
+#prev-btn{
+    padding-right: 10px;
 }
 
 .weekends th {
@@ -236,6 +247,24 @@ font-weight: bold;
     /* margin-bottom: 40px; */
 }
 
+
+/* 1. 경기 종료 (Finished) 상태일 때 헤더 스타일 */
+.result-header.status-finished {
+    
+    margin-top: 20px;
+}
+
+/* 2. 경기 예정 (Scheduled) 상태일 때 헤더 스타일 */
+/* .result-header.status-scheduled {
+    padding: 12px 0;
+    border-bottom: 1px dashed #FF9800;
+} */
+
+/* 3. 경기 정보 없음 (No Game) 상태일 때 헤더 스타일 */
+.result-header.status-no-game {
+    margin-top: 45px;
+}
+
 .game-date {
     font-weight: bold;
     font-size: 18px;
@@ -255,12 +284,7 @@ font-weight: bold;
     margin-top: 15px;
 }
 
-.teams-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 30px 10px;
-}
+
 
 .team-info {
     display: flex;
@@ -276,8 +300,6 @@ font-weight: bold;
     height: 100px;
     border: 1px solid #000;
     object-fit: contain; /* ✅ 이미지 비율을 유지하며 틀 안에 꽉 차게 */
-    
-
 }
 /* 
 div.pitcher-results p{
@@ -298,10 +320,12 @@ div.pitcher-results p{
 .teams-container {
     display: flex;
     justify-content: space-around;
-    align-items: flex-start; /* ✅ 자식 요소들을 위쪽 기준으로 정렬 */
-    padding: 30px 10px;
+    align-items: center;
+    /* 상우하좌 */
+    padding: 20px 10px 23px 10px;
+    
+   
 }
-
 .match-meta {
     padding: 12px;
     border-bottom: 1px solid #e0e0e0;
