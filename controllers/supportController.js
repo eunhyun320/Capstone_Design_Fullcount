@@ -59,7 +59,7 @@ exports.faqList = async (req, res) => {
 };
 
 /* ===== 문의 ===== */
-exports.inquiryForm = (req, res) => res.render('support/Inquiry_details.html');
+exports.inquiryForm = (req, res) => res.render('support/ContactUs.html');
 exports.inquiryHistory = (req, res) => res.render('support/Inquiry_history.html');
 
 exports.inquiryCreate = async (req, res) => {
@@ -88,5 +88,42 @@ exports.inquiryList = async (req, res) => {
     res.json({ ok:true, data: rows });
   } catch (e) {
     res.status(500).json({ ok:false, error: e.sqlMessage || e.message });
+  }
+};
+
+exports.inquiryDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const inquiry = await supportModel.getInquiryById(id);
+    
+    if (!inquiry) {
+      return res.status(404).render('error.html', { 
+        message: '문의를 찾을 수 없습니다.',
+        statusCode: 404 
+      });
+    }
+    
+    // 날짜 포맷팅
+    const formatDate = (dateStr) => {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+      const weekday = weekdays[date.getDay()];
+      return `${year}.${month}.${day} (${weekday})`;
+    };
+    
+    // 날짜 포맷팅 적용
+    inquiry.formatted_date = formatDate(inquiry.created_at);
+    
+    res.render('support/inquiry_detail.html', { inquiry });
+  } catch (e) {
+    console.error('[GET /inquiry/:id]', e);
+    res.status(500).render('error.html', { 
+      message: '서버 오류가 발생했습니다.',
+      statusCode: 500 
+    });
   }
 };

@@ -1,41 +1,91 @@
 /* ================================
-   문의내역 전용 (main.page-inquiry-history 기준)
-   다른 페이지 영향 없음
+   문의내역 전용 CSS (정리 최종본)
    ================================ */
 
+/* 기본 스타일 (모바일 우선) */
 main.page-inquiry-history {
-  width: 1275px;
-  max-width: 100%;
-  margin: 20px auto;
-  padding: 0 20px;
+  margin: 0 20px;
+  margin-top: 20px;
+  padding: 0;
   box-sizing: border-box;
 }
 
+/* 데스크톱 스타일 */
+@media (min-width: 769px) {
+  main.page-inquiry-history {
+    margin: 30px 250px 0; /* 양옆 250px 마진 */
+    padding: 0;           /* 내부 여백 제거 */
+    height: auto;
+  }
+}
+
+/* 결과 영역 */
 main.page-inquiry-history .result {
   margin-top: 0;
   text-align: left;
 }
 
+/* 제목 */
 main.page-inquiry-history .result h1 {
   margin-bottom: 10px;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   color: #333;
 }
 
+/* 제목 하단 선 */
 main.page-inquiry-history .line2 {
-  border-top: 3px solid #7e4f37;
+  border-top: 3px solid #002B5B;
   width: 100%;
   margin: 10px 0 20px;
 }
 
-/* 테이블 스타일 */
+/* 테이블 공통 스타일 */
 main.page-inquiry-history table {
   width: 100%;
   border-collapse: collapse;
   font-size: 16px;
   border: 1px solid #ddd;
   background: #fff;
+  margin-bottom: 30px;
+  table-layout: fixed; /* 고정 테이블 레이아웃 사용 */
+}
+
+/* 컬럼별 너비 설정 */
+main.page-inquiry-history table th:nth-child(1), /* 순번 */
+main.page-inquiry-history table td:nth-child(1) {
+  width: 8%;
+  min-width: 60px;
+}
+
+main.page-inquiry-history table th:nth-child(2), /* 제목 */
+main.page-inquiry-history table td:nth-child(2) {
+  width: 25%;
+  min-width: 150px;
+}
+
+main.page-inquiry-history table th:nth-child(3), /* 문의 내용 */
+main.page-inquiry-history table td:nth-child(3) {
+  width: 30%;
+  min-width: 200px;
+}
+
+main.page-inquiry-history table th:nth-child(4), /* 문의유형 */
+main.page-inquiry-history table td:nth-child(4) {
+  width: 12%;
+  min-width: 100px;
+}
+
+main.page-inquiry-history table th:nth-child(5), /* 이메일 */
+main.page-inquiry-history table td:nth-child(5) {
+  width: 15%;
+  min-width: 120px;
+}
+
+main.page-inquiry-history table th:nth-child(6), /* 이름 */
+main.page-inquiry-history table td:nth-child(6) {
+  width: 10%;
+  min-width: 80px;
 }
 
 main.page-inquiry-history thead th {
@@ -46,6 +96,7 @@ main.page-inquiry-history thead th {
   border-bottom: 2px solid #ddd;
   text-align: center;
   color: #333;
+  font-size: 16px;
 }
 
 main.page-inquiry-history tbody td {
@@ -53,14 +104,50 @@ main.page-inquiry-history tbody td {
   border-bottom: 1px solid #ddd;
   text-align: center;
   color: #555;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* 제목과 내용 컬럼은 줄바꿈 허용 */
+main.page-inquiry-history tbody td:nth-child(2),
+main.page-inquiry-history tbody td:nth-child(3) {
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* 행 hover 효과 */
 main.page-inquiry-history tbody tr:hover {
   background: #faf3ef;
   cursor: pointer;
 }
 
-/* empty-row 스타일 */
+main.page-inquiry-history tbody tr[style*="cursor: pointer"]:hover {
+  background: #e3f2fd;
+}
+
+/* 제목/내용 좌측 정렬 - 헤더도 포함 */
+main.page-inquiry-history thead th:nth-child(2),
+main.page-inquiry-history thead th:nth-child(3),
+main.page-inquiry-history tbody td:nth-child(2),
+main.page-inquiry-history tbody td:nth-child(3) {
+  text-align: left;
+}
+
+/* 제목 열 스타일 */
+main.page-inquiry-history tbody td:nth-child(2) {
+  font-weight: 500;
+  color: #333;
+}
+
+/* 내용 열 스타일 */
+main.page-inquiry-history tbody td:nth-child(3) {
+  color: #666;
+}
+
+/* 데이터 없을 때 표시 행 */
 main.page-inquiry-history .empty-row {
   padding: 40px 0;
   text-align: center;
@@ -70,35 +157,62 @@ main.page-inquiry-history .empty-row {
   font-weight: 500;
 }
 
-/* 반응형 */
+/* 모바일 대응 */
 @media (max-width: 768px) {
-  main.page-inquiry-history {
-    width: 100%;
-    padding: 10px 15px 40px;
-    margin: 0;
-  }
-
   main.page-inquiry-history .result {
-    text-align: center;
+    text-align: left;
   }
 
   main.page-inquiry-history .result h1 {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   main.page-inquiry-history table {
-    font-size: 14px;
+    font-size: 12px;
     display: block;
     overflow-x: auto;
+    white-space: nowrap;
+    min-width: 600px; /* 최소 너비 설정 */
+  }
+
+  /* 모바일에서 컬럼 너비 조정 */
+  main.page-inquiry-history table th:nth-child(1),
+  main.page-inquiry-history table td:nth-child(1) {
+    width: 50px;
+  }
+
+  main.page-inquiry-history table th:nth-child(2),
+  main.page-inquiry-history table td:nth-child(2) {
+    width: 120px;
+  }
+
+  main.page-inquiry-history table th:nth-child(3),
+  main.page-inquiry-history table td:nth-child(3) {
+    width: 150px;
+  }
+
+  main.page-inquiry-history table th:nth-child(4),
+  main.page-inquiry-history table td:nth-child(4) {
+    width: 80px;
+  }
+
+  main.page-inquiry-history table th:nth-child(5),
+  main.page-inquiry-history table td:nth-child(5) {
+    width: 120px;
+  }
+
+  main.page-inquiry-history table th:nth-child(6),
+  main.page-inquiry-history table td:nth-child(6) {
+    width: 70px;
   }
 
   main.page-inquiry-history thead th,
   main.page-inquiry-history tbody td {
-    padding: 10px 6px;
-    font-size: 13px;
+    padding: 8px 4px;
+    font-size: 12px;
   }
 
   main.page-inquiry-history thead th {
-    height: 45px;
+    height: 40px;
   }
 }

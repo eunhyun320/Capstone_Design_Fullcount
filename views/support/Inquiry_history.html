@@ -42,11 +42,11 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#39;");
 
-            tbody.innerHTML = json.data.map(q => `
-      <tr>
-        <td>${q.id}</td>
-        <td>${esc(q.title)}</td>
-        <td>${esc(q.message)}</td>
+            tbody.innerHTML = json.data.map((q, index) => `
+      <tr onclick="location.href='/inquiry/${q.id}'" style="cursor: pointer;">
+        <td>${index + 1}</td>
+        <td style="text-align: left; font-weight: 500;">${esc(q.title)}</td>
+        <td style="text-align: left;">${esc(q.message.length > 50 ? q.message.substring(0, 50) + '...' : q.message)}</td>
         <td>${esc(q.category)}</td>
         <td>${esc(q.email)}</td>
         <td>${esc(q.name)}</td>

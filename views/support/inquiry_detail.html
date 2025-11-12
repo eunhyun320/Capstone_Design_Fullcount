@@ -1,0 +1,40 @@
+{%include "include/header.html"%}
+<main class="inquiry_detail_container">
+    <p class="page-title">문의 내역</p>
+
+    <div class="line2"></div>
+    <article class="detail" id="inquiryDetail" data-id="">
+        <div class="detail-head">
+            <h2 class="title">{{ inquiry.title }}</h2>
+            <div class="meta">
+                <span class="category">{{ inquiry.category }}</span>
+                <span class="author">작성자: {{ inquiry.name }}</span>
+                <span class="email">{{ inquiry.email }}</span>
+                <time class="date" datetime="{{ inquiry.created_at | date('YYYY-MM-DDTHH:mm') }}">
+                    {{ inquiry.formatted_date }}
+                </time>
+            </div>
+        </div>
+
+        <!-- 본문: 헤더 밖, 1회만 -->
+        <section class="detail-body" id="content">
+            {{ inquiry.message | safe }}
+        </section>
+
+        <div class="back">
+            <a href="/inquiry/history">목록</a>
+        </div>
+    </article>
+</main>
+
+<script>
+    (function readQuery() {
+        var params = new URLSearchParams(location.search);
+        var id = params.get('id');
+        if (id) {
+            document.getElementById('inquiryDetail')?.setAttribute('data-id', id);
+        }
+    })();
+</script>
+
+{%include "include/footer.html"%}

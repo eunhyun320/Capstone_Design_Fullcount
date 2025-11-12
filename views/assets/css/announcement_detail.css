@@ -9,6 +9,9 @@ body {
 
 .announcement_detail_container {
     margin-top: 30px;
+    text-align: left;
+    margin: 30px auto 0;
+    padding: 0 20px;
 }
 
 .container {
@@ -43,6 +46,10 @@ body {
     font-size: 20px;
     font-weight: 700;
     margin: 4px 0 6px;
+
+    
+    /* 이거 넣을까 뺼까  */
+    text-align: left;
 }
 
 .meta {
@@ -57,6 +64,12 @@ body {
     padding: 18px 6px;
     line-height: 1.75;
     color: #222;
+    height: 500px;
+    white-space: pre-wrap; /* 줄바꿈 유지 */
+    word-wrap: break-word; /* 긴 단어 자동 줄바꿈 */
+
+    width: 1200px;
+
 }
 
 .files {
@@ -84,6 +97,16 @@ body {
     padding: 6px 10px;
     border-radius: 6px;
     display: inline-block;
+    color: #333; /* 기본 색상 */
+}
+
+.back a:visited {
+    color: #333; /* 방문 후에도 동일한 색상 유지 */
+}
+
+.back a:hover {
+    color: #333; /* 호버 시에도 동일한 색상 유지 */
+    background-color: #f5f5f5; /* 호버 시 배경색만 변경 */
 }
 
 /*검색바*/

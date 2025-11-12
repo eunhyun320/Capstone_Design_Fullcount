@@ -44,9 +44,9 @@ router.get(['/location_come', '/location_come.html'], locationController.showDir
 router.get(['/support', '/support.html'], supportController.showSupport);
 router.get(['/announcements', '/announcement_list', '/announcement_list.html'], supportController.announcementList);
 router.get(['/announcements/:id', '/announcement_detail', '/announcement_detail.html'], supportController.announcementDetail);
-router.get(['/inquiry', '/Inquiry_details', '/Inquiry_details.html'], supportController.inquiryForm);
+router.get(['/inquiry', '/ContactUs', '/ContactUs.html'], supportController.inquiryForm);
 router.get(['/inquiry/history', '/Inquiry_history', '/Inquiry_history.html'], supportController.inquiryHistory);
-
+router.get('/inquiry/:id', supportController.inquiryDetail);
 // 구버전 URL 리다이렉트
 router.get('/support/announcement_list', supportController.redirectToAnnouncements);
 router.get('/support/announcements', (req, res) => res.redirect('/announcements'));

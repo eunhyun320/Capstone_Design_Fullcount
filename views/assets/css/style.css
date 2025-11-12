@@ -80,22 +80,24 @@ header {
 
 .login_button:hover,
 .join_button:hover {
-  background: #333;
+  background: #002B5B;
   color: #fff;
 }
 
 /* 헤더 아래 메뉴 */
 .header_bottom {
   height: 65px;
-  background-color: #c7c3c3;
+
   line-height: 25px;
   display: flex;
   justify-content: center;
   width: 100%;
+  background-color: #002B5B;
+
 }
 
 nav {
-  height: 200px;
+  height: auto; /* 200px에서 auto로 변경하여 내용에 맞게 조정 */
   overflow: visible;
 }
 
@@ -123,38 +125,56 @@ nav {
   display: inline-block;
   padding: 5px 0;
   height: 30px;
+  color: #fff;
 }
 
 .mainmenu>li>a span:hover {
   font-weight: 700;
-  color: #28325e;
 }
 
 /* 서브메뉴 */
 .mainmenu .sub {
   display: none;
   background: linear-gradient(#ffffff 70px, rgba(255, 255, 255, 0.8) 50px, rgba(255, 255, 255, 0.8) 100%);
-  min-width: 100px;
-  min-height: 140px;
+  min-width: 150px;
+  /* 메인 메뉴와 동일한 너비 */
+  min-height: 160px;
+  /* 서브메뉴 높이를 줄임 (220px → 160px) */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10050;
 }
 
 .mainmenu:hover .sub {
   display: block;
+  z-index: 10051;
 }
 
 .sub li {
-  line-height: 45px;
+  line-height: 40px;
+  /* 서브메뉴 간격을 줄임 (60px → 40px) */
   list-style: none;
+  width: 150px;
+  /* 메인 메뉴와 동일한 너비 */
+  text-align: center;
+  /* 메인 메뉴와 동일한 정렬 */
+  font-size: 20px;
+  /* 메인 메뉴와 동일한 폰트 크기 */
 }
 
 .sub li a {
   color: #272424;
   text-decoration: none;
+  display: block;
+  /* 전체 영역 클릭 가능하도록 */
+  padding: 5px 0;
+  /* 메인 메뉴와 동일한 패딩 */
 }
 
 .sub li a:hover {
-  color: rgb(22, 23, 104);
-  font-size: 20px;
+  color: #28325e;
+  /* 메인 메뉴 hover와 동일한 색상 */
   font-weight: 700;
 }
 

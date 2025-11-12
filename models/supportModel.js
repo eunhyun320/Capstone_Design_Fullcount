@@ -86,3 +86,13 @@ exports.getInquiries = async () => {
   );
   return rows;
 };
+
+exports.getInquiryById = async (id) => {
+  const [[row]] = await pool.query(
+    `SELECT id,name,email,category,title,message,status,created_at
+       FROM \`${DB}\`.inquiries
+      WHERE id=?`,
+    [id]
+  );
+  return row || null;
+};

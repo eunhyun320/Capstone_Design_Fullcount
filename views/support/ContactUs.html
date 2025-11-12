@@ -69,7 +69,8 @@
             const json = await res.json();
             if (!json.ok) throw new Error(json.error || "등록 실패");
             alert("문의가 성공적으로 저장되었습니다!");
-            this.reset();
+            // 문의내역 페이지로 이동
+            window.location.href = "/Inquiry_history.html";
         } catch (err) {
             // console.error(err);
             alert("문의 제출 중 오류가 발생했습니다.");
