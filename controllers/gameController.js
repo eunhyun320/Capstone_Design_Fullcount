@@ -135,8 +135,22 @@ exports.showPlayerLineup = async (req, res) => {
     const [awayLineup] = await pool.query(lineupSQL, [g.game_id, g.away_team_id]);
     const isAnnounced = Number(g.is_lineup_announced) === 1 || (homeLineup.length && awayLineup.length);
 
-    // 날짜 포맷팅
+    // 날짜 포맷팅 (타임존 문제 방지)
     const formatDate = (date) => {
+      // 문자열인 경우 (YYYY-MM-DD 형식)
+      if (typeof date === 'string') {
+        const dateOnly = date.slice(0, 10); // YYYY-MM-DD 부분만 추출
+        const [year, month, day] = dateOnly.split('-').map(Number);
+        
+        // 타임존 오프셋을 고려하여 로컬 날짜 생성
+        const localDate = new Date(year, month - 1, day);
+        
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[localDate.getDay()];
+        return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')} (${weekday})`;
+      }
+      
+      // Date 객체인 경우
       const d = new Date(date);
       const year = d.getFullYear();
       const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -272,15 +286,24 @@ exports.getGameByDate = async (req, res) => {
       cleanDate = date.replace(/\(.*\)/, '').trim();
     }
 
-    // 2) YYYY-MM-DD로 정규화
-    const d = new Date(cleanDate);
-    if (isNaN(d.getTime()))
-      return res.status(400).json({ ok: false, error: '잘못된 날짜 형식' });
-
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    const formatted = `${yyyy}-${mm}-${dd}`;
+    // 2) YYYY-MM-DD로 정규화 (타임존 문제 방지)
+    let formatted;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) {
+      // 이미 YYYY-MM-DD 형식인 경우
+      formatted = cleanDate;
+    } else {
+      // 다른 형식인 경우 Date 객체를 통해 변환 (주의: 타임존 고려)
+      const d = new Date(cleanDate);
+      if (isNaN(d.getTime())) {
+        return res.status(400).json({ ok: false, error: '잘못된 날짜 형식' });
+      }
+      
+      // 로컬 시간 기준으로 YYYY-MM-DD 생성
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      formatted = `${yyyy}-${mm}-${dd}`;
+    }
     // console.log('[DEBUG formattedDate]', formatted);
 
     // 3) DB 조회
@@ -289,15 +312,25 @@ exports.getGameByDate = async (req, res) => {
     if (!game)
       return res.status(404).json({ ok: false, error: `해당 날짜(${formatted})의 경기가 없습니다.` });
 
-    // ---------- 안전 포맷 유틸 ----------
+    // ---------- 안전 포맷 유틸 (타임존 문제 방지) ----------
     // 'YYYY-MM-DD' → 'YYYY년 M월 D일' (타임존 영향 없음)
     const toKoreanDate = (ymd) => {
       if (typeof ymd === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(ymd)) {
         const [y, m, d] = ymd.split('-').map(Number);
         return `${y}년 ${m}월 ${d}일`;
       }
-      const dt = new Date(ymd);
-      return `${dt.getFullYear()}년 ${dt.getMonth() + 1}월 ${dt.getDate()}일`;
+      // Date 객체인 경우에도 타임존 문제 방지
+      try {
+        const dt = new Date(ymd);
+        // UTC 날짜가 아닌 로컬 날짜로 처리
+        const year = dt.getFullYear();
+        const month = dt.getMonth() + 1;
+        const day = dt.getDate();
+        return `${year}년 ${month}월 ${day}일`;
+      } catch (error) {
+        console.warn('날짜 변환 오류:', ymd);
+        return String(ymd);
+      }
     };
 
     // 'HH:MM' | 'HH:MM:SS' | Date → 'HH:MM:SS'

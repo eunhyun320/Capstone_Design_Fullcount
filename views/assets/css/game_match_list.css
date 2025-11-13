@@ -48,6 +48,49 @@
   margin-right: 6px;
 }
 
+/* 월 네비게이션 스타일 */
+.month-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 15px 0 20px 0;
+  padding: 10px;
+}
+
+.month-btn {
+  background: #0b3d91;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.month-btn:hover {
+  background: #092b68;
+}
+
+.month-btn:active {
+  transform: scale(0.95);
+}
+
+#currentMonth {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  min-width: 120px;
+  text-align: center;
+}
+
 .tbl-type06 {
   overflow-x: auto;
   width: 100%;
@@ -122,6 +165,25 @@
     flex: 0 0 auto;
     font-size: 14px;
     padding: 6px 10px;
+  }
+
+  /* 모바일 월 네비게이션 */
+  .month-navigation {
+    gap: 15px;
+    margin: 10px 0 15px 0;
+    padding: 5px;
+  }
+
+  .month-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    min-width: 35px;
+    height: 35px;
+  }
+
+  #currentMonth {
+    font-size: 16px;
+    min-width: 100px;
   }
 
   .tbl-type06 {
