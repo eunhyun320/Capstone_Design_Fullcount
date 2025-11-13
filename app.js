@@ -103,5 +103,5 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 80;
 const HOST = '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
+  console.log(`✅ Server running at http://43.200.212.37:${PORT}`);
 });
