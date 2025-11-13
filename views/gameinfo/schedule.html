@@ -230,7 +230,7 @@
             // page_id 대신 gameId 사용
             cardFinished.style.cursor = 'pointer';
             cardFinished.onclick = () => {
-                window.location.href = `:3000/gameinfo_result?id=${data.gameId}`;
+                window.location.href = `/gameinfo_result?id=${data.gameId}`;
             };
         } else {
             alert('상세 경기 정보가 없습니다.');
