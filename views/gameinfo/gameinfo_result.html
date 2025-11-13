@@ -1095,7 +1095,7 @@
 
             if (date_data.success && date_data.id) {
                 // ✅ 여기! 너 페이지 형태에 맞게 수정
-                window.location.href = `/gameinfo_result?id=${date_data.id}`;
+                window.location.href = `:3000/gameinfo_result?id=${date_data.id}`;
             } else {
                 alert('해당 날짜의 경기 데이터를 찾을 수 없습니다.');
             }
