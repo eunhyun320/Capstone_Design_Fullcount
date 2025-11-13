@@ -9,12 +9,22 @@
   
   function getLocalDateString(isoDateString) {
     if (!isoDateString) return '';
-    // '2025-09-03T...' 와 같은 문자열에서 T 이후를 제거하여 UTC가 아닌 로컬 시간으로 간주하게 함
-    const date = new Date(isoDateString.slice(0, 10));
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    // YYYY-MM-DD 형식의 문자열에서 직접 파싱하여 타임존 문제 방지
+    const dateOnly = isoDateString.slice(0, 10); // 'YYYY-MM-DD' 부분만 추출
+    
+    // Date 객체를 사용하지 않고 직접 문자열 조작으로 처리
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)) {
+      return dateOnly;
+    }
+    
+    // 만약 다른 형태의 날짜라면 안전하게 처리
+    try {
+      const [year, month, day] = dateOnly.split('-').map(Number);
+      return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    } catch (error) {
+      console.warn('날짜 파싱 오류:', isoDateString);
+      return dateOnly;
+    }
   }
   
   function updateMonthDisplay() {
@@ -55,6 +65,10 @@
           (!isCanceled && r.game_page_id) // review_url 대신 game_page_id가 존재하는지 확인
             ? `<a href="${reviewUrlBase}${r.game_page_id}" class="btn2">리뷰</a>`
             : '';
+        
+        // 날짜 표시 (타임존 문제 해결)
+        const displayDate = getLocalDateString(r.game_date);
+        
         // 이동일이나 휴식일 처리
         const isRestDay = (r.note || '').includes('이동일') || 
                          (r.note || '').includes('휴식') ||
@@ -66,7 +80,7 @@
 
         return `
           <tr>
-            <td>${r.game_date.slice(0, 10)}(${r.game_day || ''})</td>
+            <td>${displayDate}(${r.game_day || ''})</td>
             <td><b>${r.game_time ? r.game_time.slice(0, 5) : ''}</b></td>
             <td>${matchInfo}</td>
             <td>${review}</td>

@@ -159,7 +159,7 @@ exports.getSchedules = async (month) => {
     const sql = `
         SELECT
             g.id AS game_id,
-            g.game_date,
+            DATE_FORMAT(g.game_date, '%Y-%m-%d') AS game_date,
             g.game_day,
             g.game_time,
             g.team_home,
@@ -178,7 +178,7 @@ exports.getSchedules = async (month) => {
             END AS is_finished
         FROM \`${DB}\`.game_schedule_list g
         -- 날짜를 기준으로 game_page 테이블과 LEFT JOIN
-        LEFT JOIN \`${DB}\`.game_page gp ON g.game_date = gp.game_date 
+        LEFT JOIN \`${DB}\`.game_page gp ON DATE(g.game_date) = DATE(gp.game_date) 
         WHERE DATE_FORMAT(g.game_date, '%Y-%m') = ?
         ORDER BY g.game_date ASC, g.game_time ASC
     `;
