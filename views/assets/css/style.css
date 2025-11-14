@@ -253,7 +253,7 @@ main {
     left: 0;
     height: calc(100vh - 80px);
     width: 45vw;
-    background: #f4f4f4;
+    background: #002B5B;
     border-right: 1px solid #ddd;
     display: none;
     flex-direction: column;
@@ -273,7 +273,7 @@ main {
     line-height: 60px;
     text-align: center;
     padding: 0 12px;
-    border-bottom: 1px solid #e9e9e9;
+    border-bottom: 1px solid #FFF;
   }
 
   /* 오른쪽 서브 패널 */
