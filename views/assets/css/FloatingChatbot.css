@@ -300,3 +300,140 @@
 .fc-link:hover {
   text-decoration: underline;
 }
+
+/* ========== 모바일 반응형 ========== */
+@media (max-width: 768px) {
+  /* FAB 버튼 모바일 최적화 */
+  .fab {
+    right: 16px;
+    bottom: 16px;
+    width: 60px;
+    height: 60px;
+  }
+
+  /* 도킹형 모달 모바일 최적화 */
+  .modal.dock .modal__dialog {
+    right: 8px;
+    bottom: 80px;
+    width: calc(100vw - 16px);
+    max-width: 360px;
+    max-height: 50vh;
+  }
+
+  /* 중앙형 모달 모바일 최적화 */
+  .modal__dialog {
+    width: calc(100vw - 16px);
+    margin: 4vh auto 0;
+  }
+
+  /* 채팅 로그 높이 조정 */
+  .chat-log {
+    height: 280px;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  /* 채팅 입력창 조정 */
+  .chat-input-wrap {
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  #chatInput {
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 16px; /* iOS 자동 줌 방지 */
+    border-radius: 8px;
+  }
+
+  #chatSend {
+    min-width: 45px;
+    height: 38px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+
+  /* 메시지 조정 */
+  .message {
+    max-width: 85%;
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  /* 봇 아바타 조정 */
+  .fc-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .fc-bubble {
+    max-width: 80%;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+  /* 퀵버튼 조정 */
+  .fc-quick__btn {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
+  /* 모달 헤더/푸터 조정 */
+  .modal__header,
+  .modal__footer {
+    padding: 12px 14px;
+  }
+
+  .modal__body {
+    padding: 14px;
+    max-height: 60vh;
+  }
+
+  /* 버튼 조정 */
+  .modal__btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 작은 모바일 화면 추가 최적화 */
+  .fab {
+    right: 12px;
+    bottom: 12px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .modal.dock .modal__dialog {
+    right: 4px;
+    bottom: 72px;
+    width: calc(100vw - 8px);
+    max-height: 45vh;
+  }
+
+  .chat-log {
+    height: 240px;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .message {
+    max-width: 90%;
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+
+  .fc-bubble {
+    max-width: 85%;
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .fc-quick__btn {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+}
