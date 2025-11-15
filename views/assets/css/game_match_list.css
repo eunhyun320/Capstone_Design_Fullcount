@@ -154,6 +154,12 @@
     margin: 10px;
   }
 
+  .scedule_list {
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
   .tab-schedule {
     overflow-x: auto;
     flex-wrap: nowrap;
@@ -191,12 +197,69 @@
   }
 
   .tbl {
-    font-size: 13px;
-    min-width: 700px;
+    font-size: 11px;
+    min-width: 680px;
+    table-layout: auto;
   }
 
   .tbl th,
   .tbl td {
-    padding: 6px;
+    padding: 8px 5px;
+    word-break: keep-all;
+  }
+
+  /* TV 열 완전히 제거 */
+  .tbl th:nth-child(5), /* TV */
+  .tbl td:nth-child(5) {
+    display: none !important;
+    width: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .tbl colgroup col:nth-child(5) {
+    width: 0 !important;
+    display: none;
+  }
+
+  /* 게임센터 버튼 작게 */
+  .btn2 {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* 더 작은 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .scedule_list {
+    font-size: 20px;
+    margin-top: 15px;
+  }
+
+  .tbl {
+    font-size: 10px;
+    min-width: 100%;
+  }
+
+  .tbl th,
+  .tbl td {
+    padding: 3px 1px;
+  }
+
+  .month-btn {
+    padding: 5px 8px;
+    font-size: 12px;
+    min-width: 30px;
+    height: 30px;
+  }
+
+  #currentMonth {
+    font-size: 14px;
+    min-width: 90px;
+  }
+
+  .btn2 {
+    padding: 2px 4px;
+    font-size: 10px;
   }
 }
