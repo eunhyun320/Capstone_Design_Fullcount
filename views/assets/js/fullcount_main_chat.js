@@ -24,6 +24,14 @@
   const $input = document.getElementById('chatInput');
   const $send = document.getElementById('chatSend');
 
+
+  const sendBtn = document.getElementById("chatSend");
+
+  /* 전송 버튼 누를 때 input 포커스가 유지되도록 */
+  sendBtn.addEventListener("mousedown", function (e) {
+    e.preventDefault(); // 버튼 클릭 시 포커스 이동(blur) 방지
+  });
+
   if (!modal || !fab || !$log || !$input) return;
 
   /* ===== 공통 렌더(메인과 동일한 마크업) ===== */
@@ -259,4 +267,19 @@
 
   // 전송 버튼
   $send?.addEventListener('click', onSend);
+
+  sendBtn.addEventListener("mousedown", function (e) {
+    e.preventDefault(); // 버튼 클릭 시 포커스 이동(blur) 방지
+  });
+
+  sendBtn.addEventListener("click", function () {
+    const msg = $input.value.trim();
+    if (!msg) return;
+
+    // 메시지 전송 처리…
+
+    // 전송 후에도 input 포커스 유지
+    $input.focus();
+  });
+
 })();

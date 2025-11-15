@@ -1078,12 +1078,12 @@
 
 
     /*달력 날짜 선택*/
+    /*1115*/
     const dateInput = document.getElementById('gameDate');
     const resultDateH2 = document.querySelector('.result_date h2');
 
     dateInput.addEventListener('change', async function () {
         const selectedDate = this.value; // 예: "2025-10-22"
-        resultDateH2.textContent = selectedDate;
 
         try {
             console.log('선택된 날짜:', selectedDate);
@@ -1094,17 +1094,20 @@
             console.log('서버에서 받은 데이터:', date_data);
 
             if (date_data.success && date_data.id) {
-                // ✅ 여기! 너 페이지 형태에 맞게 수정
+                // 날짜를 성공적으로 찾았을 때만 화면 날짜 변경
+                resultDateH2.textContent = selectedDate;
+
                 window.location.href = `/gameinfo_result?id=${date_data.id}`;
             } else {
                 alert('해당 날짜의 경기 데이터를 찾을 수 없습니다.');
+                // 날짜 변경 안함. 그대로 두기
             }
         } catch (err) {
             console.error('fetch 오류:', err);
             alert('서버 오류가 발생했습니다.');
+            // 날짜 변경 안함
         }
     });
-
 
 
 
