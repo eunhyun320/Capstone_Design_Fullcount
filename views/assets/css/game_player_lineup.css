@@ -5,7 +5,7 @@
   font-family: "Pretendard","Noto Sans KR",system-ui,-apple-system,sans-serif;
   color:#222;
 }
-.title{
+.lineup-title{
   text-align:center;
   font-size:22px;
   font-weight:800;
@@ -13,7 +13,7 @@
 }
 
 /* 팀/로고 줄 */
-.info-box{
+.lineup-info-box{
   display:flex;
   justify-content:center;
   align-items:center;
@@ -21,17 +21,17 @@
   margin:10px 0 30px;
   flex-wrap:wrap;
 }
-.team-logo{ 
+.lineup-team-logo{ 
   height:60px; 
   max-width:180px; 
   object-fit:contain;
   transition: transform 0.2s ease;
 }
-.team-logo:hover {
+.lineup-team-logo:hover {
   transform: scale(1.1);
 }
-.team-name{ font-weight:800; font-size:18px; color:#333; }
-.vs{ font-weight:900; color:#0B3D91; font-size:20px; }
+.lineup-team-name{ font-weight:800; font-size:18px; color:#333; }
+.lineup-vs{ font-weight:900; color:#0B3D91; font-size:20px; }
 
 /* 라인업 박스 */
 .lineup-table{
@@ -41,15 +41,15 @@
   justify-content:center;
   flex-wrap:wrap; /* 데스크톱에서도 줄바꿈 허용 */
 }
-.team{
+.lineup-team{
   flex:1 1 420px;              /* 넓으면 2열, 좁으면 1열 */
   border-radius:12px;
   overflow:hidden;
   background:#fff;
 }
-.team + .team{ margin-top:0; }
+.lineup-team + .lineup-team{ margin-top:0; }
 
-.team-name{
+.lineup-team-name{
   display:block;
   color:#fff;
   padding:12px 14px;
@@ -60,30 +60,30 @@
 }
 
 /* 표 래퍼: 작은 화면에서 가로 스크롤 허용 */
-.team table{
+.lineup-team table{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
   border-radius: 0; /* 테이블 자체 둥근 모서리 제거 */
 }
-.team thead th{
+.lineup-team thead th{
   background:#f7f8fa;
   font-weight:700;
   font-size:14px;
   padding:10px 6px;
   border-bottom:1px solid #eaecef;
 }
-.team tbody td{
+.lineup-team tbody td{
   padding:11px 6px;
   font-size:15px;
   text-align:center;
   border-bottom:1px solid #f0f2f5;
   word-break:keep-all;
 }
-.team tbody tr:nth-child(even){ background:#fafbfc; }
+.lineup-team tbody tr:nth-child(even){ background:#fafbfc; }
 
 /* 가운데 VS */
-.lineup-table > .vs{
+.lineup-table > .lineup-vs{
   align-self:center;
   font-size:18px;
   font-weight:800;
@@ -92,19 +92,19 @@
 }
 
 @media (max-width: 768px){
-  .title{ font-size:18px; }
+  .lineup-title{ font-size:18px; }
   
   /* 모바일에서 기본 로고 영역 숨김 */
-  .info-box { display: none; }
+  .lineup-info-box { display: none; }
   
-  .team{ 
+  .lineup-team{ 
     flex:1 1 100%; 
     position: relative;
     margin-bottom: 20px;
   }
   
   /* 각 팀 표 위에 로고 배치 */
-  .team::before {
+  .lineup-team::before {
     content: '';
     display: block;
     width: 60px;
@@ -115,20 +115,20 @@
     background-position: center;
   }
   
-  /* 홈팀에 로고 추가 (첫 번째 .team) */
-  .team:first-child::before {
+  /* 홈팀에 로고 추가 (첫 번째 .lineup-team) */
+  .lineup-team:first-child::before {
     background-image: var(--home-logo);
   }
   
-  /* 원정팀에 로고 추가 (두 번째 .team) */
-  .team:nth-child(3)::before {
+  /* 원정팀에 로고 추가 (두 번째 .lineup-team) */
+  .lineup-team:nth-child(3)::before {
     background-image: var(--away-logo);
   }
   
   .lineup-table{ gap:14px; flex-direction:column; align-items:center; }
 
   /* ✅ VS 중앙 고정 */
-  .lineup-table > .vs{
+  .lineup-table > .lineup-vs{
     order: 0;                /* ← 기존 order:2 제거 */
     width:100%;
     text-align:center;
@@ -136,21 +136,21 @@
     margin:10px 0;
   }
 
-  .team thead th{ font-size:13px; padding:8px 4px; }
-  .team tbody td{ font-size:14px; padding:9px 4px; }
-  .team tbody td:nth-child(2){ word-break:break-all; }
+  .lineup-team thead th{ font-size:13px; padding:8px 4px; }
+  .lineup-team tbody td{ font-size:14px; padding:9px 4px; }
+  .lineup-team tbody td:nth-child(2){ word-break:break-all; }
 }
 
 
 /* --------- 큰 화면(데스크톱) --------- */
 @media (min-width: 769px){
   /* 상단 기본 로고 영역 숨김 */
-  .info-box {
+  .lineup-info-box {
     display: none;
   }
   
   /* 각 팀 표 위에 로고 배치 */
-  .team::before {
+  .lineup-team::before {
     content: '';
     display: block;
     width: 80px;
@@ -161,13 +161,13 @@
     background-position: center;
   }
   
-  /* 홈팀에 로고 추가 (첫 번째 .team) */
-  .team:first-child::before {
+  /* 홈팀에 로고 추가 (첫 번째 .lineup-team) */
+  .lineup-team:first-child::before {
     background-image: var(--home-logo);
   }
   
-  /* 원정팀에 로고 추가 (세 번째 .team - VS 다음) */
-  .team:nth-child(3)::before {
+  /* 원정팀에 로고 추가 (세 번째 .lineup-team - VS 다음) */
+  .lineup-team:nth-child(3)::before {
     background-image: var(--away-logo);
   }
   
@@ -179,7 +179,7 @@
   }
   
   /* VS 스타일 */
-  .lineup-table > .vs {
+  .lineup-table > .lineup-vs {
     align-self: center;
     font-size: 24px;
     font-weight: 900;
