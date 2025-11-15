@@ -73,11 +73,14 @@ main.page-inquiry .form-group select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  /* border: 2px solid #00106b; */
   padding: 10px 38px 10px 12px;
   position: relative;
   z-index: 1100;
   background-color: #fff;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
 }
 
 /* 포커스 외곽선 */
@@ -85,7 +88,6 @@ main.page-inquiry .form-group:has(select:focus)::after {
   content: "";
   position: absolute;
   inset: -6px;
-  border: 2px solid #000080;
   border-radius: 12px;
   pointer-events: none;
 }
