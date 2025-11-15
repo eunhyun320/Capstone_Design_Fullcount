@@ -33,6 +33,7 @@ router.get(['/gameinfo_result', '/gameinfo_result.html'], gameController.showRes
 router.get('/gameinfo_result/:id', gameController.showResult);
 
 // 야구 규칙
+router.get(['/rules_index', '/rules_index.html'], rulesController.showRulesIndex);
 router.get(['/rules', '/rules.html'], rulesController.showRules);
 router.get(['/rules_attack', '/rules_attack.html'], rulesController.showAttack);
 

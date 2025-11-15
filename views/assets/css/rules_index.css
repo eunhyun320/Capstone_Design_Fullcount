@@ -1,0 +1,175 @@
+/* 규칙 인덱스 페이지 전용 스타일 */
+
+.rules-index-main {
+  min-height: calc(100vh - 200px);
+  padding: 60px 20px;
+}
+
+.rules-index-header {
+  text-align: left;
+  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rules-index-main-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.rules-index-subtitle-text {
+  font-size: 14px;
+  color: #666;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.rules-index-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rules-index-cards {
+  display: flex;
+  gap: 200px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rules-index-card {
+  flex: 1 1 400px;
+  max-width: 450px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 50px 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.rules-index-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #0B3D91, #1e5bb8);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.rules-index-card:hover::before {
+  transform: scaleX(1);
+}
+
+.rules-index-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(11, 61, 145, 0.2);
+}
+
+.rules-index-card-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  color: #0B3D91;
+}
+
+.rules-index-card-icon i {
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+}
+
+.rules-index-card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 16px;
+}
+
+.rules-index-card-desc {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.rules-index-card-arrow {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 700;
+  color: #0B3D91;
+  transition: transform 0.3s ease;
+}
+
+.rules-index-card:hover .rules-index-card-arrow {
+  transform: translateX(8px);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .rules-index-main {
+    padding: 40px 15px;
+  }
+
+  .rules-index-title {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .rules-index-subtitle {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .rules-index-cards {
+    gap: 20px;
+  }
+
+  .rules-index-card {
+    flex: 1 1 100%;
+    padding: 40px 30px;
+  }
+
+  .rules-index-card-icon {
+    font-size: 52px;
+  }
+
+  .rules-index-card-title {
+    font-size: 24px;
+  }
+
+  .rules-index-card-desc {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rules-index-title {
+    font-size: 28px;
+  }
+
+  .rules-index-subtitle {
+    font-size: 14px;
+  }
+
+  .rules-index-card {
+    padding: 30px 20px;
+  }
+
+  .rules-index-card-icon {
+    font-size: 48px;
+  }
+
+  .rules-index-card-title {
+    font-size: 22px;
+  }
+
+  .rules-index-card-desc {
+    font-size: 14px;
+  }
+}
