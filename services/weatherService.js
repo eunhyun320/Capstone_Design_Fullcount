@@ -1,6 +1,6 @@
 // weatherService.js
 const axios = require('axios');
-const authKey = "94LfPg3YQdaC3z4N2JHWbA"; 
+const authKey = "94LfPg3YQdaC3z4N2JHWbA";
 const daeguLionsPark = { nx: 89, ny: 90 };
 
 const pad = (n) => String(n).padStart(2, '0');
@@ -10,23 +10,32 @@ const pad = (n) => String(n).padStart(2, '0');
  * - 현재 시간 - 120분 (안전 여유)
  * - 3시간 간격 발표 시간(02, 05, 08...) 중 가장 가까운 과거 시각으로 맞춤
  */
+
+const getKstDate = (date = new Date()) => {
+    // 1. 현재 서버 시스템 시간을 UTC로 변환 (서버 로컬 시간을 보정)
+    const utcTime = date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
+    // 2. KST(9시간) 오프셋을 더함
+    const kstOffset = 9 * 60 * 60 * 1000;
+    return new Date(utcTime + kstOffset);
+};
+
 const computeBaseTmfcDate = () => {
-    const now = new Date();
+    const now = getKstDate();
     // 120분 전으로 이동하여 이미 발표된 데이터를 요청 (안전 여유)
-    const safeNow = new Date(now.getTime() - 120 * 60 * 1000); 
-    
+    const safeNow = new Date(now.getTime() - 120 * 60 * 1000);
+
     const baseTimes = [2, 5, 8, 11, 14, 17, 20, 23];
     let checkDate = new Date(safeNow.getTime());
     let baseHour = checkDate.getHours();
-    
+
     // 현재 시간(시)보다 작거나 같은 가장 가까운 과거 발표 시각을 찾음
     let tmfcHourNum = baseTimes.findLast(h => h <= baseHour);
 
     if (tmfcHourNum === undefined) {
         tmfcHourNum = 23;
-        checkDate.setDate(checkDate.getDate() - 1); 
+        checkDate.setDate(checkDate.getDate() - 1);
     }
-    
+
     checkDate.setHours(tmfcHourNum, 0, 0, 0);
     return checkDate;
 };
@@ -46,7 +55,7 @@ const formatTmef = (d) => {
  */
 const parseValueForTime = (data, timeStr) => {
     if (!data) return '-99.00';
-    
+
     // 1. 데이터 전체를 쉼표로 분리 (그리드 원본 데이터 형식에 맞춤)
     const parts = data.split(',').map(p => p.trim());
 
@@ -54,22 +63,22 @@ const parseValueForTime = (data, timeStr) => {
     const validValue = parts.find(p => {
         const num = parseFloat(p);
         // 숫자인지, 그리고 -90보다 큰지 확인 (-99.00을 제외)
-        return !isNaN(num) && num > -90; 
+        return !isNaN(num) && num > -90;
     });
 
     if (validValue) {
         // console.log(`[파싱 성공] 유효 값 발견: ${validValue}`);
         return validValue;
     }
-    
+
     // 3. 유효한 값이 없으면 -99.00 반환
     const firstPart = parts[0] || '-99.00';
     if (firstPart.startsWith('ErrorCode')) {
         return '-99.00';
     }
-    
+
     console.warn(`[파싱 경고] 유효한 값 찾기 실패. 첫 번째 값 반환: ${firstPart}`);
-    return firstPart; 
+    return firstPart;
 };
 
 /**
@@ -77,13 +86,13 @@ const parseValueForTime = (data, timeStr) => {
  */
 const getSkyState = (sky, pty) => {
     const s = parseInt(sky), p = parseInt(pty);
-    
+
     // PTY(강수형태)가 우선
-    if (p > 0) { 
-        return {1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기⛆'}[p] || '강수';
+    if (p > 0) {
+        return { 1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기⛆' }[p] || '강수';
     }
     // SKY(하늘상태)
-    return {1: '맑음🌞', 2: '구름 조금⛅',3: '구름많음🌥️', 4: '흐림☁️'}[s] || '정보 없음';
+    return { 1: '맑음☀️', 2: '구름 조금⛅', 3: '구름많음🌥️', 4: '흐림☁️' }[s] || '정보 없음';
 };
 
 /**
@@ -92,40 +101,41 @@ const getSkyState = (sky, pty) => {
 const fetchWeatherInfo = async () => {
     console.log("\n--- [KMA API 호출 시작 (단기예보)] ---");
     let tmfcDate = computeBaseTmfcDate();
-    const vars = ['TMP', 'SKY', 'PTY', 'POP']; 
-    
+    const vars = ['TMP', 'SKY', 'PTY', 'POP'];
+
     // 최대 9시간 (3회 * 3시간)까지 과거 발표 데이터를 찾아 재시도
     for (let tried = 0; tried <= 3; tried++) {
         const tmfc = formatTmfc(tmfcDate);
 
         // 1. tmef (미래 예보 시각) 계산: 현재 시각 이후 가장 가까운 정시
-        const now = new Date();
+        // ❗️ 수정: 서버 시간대가 달라도 KST 기준으로 현재 시간을 가져옴
+        const now = getKstDate();
         let nextTmefDate = new Date(now.getTime());
-        nextTmefDate.setMinutes(0, 0, 0); 
-        nextTmefDate.setHours(nextTmefDate.getHours() + 1); 
-        const tmef = formatTmef(nextTmefDate); 
-        
+        nextTmefDate.setMinutes(0, 0, 0);
+        nextTmefDate.setHours(nextTmefDate.getHours() + 1);
+        const tmef = formatTmef(nextTmefDate);
+
         // console.log(`[시도 ${tried + 1}] 발표 시각 tmfc=${tmfc}, 미래 예보 시각 tmef=${tmef}`);
-        
+
         try {
             const promises = vars.map(v => {
                 // ❗️❗️ 최종 수정 URL: 성공했던 그리드 경로 (/cgi-bin/url/) 사용
                 const url = `https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_shrt_grd?tmfc=${tmfc}&tmef=${tmef}&vars=${v}&nx=${daeguLionsPark.nx}&ny=${daeguLionsPark.ny}&authKey=${authKey}`;
-                
+
                 return axios.get(url, { responseType: 'text' })
-                            .then(r => r.data)
-                            .catch(e => {
-                                console.warn(`[API 오류] ${v} 요청 실패: ${e.message}`);
-                                return null;
-                            });
+                    .then(r => r.data)
+                    .catch(e => {
+                        console.warn(`[API 오류] ${v} 요청 실패: ${e.message}`);
+                        return null;
+                    });
             });
-            
+
             const responses = await Promise.all(promises);
-            
+
             // 1. API 호출 자체가 실패했는지 확인 (401, 404 등)
-            if (responses.some(r => r === null)) { 
-                tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000); 
-                continue; 
+            if (responses.some(r => r === null)) {
+                tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
+                continue;
             }
 
             // 2. 응답 데이터를 파싱하고 -99.00(데이터 없음) 값 확인
@@ -133,42 +143,42 @@ const fetchWeatherInfo = async () => {
             const [TMP, SKY, PTY, POP] = parsedResults;
 
             // TMP 값이라도 -99.00이 아니면 성공으로 간주 (최소한 유효한 데이터가 있다는 뜻)
-            if (TMP === '-99.00' || SKY === '-99.00') { 
+            if (TMP === '-99.00' || SKY === '-99.00') {
                 console.warn(`[데이터 없음] API가 -99.00을 반환했습니다. 3시간 전 데이터로 재시도합니다.`);
                 tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
-                continue; 
+                continue;
             }
-            
+
             // 3. 데이터가 유효하면 값 가공 및 반환
             console.log(`[성공] 유효 데이터 시각: ${tmfc}. 예보 시각: ${tmef}`);
-            
+
             const temp = parseFloat(TMP) < -90 ? "정보 없음" : `${TMP}℃`;
-            
+
             let precipitationText;
             const popNum = parseFloat(POP);
-            if (popNum < 0 || isNaN(popNum)) { 
+            if (popNum < 0 || isNaN(popNum)) {
                 precipitationText = "정보 없음";
             } else if (popNum === 0) {
                 precipitationText = "강수 없음 (0%)";
             } else {
                 precipitationText = `강수 확률🌧️ ${popNum}%`;
             }
-            
+
             const skyState = getSkyState(SKY, PTY);
-            
+
             // 최종 반환 시각은 요청한 tmef 시각을 사용합니다.
             const finalDisplayHour = pad(nextTmefDate.getHours());
             const finalDisplayMonth = pad(nextTmefDate.getMonth() + 1);
             const finalDisplayDay = pad(nextTmefDate.getDate());
 
             return `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
-            
-        } catch (e) { 
+
+        } catch (e) {
             console.error(`[예상치 못한 오류] ${e.message}. 3시간 전 데이터로 재시도합니다.`);
-            tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000); 
+            tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
         }
     }
-    
+
     console.error("--- [최대 재시도 횟수 초과] ---");
     return "대구 삼성 라이온즈파크 예보: 현재 유효한 단기예보 데이터가 없습니다.";
 };
