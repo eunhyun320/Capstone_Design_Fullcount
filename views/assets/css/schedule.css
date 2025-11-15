@@ -469,13 +469,13 @@ div.pitcher-results p{
         max-width: 364px; /* 달력 컴포넌트의 최대 너비 지정 */
     }
     .result-header{
-        width: 80%;
+        width: 100%;
          margin: 0 auto;
     }
 
     /* 카드 너비 조정 (선택 사항) */
     .game-result-card{
-        width: 80%; /* 80% 대신 95%로 설정하여 결과 화면에 더 넓게 보이게 함 */
+        width: 100%; /* 80% 대신 95%로 설정하여 결과 화면에 더 넓게 보이게 함 */
         margin: 0 auto;
     }
 }
