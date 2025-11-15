@@ -26,13 +26,6 @@ body {
     /* color: aqua; */
 }
 
-.line2 {
-    
-    border-top: 3px solid #000080;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .detail {
     border-top: 2px solid #eee;
 }

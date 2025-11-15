@@ -33,13 +33,6 @@ main.page-inquiry-history .result h1 {
   color: #333;
 }
 
-/* 제목 하단 선 */
-main.page-inquiry-history .line2 {
-  border-top: 3px solid #002B5B;
-  width: 100%;
-  margin: 10px 0 20px;
-}
-
 /* 테이블 공통 스타일 */
 main.page-inquiry-history table {
   width: 100%;
