@@ -17,13 +17,21 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:10px;
-  margin:10px 0 18px;
+  gap:20px;
+  margin:10px 0 30px;
   flex-wrap:wrap;
 }
-.team-logo{ height:40px; max-width:120px; object-fit:contain; }
-.team-name{ font-weight:800; font-size:16px; }
-.vs{ font-weight:800; color:#555; }
+.team-logo{ 
+  height:60px; 
+  max-width:180px; 
+  object-fit:contain;
+  transition: transform 0.2s ease;
+}
+.team-logo:hover {
+  transform: scale(1.1);
+}
+.team-name{ font-weight:800; font-size:18px; color:#333; }
+.vs{ font-weight:900; color:#0B3D91; font-size:20px; }
 
 /* 라인업 박스 */
 .lineup-table{
@@ -35,11 +43,9 @@
 }
 .team{
   flex:1 1 420px;              /* 넓으면 2열, 좁으면 1열 */
-  border:1px solid #e5e7eb;
   border-radius:12px;
   overflow:hidden;
   background:#fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,.05);
 }
 .team + .team{ margin-top:0; }
 
@@ -49,6 +55,8 @@
   padding:12px 14px;
   font-size:17px;
   text-align:center;
+  margin:0; /* h2 기본 margin 제거 */
+  border-radius: 12px 12px 0 0; /* 위쪽 모서리만 둥글게 */
 }
 
 /* 표 래퍼: 작은 화면에서 가로 스크롤 허용 */
@@ -56,6 +64,7 @@
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
+  border-radius: 0; /* 테이블 자체 둥근 모서리 제거 */
 }
 .team thead th{
   background:#f7f8fa;
@@ -84,8 +93,38 @@
 
 @media (max-width: 768px){
   .title{ font-size:18px; }
-  .team-logo{ height:32px; }
-  .team{ flex:1 1 100%; }     /* 한 줄씩 세로 배치 */
+  
+  /* 모바일에서 기본 로고 영역 숨김 */
+  .info-box { display: none; }
+  
+  .team{ 
+    flex:1 1 100%; 
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  /* 각 팀 표 위에 로고 배치 */
+  .team::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  /* 홈팀에 로고 추가 (첫 번째 .team) */
+  .team:first-child::before {
+    background-image: var(--home-logo);
+  }
+  
+  /* 원정팀에 로고 추가 (두 번째 .team) */
+  .team:nth-child(3)::before {
+    background-image: var(--away-logo);
+  }
+  
   .lineup-table{ gap:14px; flex-direction:column; align-items:center; }
 
   /* ✅ VS 중앙 고정 */
@@ -105,11 +144,47 @@
 
 /* --------- 큰 화면(데스크톱) --------- */
 @media (min-width: 769px){
-  .lineup-table{ 
-    flex-wrap:nowrap;           /* 가로 두 칸 유지 */
+  /* 상단 기본 로고 영역 숨김 */
+  .info-box {
+    display: none;
   }
-  .lineup-table > .vs{
-    margin:0 6px;
-    font-size:20px;
+  
+  /* 각 팀 표 위에 로고 배치 */
+  .team::before {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  /* 홈팀에 로고 추가 (첫 번째 .team) */
+  .team:first-child::before {
+    background-image: var(--home-logo);
+  }
+  
+  /* 원정팀에 로고 추가 (세 번째 .team - VS 다음) */
+  .team:nth-child(3)::before {
+    background-image: var(--away-logo);
+  }
+  
+  /* 라인업 표 레이아웃 */
+  .lineup-table{ 
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 40px;
+  }
+  
+  /* VS 스타일 */
+  .lineup-table > .vs {
+    align-self: center;
+    font-size: 24px;
+    font-weight: 900;
+    color: #0B3D91;
+    margin: 0 20px;
+    margin-top: 60px; /* 로고 공간만큼 아래로 */
   }
 }
