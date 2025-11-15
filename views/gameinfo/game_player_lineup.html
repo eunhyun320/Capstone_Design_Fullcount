@@ -3,7 +3,7 @@
 <!-- ================== MAIN ================== -->
 
 
-<main class="lineup-wrapper">
+<main class="lineup-wrapper" style="--home-logo: url('{{ home.team_logo }}'); --away-logo: url('{{ away.team_logo }}');">
     <p class="title">{{ game.venue }} 라인업</p>
     <h1 class="title">
         {{ game.game_date }} {{ game.game_time }}
@@ -13,7 +13,7 @@
     <div class="info-box">
         <img src="{{ home.team_logo }}" alt="{{ home.team_name }}" class="team-logo">
         <strong class="team-name">{{ home.team_name }}</strong>
-        <span class="vs">VS</span>
+        <!-- <span class="vs">VS</span> -->
         <strong class="team-name">{{ away.team_name }}</strong>
         <img src="{{ away.team_logo }}" alt="{{ away.team_name }}" class="team-logo">
     </div>
