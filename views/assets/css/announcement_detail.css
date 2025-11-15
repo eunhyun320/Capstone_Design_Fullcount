@@ -26,13 +26,6 @@ body {
     /* color: aqua; */
 }
 
-.line2 {
-    
-    border-top: 3px solid #000080;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .detail {
     border-top: 2px solid #eee;
 }
@@ -64,12 +57,13 @@ body {
     padding: 18px 6px;
     line-height: 1.75;
     color: #222;
-    height: 500px;
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
     white-space: pre-wrap; /* 줄바꿈 유지 */
-    word-wrap: break-word; /* 긴 단어 자동 줄바꿈 */
-
-    width: 1200px;
-
+    word-wrap: break-word; /* 긁 단어 자동 줄바꿈 */
+    width: 100%;
+    max-width: 100%;
 }
 
 .files {
@@ -168,4 +162,79 @@ body {
 
 .notice-search button:hover i {
   color: #fff;
+}
+
+/* ========== 모바일 반응형 ========== */
+@media (max-width: 768px) {
+  .announcement_detail_container {
+    margin-top: 20px;
+    padding: 0 12px;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 16px 8px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .detail-head .title {
+    font-size: 19px;
+  }
+
+  .meta {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .detail-body {
+    padding: 14px 4px;
+    font-size: 15px;
+    min-height: 200px;
+    max-height: none; /* 모바일에서는 높이 제한 해제 */
+  }
+
+  .notice-search {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .notice-search input[type="text"] {
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .notice-search button {
+    padding: 0 10px;
+  }
+
+  .notice-search i {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 22px;
+  }
+
+  .detail-head .title {
+    font-size: 17px;
+  }
+
+  .meta {
+    font-size: 12px;
+  }
+
+  .detail-body {
+    padding: 12px 4px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .notice-search {
+    max-width: 100%;
+  }
 }

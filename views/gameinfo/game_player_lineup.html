@@ -3,27 +3,28 @@
 <!-- ================== MAIN ================== -->
 
 
-<main class="lineup-wrapper">
-    <h1 class="title">
-        {{ game.game_date }} {{ game.game_time }} | {{ game.venue }}
+<main class="lineup-wrapper" style="--home-logo: url('{{ home.team_logo }}'); --away-logo: url('{{ away.team_logo }}');">
+    <p class="lineup-title">{{ game.venue }} 라인업</p>
+    <h1 class="lineup-title">
+        {{ game.game_date }} {{ game.game_time }}
     </h1>
 
     <!-- 팀 로고 및 기본 정보 -->
-    <div class="info-box">
-        <img src="{{ home.team_logo }}" alt="{{ home.team_name }}" class="team-logo">
-        <strong class="team-name">{{ home.team_name }}</strong>
-        <span class="vs">VS</span>
-        <strong class="team-name">{{ away.team_name }}</strong>
-        <img src="{{ away.team_logo }}" alt="{{ away.team_name }}" class="team-logo">
+    <div class="lineup-info-box">
+        <img src="{{ home.team_logo }}" alt="{{ home.team_name }}" class="lineup-team-logo">
+        <strong class="lineup-team-name">{{ home.team_name }}</strong>
+        <!-- <span class="lineup-vs">VS</span> -->
+        <strong class="lineup-team-name">{{ away.team_name }}</strong>
+        <img src="{{ away.team_logo }}" alt="{{ away.team_name }}" class="lineup-team-logo">
     </div>
 
     {% if not game.is_lineup_announced %}
-    <p class="no-lineup">라인업 발표 전입니다.</p>
+    <p class="lineup-no-lineup">라인업 발표 전입니다.</p>
     {% else %}
     <div class="lineup-table">
         <!-- 홈팀 -->
-        <div class="team">
-            <h2 class="team-name" style="background: {{ home.color_primary | default('#0B3D91') }}">
+        <div class="lineup-team">
+            <h2 class="lineup-team-name" style="background: {{ home.color_primary | default('#0B3D91') }}">
                 {{ home.team_name }}
             </h2>
             <table>
@@ -46,11 +47,11 @@
             </table>
         </div>
 
-        <div class="vs">VS</div>
+        <div class="lineup-vs">VS</div>
 
         <!-- 원정팀 -->
-        <div class="team">
-            <h2 class="team-name" style="background: {{ away.color_primary | default('#0B3D91') }}">
+        <div class="lineup-team">
+            <h2 class="lineup-team-name" style="background: {{ away.color_primary | default('#0B3D91') }}">
                 {{ away.team_name }}
             </h2>
             <table>
