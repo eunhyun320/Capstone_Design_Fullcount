@@ -99,9 +99,9 @@ app.use('/api', (req, res) => {
 // 5) 서버 시작
 // ---------------------------------------------------------------------
 // ⚠️ Windows에서 80포트는 관리자 권한 필요할 수 있어요. 문제면 PORT=3000 으로 실행.
-const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+const PORT = process.env.PORT ? Number(process.env.PORT) : 80;
 const HOST = '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
-  console.log(`✅ Server running at http://43.200.212.37:${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
