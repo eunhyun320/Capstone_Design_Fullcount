@@ -160,7 +160,10 @@ main.support-page .faq-item.open .faq-answer {
     }
 
     main.support-page {
-        width: min(1275px, 94%);
+        margin: 0 auto;
+        padding: 0 16px;
+        width: 100%;
+        max-width: 1200px;
     }
 
     main.support-page ul {
@@ -233,8 +236,9 @@ main.support-page .faq-item.open .faq-answer {
 /* 작은 모바일(<=400px) */
 @media (max-width: 400px) {
     main.support-page {
-        padding: 16px 12px;
-        margin: 10px;
+        margin: 0 auto;
+        padding: 0 12px;
+        width: 100%;
     }
 
     main.support-page .card {
@@ -253,5 +257,33 @@ main.support-page .faq-item.open .faq-answer {
 
     main.support-page .faq-answer {
         font-size: 13.5px;
+    }
+}
+
+/* 중간 모바일 (401px ~ 500px) - 아이폰 14 Pro Max 등 대형 모바일 */
+@media (min-width: 401px) and (max-width: 500px) {
+    main.support-page {
+        margin: 0 auto;
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    main.support-page .container {
+        gap: 15px;
+        margin: 20px 0 32px;
+    }
+
+    main.support-page .card {
+        height: 130px;
+        padding: 18px;
+    }
+
+    main.support-page .card .icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    main.support-page .card p {
+        font-size: 15px;
     }
 }
