@@ -186,9 +186,15 @@ const fetchWeatherInfo = async () => {
 
 
             const rawFullText = `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
-            const rawShortText = `${skyState} | 기온 ${temp} | 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+
+            // 모바일은 줄바꿈 유지
+            const rawShortText = `${skyState} | 기온 ${temp}\n강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+
+            // PC 텍스트만 cleanText 적용 (공백/제어문자 제거)
             const fullText = cleanText(rawFullText);
-            const shortText = cleanText(rawShortText);
+
+            // 모바일은 \n 유지 + 공백/제어문자만 제거
+            const shortText = rawShortText.replace(/[\u0000-\u001F\u007F-\u009F]/g, '').trim();
             return {
                 pc: fullText,
                 mobile: shortText
