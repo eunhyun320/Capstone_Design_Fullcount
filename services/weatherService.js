@@ -186,7 +186,7 @@ const fetchWeatherInfo = async () => {
 
 
             const rawFullText = `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
-            const rawShortText = `${skyState} | 기온 ${temp} | 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+            const rawShortText = `${skyState} | 기온 ${temp} 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
             const fullText = cleanText(rawFullText);
             const shortText = cleanText(rawShortText);
             return {
