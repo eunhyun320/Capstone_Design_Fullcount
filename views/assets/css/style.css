@@ -234,6 +234,7 @@ main {
 
     #weather-info-mobile {
       display: block;
+      max-width: 170px;
     }
   }
 
