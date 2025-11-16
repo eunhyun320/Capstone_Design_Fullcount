@@ -10,35 +10,34 @@ exports.loadWeatherInfo = async (req, res, next) => {
     if (req.session.weatherInfo && req.session.weatherTimestamp) {
         const age = Date.now() - req.session.weatherTimestamp;
         if (age < cacheDuration) {
-            // 캐시가 유효하면 세션 값을 res.locals에 주입하고 종료
             res.locals.weatherInfo = req.session.weatherInfo;
-            // console.log('[캐시] 날씨 정보 캐시 사용.');
             return next();
         }
     }
 
-    // 2. 캐시가 없거나 만료되면 서비스(API) 호출
+    // 2. 캐시 없음 → API 호출
     try {
-        // 비즈니스 로직을 Service에 위임
-        const weatherText = await weatherService.fetchWeatherInfo();
-        
-        // 3. 세션과 res.locals에 저장 (캐시 업데이트)
-        req.session.weatherInfo = weatherText;
+        const weatherInfo = await weatherService.fetchWeatherInfo(); 
+
+        // 3. 캐시 저장
+        req.session.weatherInfo = weatherInfo;
         req.session.weatherTimestamp = Date.now();
-        res.locals.weatherInfo = weatherText;
+        res.locals.weatherInfo = weatherInfo;
 
     } catch (error) {
         console.error("날씨 정보 조회 실패:", error.message);
-        
-        // API 호출 실패 시, 기존 캐시가 있으면 그대로 사용, 없으면 오류 메시지 할당
+
         if (req.session.weatherInfo) {
-             res.locals.weatherInfo = req.session.weatherInfo;
-             console.warn('[오류 처리] API 호출 실패로 인해 이전 캐시를 사용합니다.');
+            res.locals.weatherInfo = req.session.weatherInfo;
+            console.warn('[오류 처리] 이전 캐시 사용.');
         } else {
-            res.locals.weatherInfo = "날씨 정보를 불러올 수 없습니다.";
+            // PC/모바일 구분되니까 이렇게
+            res.locals.weatherInfo = {
+                pc: "날씨 정보를 불러올 수 없습니다.",
+                mobile: "날씨 오류"
+            };
         }
     }
 
-    // 4. 다음 미들웨어로 이동
     next();
 };
