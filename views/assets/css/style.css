@@ -97,7 +97,8 @@ header {
 }
 
 nav {
-  height: auto; /* 200px에서 auto로 변경하여 내용에 맞게 조정 */
+  height: auto;
+  /* 200px에서 auto로 변경하여 내용에 맞게 조정 */
   overflow: visible;
 }
 
@@ -210,12 +211,31 @@ main {
   display: block;
 }
 
+#weather-info-pc {
+  display: block;
+}
+
+#weather-info-mobile {
+  display: none;
+}
+
 /* =========================
    Responsive
    ========================= */
 @media (max-width: 768px) {
   body.menu-open {
     overflow: hidden;
+  }
+
+  @media screen and (max-width: 768px) {
+    #weather-info-pc {
+      display: none;
+    }
+
+    #weather-info-mobile {
+      display: block;
+      max-width: 170px;
+    }
   }
 
   header {

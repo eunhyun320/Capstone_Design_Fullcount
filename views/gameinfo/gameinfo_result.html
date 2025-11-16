@@ -8,8 +8,14 @@
                 <p> 경기결과 </p>
             </div>
             <div class="select_date">
-                <input type="date" id="gameDate">
+                <button type="button" class="calendar_btn">
+                    <i class="fa-regular fa-calendar"></i>
+                </button>
+                <input type="date" id="gameDate" class="calendar_input">
+
             </div>
+
+
             <div class="result_date">
                 <h2></h2>
             </div>
@@ -1062,12 +1068,18 @@
             const data = await res.json();
 
             const el = document.querySelector('.result_date h2');
+            const dateInput = document.getElementById('gameDate');
 
             if (data.game_date) {
                 const [y, m, d] = data.game_date.split('-');
                 el.textContent = `${y}년 ${m}월 ${d}일`;
+
+                if (dateInput) {
+                    dateInput.value = data.game_date;   // 예: "2025-10-29"
+                }
             } else {
                 el.textContent = '날짜 없음';
+                if (dateInput) dateInput.value = '';
             }
         } catch (e) {
             console.error(e);
@@ -1108,6 +1120,28 @@
             // 날짜 변경 안함
         }
     });
+
+
+    /*1116*/
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateInput = document.getElementById('gameDate');   // hidden_date
+        const calendarBtn = document.getElementById('calendarBtn');
+
+        if (!dateInput || !calendarBtn) return;
+
+        calendarBtn.addEventListener('click', () => {
+            if (dateInput.showPicker) {
+                // 크롬/엣지/안드로이드 등
+                dateInput.showPicker();
+            } else {
+                // iOS 사파리 등
+                dateInput.focus();
+                dateInput.click();
+            }
+        });
+    });
+
+
 
 
 

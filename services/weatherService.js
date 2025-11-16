@@ -5,6 +5,18 @@ const daeguLionsPark = { nx: 89, ny: 90 };
 
 const pad = (n) => String(n).padStart(2, '0');
 
+// 텍스트 정제 함수
+const cleanText = (text) => {
+    // 모든 유니코드 공백 문자, 제어 문자, 줄바꿈(\r, \n)을 공백으로 대체합니다.
+    return text.replace(/[\u0000-\u001F\u007F-\u009F\s]/g, ' ').trim();
+};
+
+const formatTemperature = (value) => {
+    const num = parseFloat(value);
+    if (isNaN(num)) return value; // 숫자가 아니면 그대로 반환
+    return Number.isInteger(num) ? `${num}℃` : `${num}℃`;
+};
+
 /**
  * API 호출을 위한 기준 시간(tmfcDate)을 계산합니다. (단기예보용)
  * - 현재 시간 - 120분 (안전 여유)
@@ -89,10 +101,10 @@ const getSkyState = (sky, pty) => {
 
     // PTY(강수형태)가 우선
     if (p > 0) {
-        return { 1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기⛆' }[p] || '강수';
+        return { 1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기' }[p] || '강수';
     }
     // SKY(하늘상태)
-    return { 1: '맑음☀️', 2: '구름 조금⛅', 3: '구름많음🌥️', 4: '흐림☁️' }[s] || '정보 없음';
+    return { 1: '매우 맑음☀️', 2: '구름 조금⛅', 3: '구름 많음🌥️', 4: '매우 흐림☁️' }[s] || '정보 없음';
 };
 
 /**
@@ -149,10 +161,11 @@ const fetchWeatherInfo = async () => {
                 continue;
             }
 
+
             // 3. 데이터가 유효하면 값 가공 및 반환
             console.log(`[성공] 유효 데이터 시각: ${tmfc}. 예보 시각: ${tmef}`);
 
-            const temp = parseFloat(TMP) < -90 ? "정보 없음" : `${TMP}℃`;
+            const temp = parseFloat(TMP) < -90 ? "정보 없음" : formatTemperature(TMP);
 
             let precipitationText;
             const popNum = parseFloat(POP);
@@ -171,16 +184,34 @@ const fetchWeatherInfo = async () => {
             const finalDisplayMonth = pad(nextTmefDate.getMonth() + 1);
             const finalDisplayDay = pad(nextTmefDate.getDate());
 
-            return `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
 
+            const rawFullText = `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
+            const rawShortText = `${skyState} | 기온 ${temp} 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+            const fullText = cleanText(rawFullText);
+            const shortText = cleanText(rawShortText);
+            return {
+                pc: fullText,
+                mobile: shortText
+            };
         } catch (e) {
             console.error(`[예상치 못한 오류] ${e.message}. 3시간 전 데이터로 재시도합니다.`);
             tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
         }
+
     }
 
     console.error("--- [최대 재시도 횟수 초과] ---");
-    return "대구 삼성 라이온즈파크 예보: 현재 유효한 단기예보 데이터가 없습니다.";
+    return {
+        pc: cleanText("대구 삼성 라이온즈파크 예보: 현재 유효한 단기예보 데이터가 없습니다."),
+        mobile: cleanText("예보 정보 없음")
+    };
+};
+const fetchWeatherInfoMobile = async () => {
+    const result = await fetchWeatherInfo();
+    return result.mobile;
 };
 
-module.exports = { fetchWeatherInfo };
+module.exports = {
+    fetchWeatherInfo,
+    fetchWeatherInfoMobile
+};
