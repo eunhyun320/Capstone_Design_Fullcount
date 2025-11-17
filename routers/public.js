@@ -66,7 +66,8 @@ router.get('/api/game-id-by-date', gameController.getGameIdByDate);
 router.get('/api/schedules', gameController.getSchedules);
 
 router.get('/game/findByDate', gameController.findByDate);
-
+/*1117 */
+router.get('/api/game/:id/nav', gameController.getNavById);
 
 // 고객지원 API
 router.get('/api/faq', supportController.faqList);

@@ -316,8 +316,31 @@ main {
 
   }
 
+  /*1117*/
   .result_date {
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .result_date .nav-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: 0.2s;
+  }
+
+  /* 비활성화 버튼 스타일 */
+  .result_date .nav-btn.disabled,
+  .result_date .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
   }
 
   .result {
@@ -330,9 +353,8 @@ main {
 
   .result p {
     margin: 0;
-    /* p 기본 마진 제거 */
     padding: 8px 12px;
-    /* 텍스트 여백 */
+    
 
   }
 
@@ -368,7 +390,7 @@ main {
     color: #000;
   }
 
-  /* 🔥 진짜 input: 완전히 숨기고 클릭만 받도록 */
+  
   .calendar_input {
     position: absolute;
     inset: 0;
@@ -391,7 +413,7 @@ main {
   .calendar_btn i {
     font-size: 22px;
     color: #0B3D91;
-    /* FullCount 네이비 */
+   
   }
 
 }
@@ -407,13 +429,58 @@ main {
   /*1115*/
 
 
+  /*1117*/
+  .result_date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+  }
+
   .result_date h2 {
     text-align: center;
     font-size: 20px;
-    /* background-color: red; */
-    margin-top: 10px;
-
+    margin: 0;
+    padding: 0;
+    line-height: 1;
   }
+
+  .result_date .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+
+    /* 모바일 기본 버튼 제거 */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .result_date .nav-btn i {
+    line-height: 1;
+    display: block;
+  }
+
+  /* 비활성화 */
+  .result_date .nav-btn.disabled,
+  .result_date .nav-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
 
   .scoreboard {
     margin: 0 12px;
