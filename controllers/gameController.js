@@ -141,15 +141,15 @@ exports.showPlayerLineup = async (req, res) => {
       if (typeof date === 'string') {
         const dateOnly = date.slice(0, 10); // YYYY-MM-DD 부분만 추출
         const [year, month, day] = dateOnly.split('-').map(Number);
-        
+
         // 타임존 오프셋을 고려하여 로컬 날짜 생성
         const localDate = new Date(year, month - 1, day);
-        
+
         const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
         const weekday = weekdays[localDate.getDay()];
         return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')} (${weekday})`;
       }
-      
+
       // Date 객체인 경우
       const d = new Date(date);
       const year = d.getFullYear();
@@ -165,9 +165,9 @@ exports.showPlayerLineup = async (req, res) => {
         ...g,
         game_date: formatDate(g.game_date)
       },
-      home: { 
+      home: {
         team_code: g.home_code,
-        team_name: g.home_name, 
+        team_name: g.home_name,
         team_logo: g.home_logo,
         color_primary: g.home_color,
         home_stadium: g.home_stadium,
@@ -175,9 +175,9 @@ exports.showPlayerLineup = async (req, res) => {
         short_name: g.home_short,
         team_rank: g.home_rank
       },
-      away: { 
+      away: {
         team_code: g.away_code,
-        team_name: g.away_name, 
+        team_name: g.away_name,
         team_logo: g.away_logo,
         color_primary: g.away_color,
         home_stadium: g.away_stadium,
@@ -297,7 +297,7 @@ exports.getGameByDate = async (req, res) => {
       if (isNaN(d.getTime())) {
         return res.status(400).json({ ok: false, error: '잘못된 날짜 형식' });
       }
-      
+
       // 로컬 시간 기준으로 YYYY-MM-DD 생성
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -489,3 +489,31 @@ exports.findByDate = async (req, res) => {
   }
 };
 
+/*1117 */
+exports.getNavById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // 1) 이 id의 경기 날짜 가져오기
+    const game = await gameModel.findGameDateById(id);
+    if (!game || !game.game_date) {
+      return res.status(404).json({ success: false, message: 'game not found' });
+    }
+
+    const gameDate = game.game_date; // Date 객체든 문자열이든 그대로 넘겨도 됨 (MySQL)
+
+    // 2) 이전/다음 경기 찾기
+    const nav = await gameModel.findPrevNextByDate(gameDate);
+
+    return res.json({
+      success: true,
+      prevId: nav.prev ? nav.prev.game_id : null,
+      nextId: nav.next ? nav.next.game_id : null,
+      prevDate: nav.prev ? nav.prev.game_date : null,
+      nextDate: nav.next ? nav.next.game_date : null,
+    });
+  } catch (err) {
+    console.error('getNavById error:', err);
+    return res.status(500).json({ success: false, message: 'server error' });
+  }
+};
