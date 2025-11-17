@@ -137,6 +137,86 @@ import { ensureStart, ask, greet } from '/assets/js/aiCore.js';
     }
   });
 
+  /* ===== 채팅창 활성화 시 body 클래스 추가 (PC + 모바일 공통) ===== */
+  const observer = new MutationObserver(() => {
+    if ($wrap.classList.contains('active')) {
+      document.body.classList.add('chat-active');
+    } else {
+      document.body.classList.remove('chat-active');
+    }
+  });
+  observer.observe($wrap, { attributes: true, attributeFilter: ['class'] });
 
+  /* ===== 모바일 키보드 대응 로직 ===== */
+  // 모바일 감지
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  if (isMobile) {
+
+    // 입력창 포커스 시 처리
+    $input.addEventListener('focus', () => {
+      // 키보드가 올라올 때 최신 메시지로 스크롤
+      setTimeout(() => {
+        if ($log) {
+          $log.scrollTop = $log.scrollHeight;
+        }
+      }, 300); // 키보드 애니메이션 대기
+    });
+
+    // 입력창 블러 시 처리
+    $input.addEventListener('blur', () => {
+      // 키보드 내려갈 때 레이아웃 재조정
+      setTimeout(() => {
+        if ($log) {
+          $log.scrollTop = $log.scrollHeight;
+        }
+      }, 100);
+    });
+
+    // 화면 크기 변경 감지 (키보드 올라오는 것 감지)
+    let lastHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+      const currentHeight = window.innerHeight;
+      const isKeyboardOpen = currentHeight < lastHeight * 0.8;
+      
+      if (isKeyboardOpen && $wrap.classList.contains('active')) {
+        // 키보드가 올라왔을 때 채팅창 스크롤을 맨 아래로
+        setTimeout(() => {
+          if ($log) {
+            $log.scrollTop = $log.scrollHeight;
+          }
+        }, 100);
+      }
+      
+      lastHeight = currentHeight;
+    });
+
+    // iOS Visual Viewport API 지원 (더 정확한 키보드 감지)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        if ($wrap.classList.contains('active') && document.activeElement === $input) {
+          // 키보드가 화면을 차지하면 채팅창 최신 메시지로 스크롤
+          setTimeout(() => {
+            if ($log) {
+              $log.scrollTop = $log.scrollHeight;
+            }
+          }, 50);
+        }
+      });
+    }
+
+    // 메시지 전송 후 자동 스크롤 강화
+    const originalRow = row;
+    row = function(role, text) {
+      const result = originalRow(role, text);
+      // 모바일에서는 메시지 추가 후 약간 지연시켜 스크롤
+      setTimeout(() => {
+        if ($log) {
+          $log.scrollTop = $log.scrollHeight;
+        }
+      }, 50);
+      return result;
+    };
+  }
 
 })();
