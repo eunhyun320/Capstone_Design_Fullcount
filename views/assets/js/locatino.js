@@ -209,9 +209,11 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
              image: r.type === '편의시설' ? '../assets/img/marker/marker_편의시설.png' : '../assets/img/marker/marker_먹거리.png',
              lat: r.lat,
              lng: r.lng,
-             floor: '' // 층 정보가 필요하다면 markersData에 추가해야 합니다.
+            //  floor: '' // 층 정보가 필요하다면 markersData에 추가해야 합니다.
+             floor: r.floor ? String(r.floor).replace('층', '') : 'all' // '1층' -> '1'로 통일하여 저장
         })),
-        currentType: 'all' // 'all', 'food', 'toilet' 중 하나
+        currentType: 'all', // 'all', 'food', 'toilet' 중 하나
+        currentFloor: 'all'
     };
 
     function render(rows) {
@@ -259,6 +261,7 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
       console.log('필터 시작');
         const q = (qEl?.value || "").trim().toLowerCase();
         const currentType = state.currentType; 
+        const currentFloor = state.currentFloor;
 
         const filtered = state.rows.filter(r => {
             // 1. 키워드 필터링 (이름 또는 설명)
@@ -271,8 +274,14 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
             else if (r.type === '편의시설') poiType = 'toilet';
             else poiType = 'all';
             const passesType = currentType === 'all' || poiType === currentType;
+            
+            let passesFloor = true;
+            if (currentFloor !== 'all') {
+                // r.floor는 '1', '2' 등으로 저장되어 있고, currentFloor도 '1', '2' 등으로 들어옴
+                passesFloor = String(r.floor) === String(currentFloor);
+            }
 
-            return passesKeyword && passesType;
+            return passesKeyword && passesType && passesFloor;
         });
 
         // 💡 목록 (리스트) 렌더링
@@ -325,6 +334,23 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
             if (btn.classList.contains('chip')) btn.style.outline = '2px solid var(--brand)';
         });
     });
+
+    document.querySelectorAll('[data-floor]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // 1. HTML data-floor 속성에서 층 값을 가져옴 ('all', '1', '2' 등)
+        const floor = btn.getAttribute('data-floor'); 
+
+        // 2. STATE 업데이트
+        state.currentFloor = floor;
+        
+        // 3. 필터링 함수 호출
+        applyFilter(); 
+
+        // 4. 층 필터 버튼 시각적 업데이트 (active 클래스 토글)
+        document.querySelectorAll('[data-floor]').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active'); 
+    });
+});
 
     // 💡 초기 로드 시 필터 적용 (load 함수 대체)
     // DOMContentLoaded 시점에 데이터가 이미 로드된 것으로 간주하고 필터를 적용합니다.

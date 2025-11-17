@@ -246,6 +246,60 @@ body {
   height: 0;
 }
 
+/* floor-selector 기본 위치 설정 */
+.floor-selector {
+    position: absolute;
+    top: 20px; /* 상단 여백 */
+    right: 20px; /* 오른쪽 여백 */
+    z-index: 10; /* 지도 위에 표시되도록 z-index 설정 */
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column; /* 버튼을 세로로 정렬 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* 1. PC 기본 위치 및 스타일 */
+.floor-selector {
+    position: absolute;
+    top: 20px; 
+    right: 20px; 
+    z-index: 10; /* 지도 요소들 위, 검색 오버레이 아래에 위치 */
+    
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 강화 */
+    overflow: hidden;
+}
+
+/* 층 버튼 스타일 (기존과 동일) */
+.floor-btn {
+    padding: 8px 12px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.floor-btn:last-child {
+    border-bottom: none;
+}
+
+.floor-btn.active {
+    background-color: var(--brand);
+    color: white;
+}
+
 /* ===================== 데스크탑 (≥769px) ===================== */
 @media (min-width: 769px) {
   .page {
@@ -469,6 +523,29 @@ body {
   #map .m-overlay .chips {
     pointer-events: auto;
   }
+  .floor-selector {
+        /*
+         * 모바일 상단 오버레이 영역 계산:
+         * 12px (상단 여백)
+         * + var(--searchH) (검색창 높이, 기본 48px)
+         * + 12px (검색창과 칩 사이 여백)
+         * + 칩 영역 높이 (96px, aspect-ratio: 1/1)
+         * + 12px (칩 영역 아래 여백)
+         * => 대략 12 + 48 + 12 + 96 + 12 = 180px 정도
+         * 안전하게 200px 정도 아래에 배치합니다.
+         */
+        top: 200px; /* 상단 검색/칩 영역을 피해서 배치 */
+        right: 12px; /* 모바일 좌우 여백과 맞춥니다. */
+        z-index: 5;  /* 검색 오버레이(z-index: 1)와 리스트 패널(z-index: 2)보다 높게 설정하여 겹침 방지 */
+        
+        /* 모바일에서는 버튼 크기를 약간 줄여서 화면 공간 확보 */
+        width: 48px; 
+    }
+
+    .floor-selector .floor-btn {
+        padding: 6px 0; /* 좌우 패딩 제거, width로 폭 통일 */
+        font-size: 12px;
+    }
 }
 
 /* 메뉴(dropdown)가 지도보다 위로 뜨게 보강만 함 */

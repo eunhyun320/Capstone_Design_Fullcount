@@ -1,64 +1,9 @@
-// // models/locationModel.js
-// const pool = require('../common/db');
-// const DB = process.env.SVR_DB_NAME || process.env.DB_NAME || 'myapp_db';
+// models/locationModel.js (수정된 코드)
 
-// /**
-//  * POI 목록 조회
-//  * - columns 예시: poi_id, name, type, desc, lat, lng, image_url 등
-//  * - 선택 필터: type, q(이름/설명 키워드)
-//  */
-// exports.getPoiList = async ({ type, q } = {}) => {
-//   const where = [];
-//   const params = [];
-
-//   if (type) {
-//     where.push('type = ?');
-//     params.push(type);
-//   }
-//   if (q) {
-//     where.push('(name LIKE ? OR description LIKE ?)');
-//     params.push(`%${q}%`, `%${q}%`);
-//   }
-
-//   // 안전한 정렬 컬럼 선택: 테이블에 존재하는 후보 컬럼 중 하나를 사용
-//   const candidates = ['poi_id', 'id', 'created_at', 'updated_at'];
-//   const colsQuery = `
-//     SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-//      WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME IN (${candidates.map(()=>'?').join(',')})
-//   `;
-//   const colsParams = [DB, 'poi', ...candidates];
-//   const [cols] = await pool.query(colsQuery, colsParams);
-//   const present = new Set((cols || []).map(c => c.COLUMN_NAME));
-//   const orderCol = candidates.find(c => present.has(c));
-
-//   const sql = `
-//     SELECT *
-//       FROM \`${DB}\`.poi
-//      ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-//      ${orderCol ? 'ORDER BY ' + orderCol + ' DESC' : ''}
-//   `;
-
-//   const [rows] = await pool.query(sql, params);
-//   // Map DB columns to frontend-friendly keys expected by locatino.js:
-//   // { id, type, name, items, image, lat, lng, floor }
-//   return rows.map(r => ({
-//     // handle multiple possible column names to be robust against schema differences
-//     id: r.poi_id || r.id,
-//     type: r.type || r.category || '',
-//     name: r.name || r.title || '',
-//     items: r.description || r.desc || r.items || '',
-//     image: r.image_url || r.image || r.img || '',
-//     lat: r.lat || r.latitude || null,
-//     lng: r.lng || r.longitude || null,
-//     floor: r.floor || r.level || ''
-//   }));
-// };
 /**
  * 🏟️ POI 마커 데이터 (DB 대체용)
- * * 실제 DB의 'poi' 테이블에서 가져온다고 가정했던 마커 데이터입니다.
- * DB 연결 없이 JavaScript 배열을 사용합니다.
- * * NOTE: DB 모델의 getPoiList 함수에서 예상하는 필드 이름으로 데이터를 매핑해야 합니다.
- * (id, type, name, items, image, lat, lng, floor)
+ * NOTE: DB 모델의 getPoiList 함수에서 예상하는 필드 이름으로 데이터를 매핑해야 합니다.
+ * DB 필드: poi_id, name, type, desc, lat, lng, image_url, floor
  */
 const foodMarkersData = [
     { name: 'CU(1층)', lat: 35.8416621, lng: 128.6823173, type: '매점', floor: '1층' }, // 'type'을 '매점'으로 사용
@@ -106,8 +51,7 @@ const facilitiesData = [
     { name: '출입구-1(AWAY)', lat: 35.84008, lng: 128.6812, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '출입구-2(HOME)', lat: 35.84129, lng: 128.6827, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '출입구-3(외야)', lat: 35.8411, lng: 128.6803, type: '편의시설', floor: '1층' }, // 층 정보 추정
-    { name: '물품보관소-1', lat: 35.8411669, lng: 128.6803432, type: '편의시설', floor: '1층' }, // 층 정보 추정
-    { name: '물품보관소-2', lat: 35.8410331, lng: 128.6802568, type: '편의시설', floor: '1층' }, // 층 정보 추정
+    
     { name: '수유실(3층 T3-1)', lat: 35.8408419, lng: 128.6807053, type: '편의시설', floor: '3층' },
     { name: '수유실(3층 T1-1)', lat: 35.8403456, lng: 128.6812941, type: '편의시설', floor: '3층' },
     { name: '수유실(스카이석 09)', lat: 35.8407753, lng: 128.6805136, type: '편의시설', floor: '3층' }, // 층 정보 추정
@@ -116,16 +60,15 @@ const facilitiesData = [
     { name: '화장실(U15-U16 사이)', lat: 35.8407425, lng: 128.6803931, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '화장실(U22-U23 사이)', lat: 35.8412899, lng: 128.680501, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '팀 스토어(3-6, 3-6 사이)', lat: 35.8412549, lng: 128.6809088, type: '편의시설', floor: '3층' } // 층 정보 추정
+    
 ];
 
-// foodMarkersData와 facilitiesData를 병합하고,
-// DB 'poi' 테이블의 필드와 유사하도록 이름을 통일합니다.
 const allPoiData = [
     ...foodMarkersData.map((data, index) => ({
-        poi_id: `F${index + 1}`, // 고유 ID 생성 (DB의 poi_id 역할)
+        poi_id: `F${index + 1}`,
         name: data.name,
         type: data.type,
-        desc: data.name, // 설명 필드는 일단 이름과 같게 설정
+        desc: data.name,
         lat: data.lat,
         lng: data.lng,
         floor: data.floor,
@@ -144,15 +87,20 @@ const allPoiData = [
 ];
 
 /**
- * POI 목록 조회 (DB 사용하지 않음: 메모리 배열 사용)
- * - columns 예시: poi_id, name, type, desc, lat, lng, image_url 등
- * - 선택 필터: type, q(이름/설명 키워드)
+ * POI 목록 조회 (메모리 배열 사용)
+ * - 선택 필터: type, q(이름/설명 키워드), floor (층)
+ * @param {object} filterOptions - 필터 옵션
+ * @param {string} [filterOptions.type] - 타입 필터 ('매점' 또는 '편의시설')
+ * @param {string} [filterOptions.q] - 키워드 필터 (이름/설명)
+ * @param {string} [filterOptions.floor] - 층 필터 (예: '1층', '2층' 등) 🚩 추가됨
+ * @returns {Promise<Array<object>>}
  */
-exports.getPoiList = async ({ type, q } = {}) => {
+exports.getPoiList = async ({ type, q, floor } = {}) => { // 🚩 floor 매개변수 추가
     // 1. 데이터 필터링 (WHERE 절 로직 구현)
     let filteredData = allPoiData.filter(r => {
         let passesTypeFilter = true;
         let passesKeywordFilter = true;
+        let passesFloorFilter = true; // 🚩 층 필터 플래그
 
         // type 필터
         if (type) {
@@ -163,48 +111,39 @@ exports.getPoiList = async ({ type, q } = {}) => {
         if (q) {
             const lowerQ = q.toLowerCase();
             const name = r.name ? r.name.toLowerCase() : '';
-            const desc = r.desc ? r.desc.toLowerCase() : ''; // desc 필드는 name과 같다고 가정
+            const desc = r.desc ? r.desc.toLowerCase() : '';
             
             passesKeywordFilter = name.includes(lowerQ) || desc.includes(lowerQ);
         }
 
-        return passesTypeFilter && passesKeywordFilter;
+        // 🚩 floor 필터
+        if (floor) {
+            // floor 값이 'all'이 아니거나 빈 문자열이 아닌 경우에만 필터링 적용
+            const floorValue = String(floor).toLowerCase().replace('층', '');
+            if (floorValue !== 'all' && floorValue !== '') {
+                // 데이터의 floor 값을 숫자 부분만 추출하여 비교 (예: '1층' -> '1')
+                const poiFloorValue = r.floor ? String(r.floor).toLowerCase().replace('층', '') : '';
+                passesFloorFilter = poiFloorValue === floorValue;
+            }
+        }
+        
+        return passesTypeFilter && passesKeywordFilter && passesFloorFilter; // 🚩 세 조건 모두 만족해야 함
     });
 
-    // 2. 데이터 정렬 (ORDER BY 절 로직 구현 - 여기서는 단순 정렬 생략/ID 기준)
-    // 메모리 배열에서는 복잡한 DB 정렬 로직 (ORDER BY 컬럼 존재 확인)을 생략합니다.
-    // 여기서는 ID(poi_id)를 기준으로 내림차순 정렬을 유지합니다.
+    // 2. 데이터 정렬 (여기서는 poi_id 기준 내림차순 정렬 유지)
     filteredData.sort((a, b) => (b.poi_id > a.poi_id ? 1 : a.poi_id > b.poi_id ? -1 : 0));
 
 
     // 3. 필드 매핑
-    // locatino.js에서 예상하는 프론트엔드 친화적인 키(id, type, name, items, image, lat, lng, floor)로 변환
+    // locatino.js에서 예상하는 프론트엔드 친화적인 키로 변환
     return filteredData.map(r => ({
         id: r.poi_id,
         type: r.type,
         name: r.name,
-        items: r.desc, // DB에서 desc/description이 items로 매핑되었던 로직 유지
+        items: r.desc, // description/desc -> items
         image: r.image_url,
         lat: r.lat,
         lng: r.lng,
         floor: r.floor
     }));
 };
-
-// // 사용 예시:
-// (async () => {
-//     console.log('--- 전체 목록 (10개) ---');
-//     const allPois = await exports.getPoiList();
-//     console.log(allPois.slice(0, 10)); 
-//     console.log('------------------------\n');
-
-//     console.log('--- 타입: 매점 목록 (5개) ---');
-//     const foodPois = await exports.getPoiList({ type: '매점' });
-//     console.log(foodPois.slice(0, 5));
-//     console.log('---------------------------\n');
-
-//     console.log('--- 키워드: CU 목록 (모두) ---');
-//     const cuPois = await exports.getPoiList({ q: 'CU' });
-//     console.log(cuPois);
-//     console.log('------------------------------\n');
-// })();

@@ -53,8 +53,7 @@ const facilitiesData = [
     { name: '출입구-1(AWAY)', lat: 35.84008, lng: 128.6812, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '출입구-2(HOME)', lat: 35.84129, lng: 128.6827, type: '편의시설', floor: '1층' }, // 층 정보 추정
     { name: '출입구-3(외야)', lat: 35.8411, lng: 128.6803, type: '편의시설', floor: '1층' }, // 층 정보 추정
-    { name: '물품보관소-1', lat: 35.8411669, lng: 128.6803432, type: '편의시설', floor: '1층' }, // 층 정보 추정
-    { name: '물품보관소-2', lat: 35.8410331, lng: 128.6802568, type: '편의시설', floor: '1층' }, // 층 정보 추정
+   
     { name: '수유실(3층 T3-1)', lat: 35.8408419, lng: 128.6807053, type: '편의시설', floor: '3층' },
     { name: '수유실(3층 T1-1)', lat: 35.8403456, lng: 128.6812941, type: '편의시설', floor: '3층' },
     { name: '수유실(스카이석 09)', lat: 35.8407753, lng: 128.6805136, type: '편의시설', floor: '3층' }, // 층 정보 추정
@@ -81,16 +80,16 @@ var markersData = foodWithId.concat(facilitiesWithId);
 
 // 3. 커스텀 마커 아이콘 설정
 var foodIcon = {
-    url: '../assets/img/marker/marker_먹거리.png',
-    size: new naver.maps.Size(33, 33),
-    scaledSize: new naver.maps.Size(33, 33),
-    anchor: new naver.maps.Point(16.5, 33)
+    url: '../assets/img/marker/marker_orange.png',
+    size: new naver.maps.Size(22, 33),
+    scaledSize: new naver.maps.Size(22, 33),
+    anchor: new naver.maps.Point(11, 33)
 };
 var facilityIcon = {
-    url: '../assets/img/marker/marker_편의시설.png',
-    size: new naver.maps.Size(33, 33),
-    scaledSize: new naver.maps.Size(33, 33),
-    anchor: new naver.maps.Point(16.5, 33)
+    url: '../assets/img/marker/marker_blue.png',
+    size: new naver.maps.Size(22, 33),
+    scaledSize: new naver.maps.Size(22, 33),
+    anchor: new naver.maps.Point(11, 33)
 };
 // 4. InfoWindow 객체 정의 (전역)
 var infowindow = new naver.maps.InfoWindow({
