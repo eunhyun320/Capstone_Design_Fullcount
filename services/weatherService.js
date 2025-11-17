@@ -104,7 +104,7 @@ const getSkyState = (sky, pty) => {
         return { 1: '비🌧️', 2: '비/눈🌨️', 3: '눈❄️', 4: '소나기' }[p] || '강수';
     }
     // SKY(하늘상태)
-    return { 1: '매우 맑음☀️', 2: '구름 조금⛅', 3: '구름 많음🌥️', 4: '매우 흐림☁️' }[s] || '정보 없음';
+    return { 1: '맑음☀️', 2: '구름⛅', 3: '구름🌥️', 4: '흐림☁️' }[s] || '정보 없음';
 };
 
 /**
@@ -174,7 +174,7 @@ const fetchWeatherInfo = async () => {
             } else if (popNum === 0) {
                 precipitationText = "강수 없음 (0%)";
             } else {
-                precipitationText = `강수 확률🌧️ ${popNum}%`;
+                precipitationText = `강수 확률 ${popNum}%`;
             }
 
             const skyState = getSkyState(SKY, PTY);
@@ -186,7 +186,7 @@ const fetchWeatherInfo = async () => {
 
 
             const rawFullText = `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
-            const rawShortText = `${skyState} | 기온 ${temp} 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+            const rawShortText = `${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}:00시 예보 ${skyState} | ${temp} | 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
             const fullText = cleanText(rawFullText);
             const shortText = cleanText(rawShortText);
             return {
