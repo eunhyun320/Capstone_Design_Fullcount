@@ -293,3 +293,46 @@ exports.findGameByDate = async (date) => {
     return rows[0] || null;
 };
 
+
+/*1117 */
+
+// 🔹 id로 game_date 가져오기
+exports.findGameDateById = async (id) => {
+    const sql = `
+    SELECT game_date 
+    FROM ${DB}.game_page 
+    WHERE game_id = ?
+  `;
+    const [rows] = await pool.query(sql, [id]);
+    return rows[0] || null;
+};
+
+// 🔹 game_date 기준 이전/다음 경기 찾기
+exports.findPrevNextByDate = async (gameDate) => {
+    // 이전 경기 (가장 가까운 과거)
+    const prevSql = `
+    SELECT game_id, game_date
+    FROM ${DB}.game_page
+    WHERE game_date < ?
+    ORDER BY game_date DESC
+    LIMIT 1
+  `;
+    const [prevRows] = await pool.query(prevSql, [gameDate]);
+
+    // 다음 경기 (가장 가까운 미래)
+    const nextSql = `
+    SELECT game_id, game_date
+    FROM ${DB}.game_page
+    WHERE game_date > ?
+    ORDER BY game_date ASC
+    LIMIT 1
+  `;
+    const [nextRows] = await pool.query(nextSql, [gameDate]);
+
+    return {
+        prev: prevRows[0] || null,
+        next: nextRows[0] || null,
+    };
+};
+
+

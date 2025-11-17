@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- 모바일 키보드 대응 최적화된 viewport 설정 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>메인페이지시작</title>
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/footer.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <meta name="viewport" content="user-scalable=no, width=device-width">
     <link href="../assets/css/game_match_list.css" rel="stylesheet">
     <link href="/assets/css/mainChatbot.css" rel="stylesheet">
 
@@ -20,6 +20,13 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
+            transition: background-image 0.3s;
+        }
+        
+        /* 채팅창 활성화 시 배경 제거 */
+        body.chat-active {
+            background-image: none;
+            background-color: #ffffff;
         }
     </style>
 </head>
