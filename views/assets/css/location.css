@@ -299,6 +299,18 @@ body {
     background-color: var(--brand);
     color: white;
 }
+/* data-filter 버튼이 선택되었을 때의 스타일 */
+.rail-btn.active {
+    /* 예시: 버튼 배경색 변경 및 텍스트/아이콘 색상 강조 */
+    background-color: var(--brand, #007bff); 
+}
+
+.rail-btn.active .rail-copy,
+.rail-btn.active .rail-ico {
+    /* 텍스트와 아이콘을 대비되는 색상으로 변경 */
+    color: white; 
+    filter: brightness(0) invert(1); /* 아이콘 이미지를 흰색으로 보이게 함 */
+}
 
 /* ===================== 데스크탑 (≥769px) ===================== */
 @media (min-width: 769px) {

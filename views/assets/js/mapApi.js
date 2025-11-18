@@ -60,6 +60,8 @@ const facilitiesData = [
   { "name": "화장실", "lat": 35.84015, "lng": 128.68091, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U8-U9 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U8-U9 사이 | " },
   { "name": "화장실", "lat": 35.8407425, "lng": 128.68039, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U15-U16 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U15-U16 사이 | " },
   { "name": "화장실", "lat": 35.8412899, "lng": 128.6805, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U22-U23 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U22-U23 사이 | " },
+  { "name": "화장실", "lat":  35.8401725, "lng": 128.6807509, "type": "편의시설", "floor": "2층", "is_floor_estimated": "", "detail": "2층", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "2층 " },
+  { "name": "화장실", "lat": 35.8400589, "lng":128.6816817, "type": "편의시설", "floor": "2층", "is_floor_estimated": "", "detail": "2층", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "2층 " },
   { "name": "팀 스토어", "lat": 35.8412549, "lng": 128.68091, "type": "편의시설", "floor": "3층", "is_floor_estimated": "O", "detail": "3-6, 3-6 사이", "location": "", "image_path": "/assets/img/location/store.png", "ui_description": "3-6, 3-6 사이 | " }
 ];
 

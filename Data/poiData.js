@@ -39,37 +39,39 @@ const foodMarkersData = [
   { "name": "맥주부스(5층)", "lat": 35.84162, "lng": 128.68098, "type": "매점", "floor": "5층", "is_floor_estimated": "", "detail": "5F-08, 5F-04", "location": "스카이 지정석", "image_path": "/assets/img/location/beer.png", "ui_description": "5F-08, 5F-04 | 스카이 지정석" }
 ];
 const facilitiesData = [
-  { "name": "출입구-1", "lat": 35.84008, "lng": 128.682, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "AWAY", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "AWAY | " },
-  { "name": "출입구-2", "lat": 35.84129, "lng": 128.6827, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "HOME", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "HOME | " },
-  { "name": "출입구-3", "lat": 35.8411, "lng": 128.6803, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "외야", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "외야 | " },
-  { "name": "수유실", "lat": 35.8408419, "lng": 128.68071, "type": "편의시설", "floor": "3층", "is_floor_estimated": "", "detail": "3층 T3-1", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "3층 T3-1 | " },
-  { "name": "수유실", "lat": 35.8403456, "lng": 128.68129, "type": "편의시설", "floor": "3층", "is_floor_estimated": "", "detail": "3층 T1-1", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "3층 T1-1 | " },
-  { "name": "수유실", "lat": 35.8407753, "lng": 128.68051, "type": "편의시설", "floor": "5층", "is_floor_estimated": "O", "detail": "스카이석 09", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "스카이석 09 | " },
-  { "name": "화장실", "lat": 35.840641, "lng": 128.68164, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U1 뒤", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U1 뒤 | " },
-  { "name": "화장실", "lat": 35.84015, "lng": 128.68091, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U8-U9 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U8-U9 사이 | " },
-  { "name": "화장실", "lat": 35.8407425, "lng": 128.68039, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U15-U16 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U15-U16 사이 | " },
-  { "name": "화장실", "lat": 35.8412899, "lng": 128.6805, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U22-U23 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U22-U23 사이 | " },
-  { "name": "팀 스토어", "lat": 35.8412549, "lng": 128.68091, "type": "편의시설", "floor": "3층", "is_floor_estimated": "O", "detail": "3-6, 3-6 사이", "location": "", "image_path": "/assets/img/location/store.png", "ui_description": "3-6, 3-6 사이 | " }
+  { "name": "출입구-1", "lat": 35.84008, "lng": 128.682, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "AWAY", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "AWAY" },
+  { "name": "출입구-2", "lat": 35.84129, "lng": 128.6827, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "HOME", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "HOME" },
+  { "name": "출입구-3", "lat": 35.8411, "lng": 128.6803, "type": "편의시설", "floor": "2층", "is_floor_estimated": "O", "detail": "외야", "location": "", "image_path": "/assets/img/location/door.png", "ui_description": "외야" },
+  { "name": "수유실", "lat": 35.8408419, "lng": 128.68071, "type": "편의시설", "floor": "3층", "is_floor_estimated": "", "detail": "3층 T3-1", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "3층 T3-1" },
+  { "name": "수유실", "lat": 35.8403456, "lng": 128.68129, "type": "편의시설", "floor": "3층", "is_floor_estimated": "", "detail": "3층 T1-1", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "3층 T1-1" },
+  { "name": "수유실", "lat": 35.8407753, "lng": 128.68051, "type": "편의시설", "floor": "5층", "is_floor_estimated": "O", "detail": "스카이석 09", "location": "", "image_path": "/assets/img/location/su.png", "ui_description": "스카이석 09" },
+  { "name": "화장실", "lat": 35.840641, "lng": 128.68164, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U1 뒤", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U1 뒤" },
+  { "name": "화장실", "lat": 35.84015, "lng": 128.68091, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U8-U9 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U8-U9 사이" },
+  { "name": "화장실", "lat": 35.8407425, "lng": 128.68039, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U15-U16 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U15-U16 사이" },
+  { "name": "화장실", "lat": 35.8412899, "lng": 128.6805, "type": "편의시설", "floor": "5층", "is_floor_estimated": "", "detail": "U22-U23 사이", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "U22-U23 사이" },
+  { "name": "화장실", "lat": 35.8412899, "lng": 128.6805, "type": "편의시설", "floor": "2층", "is_floor_estimated": "", "detail": "2층", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "2층" },
+  { "name": "화장실", "lat": 35.8412899, "lng": 128.6805, "type": "편의시설", "floor": "2층", "is_floor_estimated": "", "detail": "2층", "location": "", "image_path": "/assets/img/location/to.png", "ui_description": "2층" },
+  { "name": "팀 스토어", "lat": 35.8412549, "lng": 128.68091, "type": "편의시설", "floor": "3층", "is_floor_estimated": "O", "detail": "3-6, 3-6 사이", "location": "", "image_path": "/assets/img/location/store.png", "ui_description": "3-6, 3-6 사이" }
 ];
 
 // 1. ID와 UI 필드를 포함하여 매점 데이터를 가공
 const foodWithProcessedData = foodMarkersData.map((data, index) => ({
-    id: `F${index + 1}`,
-    ...data,
-    // 클라이언트 통합 스크립트에서 예상하는 필드를 명시적으로 추가
-    image_url: data.image_path || (data.type === '편의시설' ? '../assets/img/marker/marker_편의시설.png' : '../assets/img/marker/marker_먹거리.png'),
-    desc: data.ui_description // POI 모델의 'desc' 필드를 UI 설명으로 사용
+  id: `F${index + 1}`,
+  ...data,
+  // 클라이언트 통합 스크립트에서 예상하는 필드를 명시적으로 추가
+  image_url: data.image_path || (data.type === '편의시설' ? '../assets/img/marker/marker_편의시설.png' : '../assets/img/marker/marker_먹거리.png'),
+  desc: data.ui_description // POI 모델의 'desc' 필드를 UI 설명으로 사용
 }));
 
 // 2. ID와 UI 필드를 포함하여 편의시설 데이터를 가공
 const facilitiesWithProcessedData = facilitiesData.map((data, index) => ({
-    id: `I${index + 1}`,
-    ...data,
-    // 클라이언트 통합 스크립트에서 예상하는 필드를 명시적으로 추가
-    ui_description: data.name, // 편의시설은 ui_description이 없으므로 name 사용 (필요 시 detail | location 조합)
-    image_path: '',
-    image_url: '../assets/img/marker/marker_편의시설.png',
-    desc: data.name // POI 모델의 'desc' 필드를 이름으로 사용
+  id: `I${index + 1}`,
+  ...data,
+  // 클라이언트 통합 스크립트에서 예상하는 필드를 명시적으로 추가
+  ui_description: data.name, // 편의시설은 ui_description이 없으므로 name 사용 (필요 시 detail | location 조합)
+  image_path: '',
+  image_url: '../assets/img/marker/marker_편의시설.png',
+  desc: data.name // POI 모델의 'desc' 필드를 이름으로 사용
 }));
 
 
@@ -79,6 +81,6 @@ const finalMarkersData = foodWithProcessedData.concat(facilitiesWithProcessedDat
 var markersData = finalMarkersData;
 // 💡 Node.js (CommonJS) 모듈 내보내기
 module.exports = {
-    
-    allPoiData: finalMarkersData 
+
+  allPoiData: finalMarkersData
 };
