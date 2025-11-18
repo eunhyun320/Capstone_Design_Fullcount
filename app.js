@@ -4,22 +4,45 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const nunjucks = require('nunjucks');
 const morgan = require('morgan');
 const app = express();
 const weatherController = require('./controllers/weatherController');
+const pool = require('./common/db');
 
 // ---------------------------------------------------------------------
 // 1) 공통 미들웨어
 // ---------------------------------------------------------------------
+// MySQL 세션 저장소 (관리자 전용)
+const sessionStore = new MySQLStore({
+  expiration: 1000 * 60 * 60 * 24, // 24시간
+  createDatabaseTable: true,
+  checkExpirationInterval: 1000 * 60 * 15, // 15분마다 만료된 세션 자동 정리
+  schema: {
+    tableName: 'sessions',
+    columnNames: {
+      session_id: 'session_id',
+      expires: 'expires',
+      data: 'data'
+    }
+  }
+}, pool);
+
 // app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'change_this_secret', // //.env 권장
+  name: 'admin_session',
+  secret: process.env.SESSION_SECRET || 'change_this_secret',
+  store: sessionStore,
   resave: false,
-  saveUninitialized: false,
-  cookie: { httpOnly: true, sameSite: 'lax' }
+  saveUninitialized: false, // 로그인 시에만 세션 생성
+  cookie: { 
+    httpOnly: true, 
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 // 24시간
+  }
 }));
 // ---------------------------------------------------------------------
 // 2) 뷰 엔진 / 정적파일
