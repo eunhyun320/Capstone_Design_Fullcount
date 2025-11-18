@@ -186,7 +186,7 @@ body {
 .badge {
   margin-left: auto;
   display: inline-block;
-  width: 60px;
+  width: 62px;
   text-align: center;
   flex-shrink: 0;
   padding: 4px 8px;
@@ -198,7 +198,30 @@ body {
   box-sizing: border-box;
   margin-left:auto;
 }
+/* 🚩 먹거리 (food) 배지 스타일 재정의: #DFA88C 계열 (갈색/주황색 연한색) 🚩 */
+.item[data-type="food"] .badge {
+    /* 연한 배경: #DFA88C (RGB: 223, 168, 140)에서 채도와 밝기를 조정 */
+    background: #FFEEE6; 
+    /* 텍스트 색상: #DFA88C 색상 그대로 사용 */
+    color: #DFA88C;      
+    /* 테두리 색상: 조금 더 연하게 */
+    border-color: #F8E3D7; 
+}
 
+/* 🚩 편의시설 (toilet) 배지 스타일 재정의: #2F97FD 계열 (파란색 연한색) 🚩 */
+.item[data-type="toilet"] .badge {
+    /* 연한 배경: #2F97FD (RGB: 47, 151, 253)에서 채도와 밝기를 조정 */
+    background: #E8F5FF; 
+    /* 텍스트 색상: #2F97FD 색상 그대로 사용 */
+    color: #2F97FD;      
+    /* 테두리 색상: 조금 더 연하게 */
+    border-color: #D3E7F8; 
+}
+
+.item .name {
+    /* 기존 스타일 유지 */
+    margin-bottom: 4px; /* 원하는 만큼의 간격 (예: 4px)을 추가합니다. */
+}
 /* 지도 */
 #map {
   min-height: 420px;

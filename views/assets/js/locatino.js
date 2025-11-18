@@ -165,21 +165,13 @@ function filterList(term = '') {
 
 
       return `
-
                 <article class="item" data-type="${dataType}" data-id="${r.id}">
-
                   <div class="thumb"${imgStyle}></div>
-
                   <div class="meta">
-
                     <h4 class="name">${r.name}</h4>
-
                     <p class="desc">${r.items || ""}</p>
-
                   </div>
-
                   <span class="badge">${badge[dataType] || ""}</span>
-
                 </article>`;
 
     }).join("");
