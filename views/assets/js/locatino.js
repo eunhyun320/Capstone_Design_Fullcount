@@ -101,120 +101,50 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
   });
 })();
 
-// ---------------------------------------------------------------------------------------
-// (function () {
-//   const listEl = document.getElementById("resultList");
-//   const qEl = document.getElementById("q_m"); // ✅ 검색 input
-//   const clearBtn = document.getElementById("btnClear_m"); // ✅ x버튼
-//   const badge = { food: "먹거리", toilet: "화장실" };
-//   const state = { rows: [] };
-
-//   function render(rows) {
-//     if (!rows || rows.length === 0) {
-//       listEl.innerHTML = '<p class="empty">표시할 항목이 없습니다.</p>';
-//       return;
-//     }
-//     listEl.innerHTML = rows.map(r => {
-//       const imgStyle = r.image ? ` style="background-image:url('${r.image}');"` : "";
-//       return `
-//         <article class="item" data-type="${r.type}" data-id="${r.id}">
-//           <div class="thumb"${imgStyle}></div>
-//           <div class="meta">
-//             <h4 class="name">${r.name}</h4>
-//             <p class="desc">${r.items || ""}</p>
-//           </div>
-//           <span class="badge">${badge[r.type] || ""}</span>
-//         </article>`;
-//     }).join("");
-//   }
-
-//   // ✅ 검색어 필터
-//   function applyFilter() {
-//     const q = (qEl?.value || "").trim().toLowerCase();
-//     const filtered = state.rows.filter(r => {
-//       const text = `${r.name || ""} ${r.items || ""}`.toLowerCase();
-//       return !q || text.includes(q);
-//     });
-//     render(filtered);
-//   }
-
-//   // ✅ 입력 이벤트 (디바운스)
-//   let t;
-//   qEl?.addEventListener("input", () => {
-//     clearTimeout(t);
-//     t = setTimeout(applyFilter, 200);
-//   });
-
-//   // ✅ “×” 버튼 클릭 시 검색창 리셋 + 전체 표시
-//   clearBtn?.addEventListener("click", () => {
-//     qEl.value = "";
-//     applyFilter();
-//     qEl.focus();
-//   });
-
-//   // ✅ 데이터 불러오기
-//   async function load() {
-//     try {
-//       listEl.innerHTML = '<p class="loading">불러오는 중...</p>';
-//       const res = await fetch("/poi");
-//       // 서버 오류(비정상 응답)가 올 수 있으므로 res.ok 검사
-//       if (!res.ok) {
-//         // 시도: 응답이 JSON이면 그 내용을 읽어 에러 메시지를 사용
-//         let errText = `HTTP ${res.status}`;
-//         try {
-//           const body = await res.json();
-//           if (body && body.error) errText = body.error;
-//         } catch (e) {
-//           // 파싱 실패 시 텍스트로 읽어본다
-//           try { errText = await res.text(); } catch (_) {}
-//         }
-//         throw new Error(errText);
-//       }
-
-//       const rows = await res.json();
-//       state.rows = Array.isArray(rows) ? rows : [];
-//       render(state.rows);
-//     } catch (e) {
-//       console.error("load error:", e);
-//       listEl.innerHTML = '<p class="error">목록을 불러오지 못했습니다.</p>';
-//     }
-//   }
-
-//   if (document.readyState === "loading") {
-//     document.addEventListener("DOMContentLoaded", load);
-//   } else {
-//     load();
-//   }
-// })();
 
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 // 💡 서버 fetch 대신 전역 markersData 배열을 사용하여 목록과 마커를 동시에 제어하는 통합 스크립트
 (function () {
     const listEl = document.getElementById("resultList");
-    const qEl = document.getElementById("q_m"); // ✅ 검색 input
-    const clearBtn = document.getElementById("btnClear_m"); // ✅ x버튼
-    const badge = { food: "먹거리", toilet: "편의시설" }; 
+    // q_m 대신 상단의 q를 사용하도록 변경
+    const qEl = document.getElementById("q"); 
+    const clearBtn = document.getElementById("btnClear"); 
+    const badge = { food: "먹거리", toilet: "편의시설" };
 
     // 💡 STATE 초기화: 전역 markersData를 사용하여 state.rows를 초기화합니다.
     // markersData는 이미 ID가 추가되고 병합된 배열이어야 합니다.
     const state = {
-        rows: markersData.map(r => ({
-             // POI 모델의 최종 반환 형태(id, type, name, items, image, lat, lng)를 시뮬레이션
-             id: r.id,
-             type: r.type, // '매점' 또는 '편의시설' (POI 모델의 DB 필드 값)
-             name: r.name,
-             items: r.name, // 설명 필드는 임시로 이름과 동일하게 설정
-             // 이미지 경로는 필요에 따라 markersData에 추가하거나 여기서 매핑합니다.
-             image: r.type === '편의시설' ? '../assets/img/marker/marker_편의시설.png' : '../assets/img/marker/marker_먹거리.png',
-             lat: r.lat,
-             lng: r.lng,
-            //  floor: '' // 층 정보가 필요하다면 markersData에 추가해야 합니다.
-             floor: r.floor ? String(r.floor).replace('층', '') : 'all' // '1층' -> '1'로 통일하여 저장
-        })),
-        currentType: 'all', // 'all', 'food', 'toilet' 중 하나
-        currentFloor: 'all'
-    };
+    rows: markersData.map(r => {
+        // 이미지 경로 결정: 데이터에 image_path가 있으면 사용하고, 없으면 type에 따라 기본 마커 이미지를 사용합니다.
+        let itemImage = '';
+        if (r.image_path) {
+            itemImage = r.image_path;
+        } else if (r.type === '편의시설') {
+            itemImage = '../assets/img/';
+        } else {
+            // '매점' 등 기타 유형
+            itemImage = '../assets/img/location/foodicon.png';
+        }
+
+        return {
+            // POI 모델의 최종 반환 형태(id, type, name, items, image, lat, lng)를 시뮬레이션
+            id: r.id, 
+            type: r.type, 
+            name: r.name,
+            // ⚠️ 수정! r.ui_description을 사용하여 이름 밑에 상세 설명 (detail | location) 표시
+            items: r.ui_description || r.name, 
+            // ⚠️ 수정! itemImage 변수를 사용하여 개별 이미지 경로 반영
+            image: itemImage, 
+            lat: r.lat,
+            lng: r.lng,
+            // 층 정보: '1층' -> '1', 'all' 등으로 통일
+            floor: r.floor ? String(r.floor).replace('층', '') : 'all' 
+        };
+    }),
+    currentType: 'all',
+    currentFloor: 'all'
+}
 
     function render(rows) {
         if (!rows || rows.length === 0) {
@@ -222,19 +152,21 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
             return;
         }
         listEl.innerHTML = rows.map(r => {
-            // POI 모델의 type 값 ('매점', '편의시설')을 HTML의 data-type ('food', 'toilet')으로 매핑
+            // ... (dataType 결정 로직은 생략)
             let dataType;
             if (r.type === '매점') dataType = 'food';
             else if (r.type === '편의시설') dataType = 'toilet';
             else dataType = 'all';
 
-            const imgStyle = r.image ? ` style="background-image:url('${r.image}');"` : "";
+            // r.image는 state 초기화에서 결정된 경로를 사용합니다.
+            const imgStyle = r.image ? ` style="background-image:url('${r.image}');"` : ""; 
+            
             return `
                 <article class="item" data-type="${dataType}" data-id="${r.id}"> 
                   <div class="thumb"${imgStyle}></div>
                   <div class="meta">
                     <h4 class="name">${r.name}</h4>
-                    <p class="desc">${r.items || ""}</p>
+                    <p class="desc">${r.items || ""}</p> 
                   </div>
                   <span class="badge">${badge[dataType] || ""}</span> 
                 </article>`;
