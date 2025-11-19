@@ -318,4 +318,44 @@ function filterList(term = '') {
       defaultFloorBtn.classList.add('active');
     }
   }
+  
+    
+  
+
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('mobileListToggle');
+    const resultList = document.getElementById('resultList');
+
+    if (toggleBtn && resultList) {
+        
+        // 1. 버튼 클릭 시 토글 (기존 로직)
+        toggleBtn.addEventListener('click', function () {
+            resultList.classList.toggle('show-names');
+            updateButtonState();
+        });
+
+        // 2. 리스트 아이템 클릭 시 닫기 (추가된 로직)
+        // 이벤트 위임: 부모(resultList)가 자식(.item)의 클릭을 감지함
+        resultList.addEventListener('click', function(e) {
+            // 클릭된 요소가 .item 이거나 그 내부 요소라면
+            if (e.target.closest('.item')) {
+                // 목록 닫기
+                resultList.classList.remove('show-names');
+                // 버튼 상태 원복
+                updateButtonState();
+            }
+        });
+
+        // 버튼 텍스트/색상 업데이트 함수 (중복 제거용)
+        function updateButtonState() {
+            if (resultList.classList.contains('show-names')) {
+                toggleBtn.textContent = '목록 닫기';
+                toggleBtn.style.backgroundColor = '#555';
+            } else {
+                toggleBtn.textContent = '목록 보기';
+                toggleBtn.style.backgroundColor = '#333';
+            }
+        }
+    }
+});
 })();

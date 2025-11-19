@@ -42,8 +42,9 @@
             </div>
             <div class="whether">
                 <div class="whe_b">
-                    <p id="weather-info-pc">{{weatherInfo.pc}}</p>
-                    <p id="weather-info-mobile">{{weatherInfo.mobile}}</p>
+                    <p id="weather-info-pc">{{ weatherInfo.pc | safe }}</p>
+
+                    <p id="weather-info-mobile">{{ weatherInfo.mobile | safe }}</p>
                 </div>
             </div>
             <div class="member">

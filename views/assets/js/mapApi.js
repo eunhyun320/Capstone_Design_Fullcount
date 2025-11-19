@@ -16,7 +16,7 @@ const foodMarkersData = [
   { "name": "&지코바(1층)", "lat": 35.8412811, "lng": 128.68037, "type": "매점", "floor": "1층", "is_floor_estimated": "", "detail": "", "location": "외부", "image_path": "/assets/img/location/gcova.png", "ui_description": " | 외부" },
   { "name": "WOKSTER", "lat": 35.8402606, "lng": 128.6806001, "type": "매점", "floor": "2층", "is_floor_estimated": "O", "detail": "2F-09", "location": "외부", "image_path": "/assets/img/location/wokster.jpg", "ui_description": "2F-09 | 외부" },
   { "name": "맘스터치", "lat": 35.8402383, "lng": 128.6805425, "type": "매점", "floor": "2층", "is_floor_estimated": "O", "detail": "2F-13", "location": "외부", "image_path": "/assets/img/location/Momstouch.png", "ui_description": "2F-13 | 외부" },
-  { "name": "버터우드X상하목장", "lat": 35.84390, "lng": 128.68075, "type": "매점", "floor": "2층", "is_floor_estimated": "O", "detail": "2F-08", "location": "외부", "image_path": "/assets/img/location/ButterWood.jpg", "ui_description": "2F-08 | 외부" },
+//   { "name": "버터우드X상하목장", "lat": 35.84390, "lng": 128.68075, "type": "매점", "floor": "2층", "is_floor_estimated": "O", "detail": "2F-08", "location": "외부", "image_path": "/assets/img/location/ButterWood.jpg", "ui_description": "2F-08 | 외부" },
   { "name": "브뤼셀프라이", "lat": 35.8411685, "lng": 128.6808656, "type": "매점", "floor": "2층", "is_floor_estimated": "O", "detail": "2F-10", "location": "외부", "image_path": "/assets/img/location/Brussels_fries.png", "ui_description": "2F-10 | 외부" },
   { "name": "CU(2층)", "lat": 35.84165, "lng": 128.68115, "type": "매점", "floor": "2층", "is_floor_estimated": "", "detail": "2F-12", "location": "외부", "image_path": "/assets/img/location/CU.png", "ui_description": "2F-12 | 외부" },
   { "name": "파파존스피자", "lat": 35.84165, "lng": 128.6811, "type": "매점", "floor": "2층", "is_floor_estimated": "", "detail": "3F-18", "location": "외야", "image_path": "/assets/img/location/Papa_Johns.png", "ui_description": "3F-18 | 외야" },
@@ -94,10 +94,11 @@ var facilityIcon = {
 };
 // 4. InfoWindow 객체 정의 (전역)
 var infowindow = new naver.maps.InfoWindow({
-    content: '',
-    maxWidth: 200,
+    content: '', // 초기값은 비워둡니다 (나중에 채워짐)
+    maxWidth: 300,
     backgroundColor: "#fff",
-    borderWidth: 1,
+    borderColor: "#888",    // [디자인] 테두리 진한 회색
+    borderWidth: 1,         // [디자인] 테두리 두께
     anchorSize: new naver.maps.Size(10, 10),
     anchorColor: "#fff",
     pixelOffset: new naver.maps.Point(0, -10)
@@ -108,6 +109,7 @@ var infowindow = new naver.maps.InfoWindow({
 var markers = []; 
 
 markersData.forEach(function (data) {
+    
     var position = new naver.maps.LatLng(data.lat, data.lng);
     var iconToUse = data.type === '편의시설' ? facilityIcon : foodIcon;
 
@@ -126,8 +128,8 @@ markersData.forEach(function (data) {
     // ----------------------------------------------------
     // ✨ 마우스 오버/클릭 시 이름 표시 이벤트 리스너 추가
     var contentString = [
-        '<div style="padding:10px; text-align:center; background-color:#fff;">', // 배경색 추가 (비침 방지)
-        '   <span style="font-size:14px; color:#333; white-space: nowrap;">' + data.name + '</span>', // h4 대신 span 사용 (여백 문제 해결)
+        '<div style="padding: 10px 15px; text-align: center; font-size: 14px; font-weight: bold; color: #333; white-space: nowrap;">',
+        data.name, // 데이터의 이름이 여기에 들어갑니다.
         '</div>'
     ].join('');
 
