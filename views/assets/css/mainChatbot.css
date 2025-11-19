@@ -34,8 +34,8 @@
     position: absolute;
     left: var(--fc-gap);
     right: var(--fc-gap);
-    bottom: calc(var(--barH) + 2*var(--fc-gap) + var(--log-lift));
-    /* 핵심 */
+    bottom: calc(var(--barH) + var(--fc-gap));
+    /* 입력창과 붙임 */
     z-index: 2;
     /* 입력창보다 위 */
     display: none;
@@ -46,11 +46,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
     padding: var(--fc-gap);
     /* ======================================== 📏 채팅창 높이 조절 (여기서 수정!) ======================================== */
-    height: 600px;
-    /* ← 기본 고정 높이 (원하는 값으로 변경 가능: 500px, 600px 등) */
-    max-height: clamp(280px, 60vh, 480px);
-    /* ← 최대 높이: (최소 280px, 화면의 60%, 최대 480px) */
-    /* max-height 값 설명: - 280px = 최소 높이 - 60vh = 화면 높이의 60% - 480px = 절대 최대 높이 (이 값을 늘리면 더 길어짐) */
+    height: 350px;
+    /* ← 기본 고정 높이 (인사 메시지가 보이도록 줄임) */
+    max-height: clamp(280px, 45vh, 380px);
+    /* ← 최대 높이: (최소 280px, 화면의 45%, 최대 380px) */
+    /* max-height 값 설명: - 280px = 최소 높이 - 45vh = 화면 높이의 45% - 380px = 절대 최대 높이 (이 값을 늘리면 더 길어짐) */
     overflow-y: auto;
     /* ← 세로 스크롤 활성화 */
     overflow-x: hidden;
@@ -65,14 +65,20 @@
 
 /* 3) 입력창: 하단 고정(그대로) */
 /* 입력창은 하단 고정, 로그는 위로 펼침(이미 적용한 구조면 그대로) */
-#chatInput {
+.fc-chat__input {
     position: absolute;
     left: var(--gap);
     right: var(--gap);
     bottom: var(--gap);
     height: var(--barH);
-    /* 입력창 스타일 추가 */
-    width: calc(100% - 2*var(--gap));
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#chatInput {
+    flex: 1;
+    height: 100%;
     padding: 0 16px;
     border: 1px solid var(--fc-line);
     border-radius: 24px;
@@ -90,6 +96,38 @@
 
 #chatInput::placeholder {
     color: #999;
+}
+
+/* 전송 버튼 (PC에서는 숨김) */
+.fc-send-btn {
+    display: none;
+    width: var(--barH);
+    height: var(--barH);
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--fc-navy);
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(11, 61, 145, .2);
+    transition: background .2s, box-shadow .2s;
+}
+
+.fc-send-btn:hover {
+    background: #0a3275;
+    box-shadow: 0 4px 12px rgba(11, 61, 145, .3);
+}
+
+.fc-send-btn:active {
+    transform: scale(0.95);
+}
+
+.fc-send-btn svg {
+    width: 20px;
+    height: 20px;
 }
 
 /* 4) 메시지 기본 스타일 */
@@ -176,8 +214,8 @@
     /* 🔵 대화창: 헤더 밑 ~ 입력창 위 영역만 차지, 여기만 스크롤 */
     #chatLog {
         position: absolute;
-        top: var(--header-h);
-        /* 헤더 바로 아래에서 시작 */
+        top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 145px);
+        /* 아이폰 노치/주소창 대응 */
         left: 0;
         right: 0;
         /* 입력창 + 키보드 보정 만큼 위에서 끝나게 */
@@ -193,8 +231,8 @@
         /* 입력창보다 뒤 */
     }
 
-    /* 🔵 입력창: 항상 화면 맨 아래에, 키보드 올라오면 JS로 올려줌 */
-    #chatInput {
+    /* 🔵 입력창 컨테이너: 항상 화면 맨 아래에, 키보드 올라오면 JS로 올려줌 */
+    .fc-chat__input {
         position: fixed;
         /* 뷰포트 기준 고정 */
         left: 0;
@@ -203,11 +241,30 @@
         /* 아이폰 노치 + 키보드 보정 */
         height: var(--barH);
         width: 100%;
-        border-radius: 0;
-        padding: 0 16px;
+        padding: 0 8px;
         box-sizing: border-box;
         z-index: 1000;
         /* chatLog보다 항상 앞 */
+        display: flex;
+        gap: 8px;
+        background: #fff;
+    }
+
+    #chatInput {
+        flex: 1;
+        border-radius: 24px;
+        padding: 0 16px;
+    }
+
+    /* 모바일에서 전송 버튼 표시 */
+    .fc-send-btn {
+        display: flex;
+    }
+
+    /* iOS 기기에서만 top 값을 더 내리는 CSS 추가 */
+    #chatLog,
+    body.ios #chatLog {
+        top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 145px);
     }
 }
 

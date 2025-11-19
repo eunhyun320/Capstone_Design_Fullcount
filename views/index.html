@@ -107,6 +107,11 @@
             <div class="fc-chat__log" id="chatLog" aria-live="polite"></div>
             <div class="fc-chat__input">
                 <input type="text" id="chatInput" placeholder="무엇이 궁금하신가요? (Enter 입력)">
+                <button type="button" id="chatSendBtn" class="fc-send-btn" aria-label="전송">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+                    </svg>
+                </button>
             </div>
         </section>
     </main>
@@ -141,23 +146,32 @@
 <script>
     (function () {
         const chat = document.getElementById('fcChat');
-        const footer = document.querySelector('footer');            // 푸터 선택자 필요 시 바꿔도 됨
+        const footer = document.querySelector('footer');
         if (!chat || !footer) return;
 
         // fcChat이 다른 래퍼에 들어있으면 body로 이동(고정 보장)
         if (chat.parentElement !== document.body) document.body.appendChild(chat);
+
+        let ticking = false;
 
         function setFooterOffset() {
             const r = footer.getBoundingClientRect();
             // 푸터 상단이 뷰포트 안으로 들어온 양(겹치는 높이)
             const overlap = Math.max(0, window.innerHeight - r.top);
             chat.style.setProperty('--footer-offset', overlap + 'px');
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(setFooterOffset);
+                ticking = true;
+            }
         }
 
         setFooterOffset();
-        window.addEventListener('scroll', setFooterOffset, { passive: true });
-        window.addEventListener('resize', setFooterOffset);
-        $log.scrollTop = $log.scrollHeight;
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick, { passive: true });
     })();
 </script>
 

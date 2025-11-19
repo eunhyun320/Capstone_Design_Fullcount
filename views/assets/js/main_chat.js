@@ -36,9 +36,18 @@ import { ensureStart, ask, greet } from '/assets/js/aiCore.js';
 
   /* ---------- 유틸: 로그 열기 ---------- */
   function openLog() {
+    if (!document.body.classList.contains('chat-active')) {
+      document.body.classList.add('chat-active');
+    }
     if (!$wrap.classList.contains('active')) {
       $wrap.classList.add('active');
     }
+  }
+
+  // 채팅창 닫기 함수 (필요시)
+  function closeLog() {
+    document.body.classList.remove('chat-active');
+    $wrap.classList.remove('active');
   }
 
   /* ---------- 공통 렌더 ---------- */
@@ -212,4 +221,22 @@ import { ensureStart, ask, greet } from '/assets/js/aiCore.js';
       onSend();
     }
   });
+
+  // 전송 버튼 클릭 이벤트
+  const $sendBtn = document.getElementById('chatSendBtn');
+  if ($sendBtn) {
+    $sendBtn.addEventListener('click', () => {
+      if (!greeted) {
+        greetOnce().then(() => { onSend(); $input.focus(); }).catch(() => { onSend(); $input.focus(); });
+      } else {
+        onSend();
+        $input.focus();
+      }
+    });
+  }
+
+  // iOS 감지 후 body에 ios 클래스 추가
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    document.body.classList.add('ios');
+  }
 })();
