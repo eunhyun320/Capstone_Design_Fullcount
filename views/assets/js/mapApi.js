@@ -81,7 +81,7 @@ var markersData = foodWithId.concat(facilitiesWithId);
 
 // 3. 커스텀 마커 아이콘 설정
 var foodIcon = {
-    url: '../assets/img/marker/marker_orange.png',
+    url: '../assets/img/marker/marker_gray.png',
     size: new naver.maps.Size(22, 33),
     scaledSize: new naver.maps.Size(22, 33),
     anchor: new naver.maps.Point(11, 33)
