@@ -117,7 +117,14 @@ exports.showPlayerLineup = async (req, res) => {
         )`;
     const [gameRows] = gameId
       ? await pool.query(baseSQL + ' WHERE g.game_id=?', [gameId])
-      : await pool.query(baseSQL + ' ORDER BY g.game_date DESC, g.game_time DESC LIMIT 1');
+      : await pool.query(
+          baseSQL + 
+          ` WHERE EXISTS (
+            SELECT 1 FROM \`${DB}\`.lineups l 
+            WHERE l.game_id = g.game_id
+          )
+          ORDER BY g.game_date DESC, g.game_time DESC LIMIT 1`
+        );
 
     if (!gameRows.length)
       return res.render('gameinfo/game_player_lineup.html', { game: null, home: null, away: null, home_lineup: [], away_lineup: [], error: '경기 데이터가 없습니다.' });
@@ -133,7 +140,16 @@ exports.showPlayerLineup = async (req, res) => {
     `;
     const [homeLineup] = await pool.query(lineupSQL, [g.game_id, g.home_team_id]);
     const [awayLineup] = await pool.query(lineupSQL, [g.game_id, g.away_team_id]);
-    const isAnnounced = Number(g.is_lineup_announced) === 1 || (homeLineup.length && awayLineup.length);
+    
+    console.log('📊 라인업 조회 결과:');
+    console.log('  game_id:', g.game_id);
+    console.log('  game_date:', g.game_date);
+    console.log('  home_team_id:', g.home_team_id, '/ 라인업 수:', homeLineup.length);
+    console.log('  away_team_id:', g.away_team_id, '/ 라인업 수:', awayLineup.length);
+    if (homeLineup.length) console.log('  홈 첫번째:', homeLineup[0]);
+    if (awayLineup.length) console.log('  어웨이 첫번째:', awayLineup[0]);
+    
+    const isAnnounced = (homeLineup.length > 0 && awayLineup.length > 0);
 
     // 날짜 포맷팅 (타임존 문제 방지)
     const formatDate = (date) => {
@@ -163,7 +179,8 @@ exports.showPlayerLineup = async (req, res) => {
     res.render('gameinfo/game_player_lineup.html', {
       game: {
         ...g,
-        game_date: formatDate(g.game_date)
+        game_date: formatDate(g.game_date),
+        is_lineup_announced: isAnnounced
       },
       home: {
         team_code: g.home_code,
