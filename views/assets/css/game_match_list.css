@@ -7,12 +7,20 @@
 }
 
 
-.scedule_list{
+.scedule_list {
   font-size: 28px;
   font-weight: bold;
   margin-top: 30px;
   margin-bottom: 10px;
 }
+
+.line1_player {
+  margin-top: 10px;
+  border-top: 3px solid #000080;
+  margin-bottom: 10px;
+
+}
+
 .schedule-main {
   width: 1275px;
   margin: 0 auto;
@@ -154,8 +162,19 @@
     margin: 10px;
   }
 
+  .line1_player {
+    margin-top: 5px;
+    border-top: 3px solid #000080;
+    width: 100%;
+    /* 부모 영역 가득 */
+    display: block;
+    /* 혹시 inline이면 표시 안 될 수 있음 */
+    height: 0;
+
+  }
+
   .scedule_list {
-    font-size: 22px;
+    font-size: 28px;
     margin-top: 20px;
     margin-bottom: 8px;
   }
@@ -209,7 +228,8 @@
   }
 
   /* TV 열 완전히 제거 */
-  .tbl th:nth-child(5), /* TV */
+  .tbl th:nth-child(5),
+  /* TV */
   .tbl td:nth-child(5) {
     display: none !important;
     width: 0 !important;
@@ -232,7 +252,7 @@
 /* 더 작은 화면 (480px 이하) */
 @media (max-width: 480px) {
   .scedule_list {
-    font-size: 20px;
+    font-size: 28px;
     margin-top: 15px;
   }
 
