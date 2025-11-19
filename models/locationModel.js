@@ -1,55 +1,70 @@
-// models/locationModel.js
-const pool = require('../common/db');
-const DB = process.env.SVR_DB_NAME || process.env.DB_NAME || 'myapp_db';
+// models/locationModel.js (수정된 코드)
+const { allPoiData:markersData } = require('../Data/poiData'); // CommonJS 환경을 가정
+/**
+ * 🏟️ POI 마커 데이터 (DB 대체용)
+ * NOTE: DB 모델의 getPoiList 함수에서 예상하는 필드 이름으로 데이터를 매핑해야 합니다.
+ * DB 필드: poi_id, name, type, desc, lat, lng, image_url, floor
+ */
+
 
 /**
- * POI 목록 조회
- * - columns 예시: poi_id, name, type, desc, lat, lng, image_url 등
- * - 선택 필터: type, q(이름/설명 키워드)
+ * POI 목록 조회 (메모리 배열 사용)
+ * - 선택 필터: type, q(이름/설명 키워드), floor (층)
+ * @param {object} filterOptions - 필터 옵션
+ * @param {string} [filterOptions.type] - 타입 필터 ('매점' 또는 '편의시설')
+ * @param {string} [filterOptions.q] - 키워드 필터 (이름/설명)
+ * @param {string} [filterOptions.floor] - 층 필터 (예: '1층', '2층' 등) 🚩 추가됨
+ * @returns {Promise<Array<object>>}
  */
-exports.getPoiList = async ({ type, q } = {}) => {
-  const where = [];
-  const params = [];
+exports.getPoiList = async ({ type, q, floor } = {}) => { // 🚩 floor 매개변수 추가
+    // 1. 데이터 필터링 (WHERE 절 로직 구현)
+    let filteredData = allPoiData.filter(r => {
+        let passesTypeFilter = true;
+        let passesKeywordFilter = true;
+        let passesFloorFilter = true; // 🚩 층 필터 플래그
 
-  if (type) {
-    where.push('type = ?');
-    params.push(type);
-  }
-  if (q) {
-    where.push('(name LIKE ? OR description LIKE ?)');
-    params.push(`%${q}%`, `%${q}%`);
-  }
+        // type 필터
+        if (type) {
+            passesTypeFilter = r.type === type;
+        }
 
-  // 안전한 정렬 컬럼 선택: 테이블에 존재하는 후보 컬럼 중 하나를 사용
-  const candidates = ['poi_id', 'id', 'created_at', 'updated_at'];
-  const colsQuery = `
-    SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-     WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME IN (${candidates.map(()=>'?').join(',')})
-  `;
-  const colsParams = [DB, 'poi', ...candidates];
-  const [cols] = await pool.query(colsQuery, colsParams);
-  const present = new Set((cols || []).map(c => c.COLUMN_NAME));
-  const orderCol = candidates.find(c => present.has(c));
+        // q (키워드) 필터
+        if (q) {
+            const lowerQ = q.toLowerCase();
+            const name = r.name ? r.name.toLowerCase() : '';
+            const desc = r.desc ? r.desc.toLowerCase() : '';
+            
+            passesKeywordFilter = name.includes(lowerQ) || desc.includes(lowerQ);
+        }
 
-  const sql = `
-    SELECT *
-      FROM \`${DB}\`.poi
-     ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-     ${orderCol ? 'ORDER BY ' + orderCol + ' DESC' : ''}
-  `;
+        // 🚩 floor 필터
+        if (floor) {
+            // floor 값이 'all'이 아니거나 빈 문자열이 아닌 경우에만 필터링 적용
+            const floorValue = String(floor).toLowerCase().replace('층', '');
+            if (floorValue !== 'all' && floorValue !== '') {
+                // 데이터의 floor 값을 숫자 부분만 추출하여 비교 (예: '1층' -> '1')
+                const poiFloorValue = r.floor ? String(r.floor).toLowerCase().replace('층', '') : '';
+                passesFloorFilter = poiFloorValue === floorValue;
+            }
+        }
+        
+        return passesTypeFilter && passesKeywordFilter && passesFloorFilter; // 🚩 세 조건 모두 만족해야 함
+    });
 
-  const [rows] = await pool.query(sql, params);
-  // Map DB columns to frontend-friendly keys expected by locatino.js:
-  // { id, type, name, items, image, lat, lng, floor }
-  return rows.map(r => ({
-    // handle multiple possible column names to be robust against schema differences
-    id: r.poi_id || r.id,
-    type: r.type || r.category || '',
-    name: r.name || r.title || '',
-    items: r.description || r.desc || r.items || '',
-    image: r.image_url || r.image || r.img || '',
-    lat: r.lat || r.latitude || null,
-    lng: r.lng || r.longitude || null,
-    floor: r.floor || r.level || ''
-  }));
+    // 2. 데이터 정렬 (여기서는 poi_id 기준 내림차순 정렬 유지)
+    filteredData.sort((a, b) => (b.poi_id > a.poi_id ? 1 : a.poi_id > b.poi_id ? -1 : 0));
+
+
+    // 3. 필드 매핑
+    // locatino.js에서 예상하는 프론트엔드 친화적인 키로 변환
+    return filteredData.map(r => ({
+        id: r.poi_id,
+        type: r.type,
+        name: r.name,
+        items: r.desc, // description/desc -> items
+        image: r.image_url,
+        lat: r.lat,
+        lng: r.lng,
+        floor: r.floor
+    }));
 };
