@@ -196,32 +196,39 @@ body {
   font-size: 12px;
   border: 1px solid #dbe7ff;
   box-sizing: border-box;
-  margin-left:auto;
+  margin-left: auto;
 }
+
 /* 🚩 먹거리 (food) 배지 스타일 재정의: #DFA88C 계열 (갈색/주황색 연한색) 🚩 */
 .item[data-type="food"] .badge {
-    /* 연한 배경: #DFA88C (RGB: 223, 168, 140)에서 채도와 밝기를 조정 */
-    background: #FFEEE6; 
-    /* 텍스트 색상: #DFA88C 색상 그대로 사용 */
-    color: #DFA88C;      
-    /* 테두리 색상: 조금 더 연하게 */
-    border-color: #F8E3D7; 
+  /* 연한 배경: #DFA88C (RGB: 223, 168, 140)에서 채도와 밝기를 조정 */
+  background: #FFEEE6;
+  /* 텍스트 색상: #DFA88C 색상 그대로 사용 */
+  color: #DFA88C;
+  /* 테두리 색상: 조금 더 연하게 */
+  border-color: #F8E3D7;
 }
 
 /* 🚩 편의시설 (toilet) 배지 스타일 재정의: #2F97FD 계열 (파란색 연한색) 🚩 */
 .item[data-type="toilet"] .badge {
-    /* 연한 배경: #2F97FD (RGB: 47, 151, 253)에서 채도와 밝기를 조정 */
-    background: #E8F5FF; 
-    /* 텍스트 색상: #2F97FD 색상 그대로 사용 */
-    color: #2F97FD;      
-    /* 테두리 색상: 조금 더 연하게 */
-    border-color: #D3E7F8; 
+  /* 연한 배경: #2F97FD (RGB: 47, 151, 253)에서 채도와 밝기를 조정 */
+  background: #E8F5FF;
+  /* 텍스트 색상: #2F97FD 색상 그대로 사용 */
+  color: #2F97FD;
+  /* 테두리 색상: 조금 더 연하게 */
+  border-color: #D3E7F8;
 }
 
 .item .name {
-    /* 기존 스타일 유지 */
-    margin-bottom: 4px; /* 원하는 만큼의 간격 (예: 4px)을 추가합니다. */
+  /* 기존 스타일 유지 */
+  margin-bottom: 4px;
+  /* 원하는 만큼의 간격 (예: 4px)을 추가합니다. */
 }
+
+.mobile-list-btn {
+  display: none;
+}
+
 /* 지도 */
 #map {
   min-height: 420px;
@@ -271,68 +278,76 @@ body {
 
 /* floor-selector 기본 위치 설정 */
 .floor-selector {
-    position: absolute;
-    top: 20px; /* 상단 여백 */
-    right: 20px; /* 오른쪽 여백 */
-    z-index: 10; /* 지도 위에 표시되도록 z-index 설정 */
-    pointer-events: auto;
-    display: flex;
-    flex-direction: column; /* 버튼을 세로로 정렬 */
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow: hidden;
+  position: absolute;
+  top: 20px;
+  /* 상단 여백 */
+  right: 20px;
+  /* 오른쪽 여백 */
+  z-index: 10;
+  /* 지도 위에 표시되도록 z-index 설정 */
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  /* 버튼을 세로로 정렬 */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 /* 1. PC 기본 위치 및 스타일 */
 .floor-selector {
-    position: absolute;
-    top: 20px; 
-    right: 20px; 
-    z-index: 10; /* 지도 요소들 위, 검색 오버레이 아래에 위치 */
-    
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 그림자 강화 */
-    overflow: hidden;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  /* 지도 요소들 위, 검색 오버레이 아래에 위치 */
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* 그림자 강화 */
+  overflow: hidden;
 }
 
 /* 층 버튼 스타일 (기존과 동일) */
 .floor-btn {
-    padding: 8px 12px;
-    border: none;
-    border-bottom: 1px solid #eee;
-    background: transparent;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    transition: background-color 0.2s;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid #eee;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  transition: background-color 0.2s;
 }
 
 .floor-btn:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .floor-btn.active {
-    background-color: var(--brand);
-    color: white;
+  background-color: var(--brand);
+  color: white;
 }
+
 /* data-filter 버튼이 선택되었을 때의 스타일 */
 .rail-btn.active {
-    /* 예시: 버튼 배경색 변경 및 텍스트/아이콘 색상 강조 */
-    background-color: var(--brand, #007bff); 
+  /* 예시: 버튼 배경색 변경 및 텍스트/아이콘 색상 강조 */
+  background-color: var(--brand, #007bff);
 }
 
 .rail-btn.active .rail-copy,
 .rail-btn.active .rail-ico {
-    /* 텍스트와 아이콘을 대비되는 색상으로 변경 */
-    color: white; 
-    filter: brightness(0) invert(1); /* 아이콘 이미지를 흰색으로 보이게 함 */
+  /* 텍스트와 아이콘을 대비되는 색상으로 변경 */
+  color: white;
+  filter: brightness(0) invert(1);
+  /* 아이콘 이미지를 흰색으로 보이게 함 */
 }
 
 /* ===================== 데스크탑 (≥769px) ===================== */
@@ -436,7 +451,7 @@ body {
     font-size: 16px !important;
   }
 
-  .icon-search { 
+  .icon-search {
     left: 16px !important;
     width: 22px !important;
     height: 22px !important;
@@ -494,6 +509,122 @@ body {
     height: 36px !important;
     object-fit: contain !important;
     display: block !important;
+  }
+
+  /* [1] 패널(.panel) 설정: 기존 UI를 건드리지 않도록 설정 */
+  /* 패널이 화면을 가리지 않게 크기를 없애고 내용만 보여줍니다 */
+  .panel {
+    display: block !important;
+    position: static;
+    /* 위치 강제 지정 안 함 (기존 흐름 따름) */
+    width: auto;
+    height: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    pointer-events: none;
+    /* 패널 빈 공간 터치 시 지도 조작 가능 */
+  }
+
+  /* 검색창(.search)은 클릭 가능해야 함 */
+  .panel .search {
+    pointer-events: auto;
+    /* 검색창 스타일이 깨졌다면 아래 주석을 풀어주세요 */
+    /* width: 95%; margin: 10px auto; background: #fff; */
+  }
+
+  /* [중요] 레일(카테고리 버튼) 숨김 코드 제거됨 -> 이제 보일 것입니다. */
+
+  /* [2] 결과 리스트 (#resultList) */
+  /* 평소에는 숨겨둡니다 */
+  #resultList {
+    display: none;
+  }
+
+  /* 버튼을 눌러서 .show-names 클래스가 붙으면 나타납니다 */
+  #resultList.show-names {
+    display: block !important;
+    position: fixed;
+    /* 화면 기준 배치 (무조건 뜸) */
+    bottom: 80px;
+    /* '목록 닫기' 버튼 위쪽으로 띄움 */
+    left: 20px;
+    /* 좌우 여백을 주어 카드 형태 */
+    right: 20px;
+    width: auto;
+    /* 너비 자동 */
+
+    background: rgba(255, 255, 255, 0.98);
+    /* 살짝 투명도 줌 (세련되게) */
+    border-radius: 15px;
+    /* 둥근 모서리 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* 진한 그림자로 붕 떠보이게 */
+
+    max-height: 35vh;
+    /* 화면 높이의 35%까지만 차지 (검색창 가리지 않게) */
+    overflow-y: auto;
+    /* 내용 많으면 스크롤 */
+    z-index: 9999;
+    /* 지도, 버튼, 모든 것 위에 표시 */
+    pointer-events: auto;
+    /* 리스트 클릭/스크롤 가능 */
+  }
+
+  /* [3] 리스트 내부 내용 정리 (이름만 남기기) */
+  /* 썸네일, 설명, 배지 등 불필요한 정보 숨김 */
+  #resultList.show-names .thumb,
+  
+  #resultList.show-names .badge,
+  #resultList.show-names .badge-wrap {
+    display: none !important;
+  }
+
+  /* 아이템 박스 디자인 */
+  #resultList.show-names .item {
+    display: block;
+    padding: 15px 0;
+    /* 위아래 여백 */
+    margin: 0 15px;
+    /* 좌우 여백 */
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    /* 글자 가운데 정렬 */
+  }
+
+  /* 마지막 줄은 선 없애기 */
+  #resultList.show-names .item:last-child {
+    border-bottom: none;
+  }
+
+  /* 이름 폰트 스타일 */
+  #resultList.show-names .name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+  }
+
+  /* [4] 하단 '목록 보기/닫기' 버튼 */
+  .mobile-list-btn {
+    display: block;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    /* 리스트보다 더 위에 (가장 최상단) */
+
+    padding: 12px 30px;
+    background-color: #444;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    pointer-events: auto;
   }
 }
 
@@ -558,8 +689,9 @@ body {
   #map .m-overlay .chips {
     pointer-events: auto;
   }
+
   .floor-selector {
-        /*
+    /*
          * 모바일 상단 오버레이 영역 계산:
          * 12px (상단 여백)
          * + var(--searchH) (검색창 높이, 기본 48px)
@@ -569,18 +701,22 @@ body {
          * => 대략 12 + 48 + 12 + 96 + 12 = 180px 정도
          * 안전하게 200px 정도 아래에 배치합니다.
          */
-        top: 200px; /* 상단 검색/칩 영역을 피해서 배치 */
-        right: 12px; /* 모바일 좌우 여백과 맞춥니다. */
-        z-index: 5;  /* 검색 오버레이(z-index: 1)와 리스트 패널(z-index: 2)보다 높게 설정하여 겹침 방지 */
-        
-        /* 모바일에서는 버튼 크기를 약간 줄여서 화면 공간 확보 */
-        width: 48px; 
-    }
+    top: 200px;
+    /* 상단 검색/칩 영역을 피해서 배치 */
+    right: 12px;
+    /* 모바일 좌우 여백과 맞춥니다. */
+    z-index: 5;
+    /* 검색 오버레이(z-index: 1)와 리스트 패널(z-index: 2)보다 높게 설정하여 겹침 방지 */
 
-    .floor-selector .floor-btn {
-        padding: 6px 0; /* 좌우 패딩 제거, width로 폭 통일 */
-        font-size: 12px;
-    }
+    /* 모바일에서는 버튼 크기를 약간 줄여서 화면 공간 확보 */
+    width: 48px;
+  }
+
+  .floor-selector .floor-btn {
+    padding: 6px 0;
+    /* 좌우 패딩 제거, width로 폭 통일 */
+    font-size: 12px;
+  }
 }
 
 /* 메뉴(dropdown)가 지도보다 위로 뜨게 보강만 함 */
