@@ -266,7 +266,7 @@ main {
   .scoreboard {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 24px 28px;
+    padding: 24px 0;
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
@@ -276,6 +276,12 @@ main {
 
   }
 
+  .line1_player {
+    margin-top: 10px;
+    border-top: 3px solid #000080;
+    margin-bottom: 10px;
+
+  }
 
   .scoreboard>.result_table,
   .scoreboard>.result_table_bottom {
@@ -303,7 +309,7 @@ main {
     display: flex;
     flex-direction: column;
     /* 세로 스택 */
-    gap: 12px;
+    /* gap: 12px; */
     /* 블록 사이 간격 */
     width: 100%;
 
@@ -344,17 +350,18 @@ main {
   }
 
   .result {
-    font-size: 32px;
-    font-weight: bold;
+    /* font-size: 32px; */
+    /* font-weight: bold; */
     /* background-color: red; */
-    margin-left: -15px;
+    /* margin-left: -15px; */
     width: calc(100% + 15px);
   }
 
   .result p {
     margin: 0;
-    padding: 8px 12px;
-    
+    padding-top: 5px;
+    font-size: 28px;
+    font-weight: bold;
 
   }
 
@@ -390,7 +397,7 @@ main {
     color: #000;
   }
 
-  
+
   .calendar_input {
     position: absolute;
     inset: 0;
@@ -413,7 +420,7 @@ main {
   .calendar_btn i {
     font-size: 22px;
     color: #0B3D91;
-   
+
   }
 
 }
@@ -426,7 +433,16 @@ main {
     padding-top: 0;
   }
 
-  /*1115*/
+  .line1_player {
+    margin-top: 5px;
+    border-top: 3px solid #000080;
+    width: 100%;
+    /* 부모 영역 가득 */
+    display: block;
+    /* 혹시 inline이면 표시 안 될 수 있음 */
+    height: 0;
+
+  }
 
 
   /*1117*/
@@ -552,7 +568,7 @@ main {
   /* 폰트 및 패딩 축소 */
   .result p {
 
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     text-align: left;
   }
