@@ -151,7 +151,7 @@ exports.saveLineup = async (req, res) => {
     if (!home_team_id || !away_team_id) return res.status(400).send('팀 선택 누락');
     if (String(home_team_id) === String(away_team_id)) return res.status(400).send('홈/원정이 같습니다');
 
-    // team_code를 숫자 ID로 변환 (games 테이블이 정수 타입이므로)
+    // team_code를 숫자 ID로 변환 (games 테이블은 정수형)
     const teamCodeToId = {
       'E': 1,      // 한화
       'LG': 2,     // LG
@@ -165,14 +165,26 @@ exports.saveLineup = async (req, res) => {
       'WO': 10     // 키움
     };
 
-    const homeTeamNumId = teamCodeToId[home_team_id] || 1;
-    const awayTeamNumId = teamCodeToId[away_team_id] || 2;
+    // team_code 그대로 사용 (문자열)
+    const homeTeamCode = home_team_id;
+    const awayTeamCode = away_team_id;
+
+    // games 테이블이 teams 테이블을 참조하므로, teams 테이블에 해당 팀이 있는지 확인하고 없으면 추가
+    await pool.query(`
+      INSERT IGNORE INTO \`${DB}\`.teams (team_id, team_name)
+      SELECT 1, '홈팀' WHERE NOT EXISTS (SELECT 1 FROM \`${DB}\`.teams WHERE team_id = 1)
+      UNION ALL SELECT 2, '원정팀' WHERE NOT EXISTS (SELECT 1 FROM \`${DB}\`.teams WHERE team_id = 2)
+    `);
+
+    // 임시로 team_id 1, 2 사용 (나중에 외래키 제약 조건 수정 필요)
+    const homeTeamId = 1;
+    const awayTeamId = 2;
 
     // 중복 경기 확인
     const [existingGames] = await pool.query(
       `SELECT game_id FROM \`${DB}\`.games 
-       WHERE game_date = ? AND game_time = ? AND home_team_id = ? AND away_team_id = ?`,
-      [game_date, game_time, homeTeamNumId, awayTeamNumId]
+       WHERE game_date = ? AND game_time = ?`,
+      [game_date, game_time]
     );
 
     let gameId;
@@ -186,18 +198,17 @@ exports.saveLineup = async (req, res) => {
         [gameId]
       );
     } else {
-      // 1) 새 경기 생성 (숫자 ID 사용)
+      // 1) 새 경기 생성 (임시로 1, 2 사용)
       const [r] = await pool.query(
         `INSERT INTO \`${DB}\`.games (game_date, game_time, venue, home_team_id, away_team_id, is_lineup_announced)
          VALUES (?, ?, ?, ?, ?, 1)`,
-        [game_date, game_time, venue, homeTeamNumId, awayTeamNumId]
+        [game_date, game_time, venue, homeTeamId, awayTeamId]
       );
       gameId = r.insertId;
     }
 
-    // 2) 라인업 생성 (1~10: 10=P) - 숫자 ID 사용
-    async function insertLineup(teamCode, prefix) {
-      const teamNumId = teamCodeToId[teamCode] || 1;
+    // 2) 라인업 생성 (1~10: 10=P) - team_id 1, 2 사용
+    async function insertLineup(teamId, prefix) {
       for (let i = 1; i <= 10; i++) {
         const name = (req.body[`${prefix}_player_name_${i}`] || '').trim();
         const pos = (req.body[`${prefix}_position_${i}`] || '').trim();
@@ -205,13 +216,13 @@ exports.saveLineup = async (req, res) => {
           await pool.query(
             `INSERT INTO \`${DB}\`.lineups (game_id, team_id, order_num, player_name, position_kr)
              VALUES (?, ?, ?, ?, ?)`,
-            [gameId, teamNumId, i, name, pos]
+            [gameId, teamId, i, name, pos]
           );
         }
       }
     }
-    await insertLineup(home_team_id, 'home');
-    await insertLineup(away_team_id, 'away');
+    await insertLineup(homeTeamId, 'home');
+    await insertLineup(awayTeamId, 'away');
 
     res.redirect(`/game_player_lineup?game_id=${gameId}`);
   } catch (e) {
