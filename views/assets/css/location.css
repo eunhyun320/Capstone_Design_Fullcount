@@ -561,7 +561,7 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     /* 진한 그림자로 붕 떠보이게 */
 
-    max-height: 35vh;
+    max-height: 50vh;
     /* 화면 높이의 35%까지만 차지 (검색창 가리지 않게) */
     overflow-y: auto;
     /* 내용 많으면 스크롤 */
@@ -590,6 +590,10 @@ body {
     border-bottom: 1px solid #eee;
     text-align: center;
     /* 글자 가운데 정렬 */
+  }
+  .item{
+    border: 0;
+    border-radius: 0;
   }
 
   /* 마지막 줄은 선 없애기 */
