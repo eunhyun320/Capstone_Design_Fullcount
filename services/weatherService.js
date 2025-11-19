@@ -118,20 +118,14 @@ const fetchWeatherInfo = async () => {
     // 최대 9시간 (3회 * 3시간)까지 과거 발표 데이터를 찾아 재시도
     for (let tried = 0; tried <= 3; tried++) {
         const tmfc = formatTmfc(tmfcDate);
-
-        // 1. tmef (미래 예보 시각) 계산: 현재 시각 이후 가장 가까운 정시
-        // ❗️ 수정: 서버 시간대가 달라도 KST 기준으로 현재 시간을 가져옴
         const now = getKstDate();
         let nextTmefDate = new Date(now.getTime());
         nextTmefDate.setMinutes(0, 0, 0);
         nextTmefDate.setHours(nextTmefDate.getHours() + 1);
         const tmef = formatTmef(nextTmefDate);
 
-        // console.log(`[시도 ${tried + 1}] 발표 시각 tmfc=${tmfc}, 미래 예보 시각 tmef=${tmef}`);
-
         try {
             const promises = vars.map(v => {
-                // ❗️❗️ 최종 수정 URL: 성공했던 그리드 경로 (/cgi-bin/url/) 사용
                 const url = `https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_shrt_grd?tmfc=${tmfc}&tmef=${tmef}&vars=${v}&nx=${daeguLionsPark.nx}&ny=${daeguLionsPark.ny}&authKey=${authKey}`;
 
                 return axios.get(url, { responseType: 'text' })
@@ -144,25 +138,20 @@ const fetchWeatherInfo = async () => {
 
             const responses = await Promise.all(promises);
 
-            // 1. API 호출 자체가 실패했는지 확인 (401, 404 등)
             if (responses.some(r => r === null)) {
                 tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
                 continue;
             }
 
-            // 2. 응답 데이터를 파싱하고 -99.00(데이터 없음) 값 확인
             const parsedResults = responses.map(r => parseValueForTime(r, tmef));
             const [TMP, SKY, PTY, POP] = parsedResults;
 
-            // TMP 값이라도 -99.00이 아니면 성공으로 간주 (최소한 유효한 데이터가 있다는 뜻)
             if (TMP === '-99.00' || SKY === '-99.00') {
                 console.warn(`[데이터 없음] API가 -99.00을 반환했습니다. 3시간 전 데이터로 재시도합니다.`);
                 tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
                 continue;
             }
 
-
-            // 3. 데이터가 유효하면 값 가공 및 반환
             console.log(`[성공] 유효 데이터 시각: ${tmfc}. 예보 시각: ${tmef}`);
 
             const temp = parseFloat(TMP) < -90 ? "정보 없음" : formatTemperature(TMP);
@@ -179,16 +168,25 @@ const fetchWeatherInfo = async () => {
 
             const skyState = getSkyState(SKY, PTY);
 
-            // 최종 반환 시각은 요청한 tmef 시각을 사용합니다.
             const finalDisplayHour = pad(nextTmefDate.getHours());
             const finalDisplayMonth = pad(nextTmefDate.getMonth() + 1);
             const finalDisplayDay = pad(nextTmefDate.getDate());
 
-
+            // 1. PC용 텍스트 (기존 유지)
             const rawFullText = `대구 삼성 라이온즈파크 ${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보: 기온 ${temp}, 하늘 ${skyState}, ${precipitationText}`;
-            const rawShortText = `${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}:00시 예보 ${skyState} | ${temp} | 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}`;
+
+            // 2. 모바일용 HTML 텍스트 (디자인 적용됨)
+            // display: block으로 줄바꿈 강제, margin-bottom으로 간격 확보
+            const rawShortText = `
+<span style="display:block; margin-bottom: 4px;">${finalDisplayMonth}월 ${finalDisplayDay}일 ${finalDisplayHour}시 예보</span>
+<span style="font-size: 0.95em;">${skyState} | ${temp} | 강수 ${popNum >= 0 && popNum <= 100 ? `${popNum}%` : '정보없음'}</span>
+            `;
+
             const fullText = cleanText(rawFullText);
-            const shortText = cleanText(rawShortText);
+
+            // [수정] HTML 태그가 포함된 문자열은 cleanText를 돌리면 줄바꿈이 사라지거나 꼬일 수 있으므로 trim()만 사용합니다.
+            const shortText = rawShortText.trim();
+
             return {
                 pc: fullText,
                 mobile: shortText
@@ -197,15 +195,16 @@ const fetchWeatherInfo = async () => {
             console.error(`[예상치 못한 오류] ${e.message}. 3시간 전 데이터로 재시도합니다.`);
             tmfcDate = new Date(tmfcDate.getTime() - 3 * 60 * 60 * 1000);
         }
-
     }
 
     console.error("--- [최대 재시도 횟수 초과] ---");
     return {
         pc: cleanText("대구 삼성 라이온즈파크 예보: 현재 유효한 단기예보 데이터가 없습니다."),
-        mobile: cleanText("예보 정보 없음")
+        mobile: "예보 정보 없음"
     };
 };
+
+
 const fetchWeatherInfoMobile = async () => {
     const result = await fetchWeatherInfo();
     return result.mobile;

@@ -68,16 +68,17 @@
             </div>
             <div class="whether">
                 <div class="whe_b">
-                    <p id="weather-info-pc">{{weatherInfo.pc}}</p>
-                    <p id="weather-info-mobile">{{weatherInfo.mobile}}</p>
+                    <p id="weather-info-pc">{{ weatherInfo.pc | safe }}</p>
+
+                    <p id="weather-info-mobile">{{ weatherInfo.mobile | safe }}</p>
                 </div>
             </div>
             <div class="member">
                 <div class="login">
                     {% if me %}
-                        <a href="/admin" class="login_button">관리자 페이지</a>
+                    <a href="/admin" class="login_button">관리자 페이지</a>
                     {% else %}
-                        <a href="/login/Login.html" class="login_button">관리자 로그인</a>
+                    <a href="/login/Login.html" class="login_button">관리자 로그인</a>
                     {% endif %}
                 </div>
             </div>
