@@ -16,7 +16,7 @@
         body {
             font-family: sans-serif;
             min-height: 120vh;
-            background-image: url('./assets/img/background_2.png');
+            background-image: url('./assets/img/background.png');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
@@ -48,7 +48,11 @@
             </div>
             <div class="member">
                 <div class="login">
-                    <a href="/login/Login.html" class="login_button">관리자 로그인</a>
+                    {% if me %}
+                        <a href="/admin" class="login_button">관리자 페이지</a>
+                    {% else %}
+                        <a href="/login/Login.html" class="login_button">관리자 로그인</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

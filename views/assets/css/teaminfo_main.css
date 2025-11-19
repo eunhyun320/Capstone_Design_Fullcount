@@ -39,7 +39,8 @@ body {
     grid-template-columns: repeat(auto-fit, 220px);
     gap: 20px;
     /* margin: 50px 200px;        좌우 여백 200px 유지 */
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: flex-start;
     /* 그리드 트랙을 가운데 정렬 */
     /* background-color: red; */
     /* margin-top: 100px; */
