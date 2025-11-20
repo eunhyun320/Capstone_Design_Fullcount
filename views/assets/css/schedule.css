@@ -34,22 +34,54 @@
 }
 
 
-/* 달력  */
+/* 달력  .  */
 
 
 .section-title {
     text-align: left;
     font-size: 28px;
     font-weight: bold;
-     margin-bottom: 20px;
+    margin-bottom: 10px;
+    /* background-color: red; */
+    margin-left: 0;
+    margin-top: 28px;
+}
+
+.line1_player {
+    margin-top: 10px;
+    border-top: 3px solid #000080;
+    margin-bottom: 10px;
+
+}
+
+
+@media (min-width: 769px) {
+    .result-header {
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 30px;
+        /* 둥근 모서리 */
+        /* margin-bottom: 40px; */
+        /* gap: 160px;  */
+        margin-left: 80px;
+        width: 450px;
+    }
+
 }
 
 @media (max-width: 768px) {
-.card {
-    flex-direction: column;
-    align-items: center;
-}
+    .card {
+        flex-direction: column;
+        align-items: center;
     }
+
+
+}
+
 .btn {
     font-family: 'Open Sans';
     font-size: 1em;
@@ -252,15 +284,7 @@
     /* 부모 요소 안에서 가운데 정렬 */
 }
 
-.result-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 30px; /* 둥근 모서리 */
-    /* margin-bottom: 40px; */
-}
+
 
 
 /* 1. 경기 종료 (Finished) 상태일 때 헤더 스타일 */
@@ -279,7 +303,7 @@
 /* 3. 경기 정보 없음 (No Game) 상태일 때 헤더 스타일 */
 .result-header.status-no-game {
     margin-top: 45px;
-    /* gap: 160px; */
+    gap: 160px;
 }
 
 .game-date {
@@ -458,12 +482,10 @@ div.pitcher-results p{
     background-color: #28a745;
     /* 세 (초록색) */
 }
-/* 화면 너비가 768px 이하일 때 적용될 스타일 */
+
+/* 화면 너비가 768px 이하일 때 적용될 스타일 (모바일)*/
 @media (max-width: 768px) {
 
-.result-header.status-no-game {
-    margin-top: 45px;
-}
     /* 기존 코드 */
     .card {
         flex-direction: column;
@@ -512,9 +534,28 @@ div.pitcher-results p{
         max-width: 364px;
         /* 달력 컴포넌트의 최대 너비 지정 */
     }
-    .result-header{
+
+    .result-header,
+    .result-header.status-no-game,
+    .result-header.status-finished {
         width: 100%;
-         margin: 0 auto;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        /* justify-content: flex-start; */
+        gap: 24px;  
+
+        align-items: center;
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 30px;
+        box-sizing: border-box;
+    }
+
+
+    .result-header .game-date {
+        white-space: nowrap;
+        /* 줄바꿈 금지 */
     }
 
 
