@@ -279,7 +279,7 @@
 /* 3. 경기 정보 없음 (No Game) 상태일 때 헤더 스타일 */
 .result-header.status-no-game {
     margin-top: 45px;
-    gap: 160px;
+    /* gap: 160px; */
 }
 
 .game-date {
@@ -462,11 +462,7 @@ div.pitcher-results p{
 @media (max-width: 768px) {
 
 .result-header.status-no-game {
-
     margin-top: 45px;
-
-    
-
 }
     /* 기존 코드 */
     .card {
