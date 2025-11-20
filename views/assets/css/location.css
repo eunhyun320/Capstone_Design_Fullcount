@@ -202,14 +202,14 @@ body {
 /* 🚩 먹거리 (food) 배지 스타일 재정의: #DFA88C 계열 (갈색/주황색 연한색) 🚩 */
 .item[data-type="food"] .badge {
   /* 연한 배경: #A6A6A6 기반의 아주 연한 회색 (#F5F5F5) */
-  background: #F5F5F5; 
-  
+  background: #F5F5F5;
+
   /* 텍스트 색상: #A6A6A6 마커 색상 그대로 사용 */
   /* (만약 글자가 너무 흐려 보이면 #808080 정도로 진하게 조정 추천) */
-  color: #808080; 
-  
+  color: #808080;
+
   /* 테두리 색상: 배경과 텍스트 사이의 중간 톤 회색 */
-  border-color: #E0E0E0; 
+  border-color: #E0E0E0;
 }
 
 /* 🚩 편의시설 (toilet) 배지 스타일 재정의: #2F97FD 계열 (파란색 연한색) 🚩 */
@@ -402,7 +402,7 @@ body {
 /* ===================== 모바일 (≤768px) ===================== */
 @media (max-width: 768px) {
   .page {
-    height: calc(100% - 58px);
+   height: calc(100dvh - var(--offset-top));
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
@@ -418,6 +418,7 @@ body {
     position: relative !important;
     min-height: calc(100dvh - 58px) !important;
     z-index: 1 !important;
+    min-height: 100% !important;
   }
 
   /* 오버레이: 지도 전체 덮음 */
@@ -573,12 +574,27 @@ body {
     pointer-events: auto;
     /* 리스트 클릭/스크롤 가능 */
     position: fixed;
+    
+    
   }
+
+  body.no-scroll {
+    overflow: hidden !important;
+    /* 스크롤 잠금 */
+    position: fixed;
+    /* 모바일에서 오버스크롤(튕김) 방지 */
+    width: 100%;
+    height: 100vh;
+
+    /* 🛑 스크롤바가 사라지면서 발생하는 레이아웃 흔들림 방지 */
+    padding-right: 17px;
+  }
+
 
   /* [3] 리스트 내부 내용 정리 (이름만 남기기) */
   /* 썸네일, 설명, 배지 등 불필요한 정보 숨김 */
   #resultList.show-names .thumb,
-  
+
   #resultList.show-names .badge,
   #resultList.show-names .badge-wrap {
     display: none !important;
@@ -595,7 +611,8 @@ body {
     text-align: center;
     /* 글자 가운데 정렬 */
   }
-  .item{
+
+  .item {
     border: 0;
     border-radius: 0;
   }
@@ -678,14 +695,17 @@ body {
 /* 7) 모바일에서 지도 오버레이 사용하는 경우도 헤더를 침범하지 않도록 */
 @media (max-width: 768px) {
   .page {
-    height: calc(100dvh - var(--offset-top));
+    /* height: calc(100dvh - var(--offset-top)); */
+    height: calc(100dvh - var(--menu-h)); /* menu-h가 모바일 헤더 높이라고 가정 */
   }
 
   #map {
-    position: relative;
-    /* 기준점 */
-    min-height: calc(100dvh - var(--offset-top));
-    z-index: 1;
+    grid-row: 1;
+    position: relative !important;
+    /* 🛑 남은 공간의 100%를 차지하도록 수정 */
+    min-height: 100% !important; 
+    z-index: 1 !important;
+    
   }
 
   #map .m-overlay {
