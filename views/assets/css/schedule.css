@@ -461,6 +461,13 @@ div.pitcher-results p{
 /* 화면 너비가 768px 이하일 때 적용될 스타일 */
 @media (max-width: 768px) {
 
+.result-header.status-no-game {
+
+    margin-top: 45px;
+
+    
+
+}
     /* 기존 코드 */
     .card {
         flex-direction: column;
