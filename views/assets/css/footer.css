@@ -31,7 +31,7 @@ main {
     background-color: #002B5B;  /* 진한 블루 */
     color: #f1f1f1;             /* 밝은 회색 글씨 */
     padding: 10px 20px;
-    margin-top: 60px;
+    margin-top: 160px; /* 푸터를 더 아래로 내림, 값은 필요에 따라 조정 */
 
     display: flex;
     justify-content: center;    /* 중앙 정렬 */
@@ -140,6 +140,7 @@ main {
     background-color: #002B5B;
     color: #f1f1f1;
     margin-top: 40px;
+    
   }
 
   .footer-content {
