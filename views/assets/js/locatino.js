@@ -318,44 +318,107 @@ function filterList(term = '') {
       defaultFloorBtn.classList.add('active');
     }
   }
-  
-    
-  
 
-document.addEventListener('DOMContentLoaded', function () {
+
+  let lastScrollTop = 0;
+  document.addEventListener('DOMContentLoaded', function () {
     const toggleBtn = document.getElementById('mobileListToggle');
     const resultList = document.getElementById('resultList');
+    // 🛑 BODY 스크롤 제어를 위해 참조
+    const body = document.body;
 
     if (toggleBtn && resultList) {
-        
-        // 1. 버튼 클릭 시 토글 (기존 로직)
-        toggleBtn.addEventListener('click', function () {
-            resultList.classList.toggle('show-names');
-            updateButtonState();
-        });
 
-        // 2. 리스트 아이템 클릭 시 닫기 (추가된 로직)
-        // 이벤트 위임: 부모(resultList)가 자식(.item)의 클릭을 감지함
-        resultList.addEventListener('click', function(e) {
-            // 클릭된 요소가 .item 이거나 그 내부 요소라면
-            if (e.target.closest('.item')) {
-                // 목록 닫기
-                resultList.classList.remove('show-names');
-                // 버튼 상태 원복
-                updateButtonState();
-            }
-        });
+      // 🛑 [Body 스크롤 방지 로직] 리스트 내부 터치는 이벤트 전달 방지 (푸터/지도 스크롤 막음)
+      resultList.addEventListener('touchstart', function (e) {
+        e.stopPropagation();
+      });
+      resultList.addEventListener('touchmove', function (e) {
+        e.stopPropagation();
+      });
 
-        // 버튼 텍스트/색상 업데이트 함수 (중복 제거용)
-        function updateButtonState() {
-            if (resultList.classList.contains('show-names')) {
-                toggleBtn.textContent = '목록 닫기';
-                toggleBtn.style.backgroundColor = '#555';
-            } else {
-                toggleBtn.textContent = '목록 보기';
-                toggleBtn.style.backgroundColor = '#333';
-            }
+      // 1. 버튼 클릭 시 토글 (기존 로직)
+      toggleBtn.addEventListener('click', function () {
+        resultList.classList.toggle('show-names');
+        updateButtonState();
+      });
+
+      // 2. 리스트 아이템 클릭 시 닫기 (기존 로직)
+      resultList.addEventListener('click', function (e) {
+        if (e.target.closest('.item')) {
+          resultList.classList.remove('show-names');
+          updateButtonState();
         }
+      });
+
+      // 3. [스크롤 감지 로직] (수정된 로직)
+      resultList.addEventListener('scroll', function () {
+        const scrollHeight = resultList.scrollHeight;
+        const scrollTop = resultList.scrollTop;
+        const clientHeight = resultList.clientHeight;
+
+        // 현재 스크롤 방향 판단
+        const scrollingUp = scrollTop < lastScrollTop;
+
+        // 맨 아래 도달 체크 (소수점 오차 방지를 위해 1픽셀 여유)
+        const isAtBottom = (scrollTop + clientHeight) >= (scrollHeight - 1);
+
+        // ------------------------------------------------------------------
+        // 스크롤 차단/허용 결정 로직
+        // ------------------------------------------------------------------
+
+        if (isAtBottom && !scrollingUp) {
+          // [바닥 + 아래로 스크롤 시] : 스크롤을 멈춥니다.
+          resultList.classList.add('no-inner-scroll');
+        }
+        // 🛑 바닥에 닿은 후 위로 스크롤하려고 하거나 중간일 경우 무조건 허용
+        else {
+          resultList.classList.remove('no-inner-scroll');
+        }
+
+        // 현재 스크롤 위치를 다음 체크를 위해 저장 (필수!)
+        lastScrollTop = scrollTop;
+      });
+
+      // 4. [터치 종료 리스너] (스크롤 차단 해제 보조)
+      resultList.addEventListener('touchend', function () {
+        // 터치 종료 시 차단 클래스를 제거하여 다음 동작을 위해 준비
+        if (resultList.classList.contains('no-inner-scroll')) {
+          resultList.classList.remove('no-inner-scroll');
+        }
+      });
+
+      // 5. [업데이트 함수] (Body 스크롤 락 추가)
+      function updateButtonState() {
+        const body = document.body;
+        // 스크롤바 너비 계산 (PC 등 스크롤바가 있는 환경에서 레이아웃 밀림 방지)
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+        if (resultList.classList.contains('show-names')) {
+          // 목록이 열렸을 때 (목록 보기 상태)
+          toggleBtn.textContent = '목록 닫기';
+          toggleBtn.style.backgroundColor = '#555';
+
+          // 🛑 [Body 스크롤 락 시작] 리스트 바깥 터치 시 페이지 움직임 차단
+          if (scrollbarWidth > 0) {
+            // 스크롤바 너비만큼 padding-right를 추가하여 레이아웃 밀림 보정
+            body.style.paddingRight = `${scrollbarWidth}px`;
+          }
+          body.classList.add('no-scroll'); // CSS로 overflow: hidden 적용
+        } else {
+          // 목록이 닫혔을 때 (목록 숨김 상태)
+          toggleBtn.textContent = '목록 보기';
+          toggleBtn.style.backgroundColor = '#333';
+
+          // 🛑 [Body 스크롤 락 해제]
+          body.classList.remove('no-scroll');
+          body.style.paddingRight = ''; // 보정 패딩 제거
+
+          // 🛑 [내부 스크롤 잔여 클래스 제거] 
+          // 혹시 모를 내부 스크롤 차단 잔여 클래스를 확실히 제거하여 다음 목록 열림에 대비
+          resultList.classList.remove('no-inner-scroll');
+        }
+      }
     }
-});
+  });
 })();
