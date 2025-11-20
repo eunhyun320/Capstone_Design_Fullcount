@@ -357,19 +357,12 @@ main {
     width: calc(100% + 15px);
   }
 
-  /* .result p {
+  .result p {
     margin: 0;
     padding-top: 5px;
     font-size: 28px;
     font-weight: bold;
 
-  } */
-
-  .result p {
-    margin-top: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    text-align: left;
   }
 
   /*1116*/
@@ -573,8 +566,9 @@ main {
   }
 
   /* 폰트 및 패딩 축소 */
-  .result p {
-
+  /* 1121 */
+ .result p {
+    margin-top: 20px;
     font-size: 28px;
     font-weight: bold;
     text-align: left;
