@@ -17,6 +17,9 @@ main.page-inquiry .form-group select,
 main.page-inquiry .form-group textarea {
   scroll-margin-top: 90px;
 }
+.page-inquiry > h1{
+  font-size: 28px;
+} 
 
 /* 구분선 */
 main.page-inquiry .line1 {
@@ -122,7 +125,7 @@ main.page-inquiry .inquiry-form button:hover {
 
   /* 모바일은 메뉴바(65px) 숨김 → 20px만 띄움 */
   main.page-inquiry {
-    width: 100%;
+    width: 95%;
     margin-top: 5px;  /* ← 핵심 수정 */
     padding: 0 16px 40px;
     box-sizing: border-box;
