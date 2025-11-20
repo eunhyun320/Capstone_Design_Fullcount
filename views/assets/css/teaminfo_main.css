@@ -30,6 +30,8 @@ body {
     font-size: 28px;
     font-weight: bold;
     display: block;
+    /* 1121 수정 */
+     margin-top: 28px;
   }
 
   .legend, .win_year{
@@ -46,7 +48,9 @@ body {
     /* margin-top: 100px; */
   }
   .win_year{
-    margin-top: 70px;
+    /* margin-top: 70px; */
+    /* 1121 수정 */
+    margin-top: 30px;
   }
 
   .legend_player, .winPic{
@@ -99,18 +103,21 @@ body {
     /* padding-top: 50px; */
   }
 
+  /* 1121 */
   .legend{
-    margin-top: 10px;
+    margin-top: 20px;
   }
   .legnedPlayer, .winText{
     grid-column: 1 / -1;
   }
+
   .legnedPlayer p, .winText p{
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     display: block;
+    margin-top: 20px;
   }
-  
+
   .legend, .win_year{
     display: grid;
     grid-template-columns: repeat(auto-fit, 160px);
@@ -135,7 +142,7 @@ body {
   }
 
   .win_year{
-    margin-top: 50px;
+    margin-top: 20px;
   }
 
   .legend_player img, .winPic img{
