@@ -572,6 +572,7 @@ body {
     /* 지도, 버튼, 모든 것 위에 표시 */
     pointer-events: auto;
     /* 리스트 클릭/스크롤 가능 */
+    position: fixed;
   }
 
   /* [3] 리스트 내부 내용 정리 (이름만 남기기) */
@@ -632,6 +633,7 @@ body {
     font-size: 15px;
     cursor: pointer;
     pointer-events: auto;
+    position: fixed;
   }
 }
 
