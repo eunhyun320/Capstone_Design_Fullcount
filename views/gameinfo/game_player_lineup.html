@@ -4,9 +4,11 @@
 
 
 <main class="lineup-wrapper" style="--home-logo: url('{{ home.team_logo }}'); --away-logo: url('{{ away.team_logo }}');">
-    <p class="lineup-title">{{ game.venue }} 라인업</p>
-    <h1 class="lineup-title">
-        {{ game.game_date }} {{ game.game_time }}
+    <p class="lineup_maintitle">라인업</p>
+    <div class="line1_lineup"></div>
+    <p class="lineup-title">{{ game.venue }} </p>
+    <h1 class="lineup-title1">
+        {{ game.game_date }} {{ game.game_time.slice(0, 5) }}
     </h1>
 
     <!-- 팀 로고 및 기본 정보 -->
