@@ -216,7 +216,8 @@ body {
 
 @media (max-width: 480px) {
   .page-title {
-    font-size: 22px;
+    font-size: 28px;
+    margin-top: 0px;
   }
 
   .detail-head .title {
