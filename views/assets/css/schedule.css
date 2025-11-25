@@ -34,12 +34,12 @@
 /* 달력  */
 
 
-.section-title {
+/* .section-title {
     text-align: left;
     font-size: 24px;
     font-weight: bold;
      margin-bottom: 20px;
-}
+} */
 
 @media (max-width: 768px) {
 .card {
@@ -249,8 +249,8 @@ font-weight: bold;
 
 /* 1. 경기 종료 (Finished) 상태일 때 헤더 스타일 */
 .result-header.status-finished {
-    
-    margin-top: 20px;
+    /* margin-bottom: 10px; */
+    margin-top: -10px;
 }
 
 /* 2. 경기 예정 (Scheduled) 상태일 때 헤더 스타일 */
@@ -261,7 +261,7 @@ font-weight: bold;
 
 /* 3. 경기 정보 없음 (No Game) 상태일 때 헤더 스타일 */
 .result-header.status-no-game {
-    margin-top: 45px;
+    margin-top: -10px;
 }
 
 .game-date {
@@ -311,6 +311,7 @@ div.pitcher-results p{
     font-size: 24px;
     font-weight: bold;
     color: #888;
+    line-height: 100px;
 }
 
 
@@ -319,9 +320,9 @@ div.pitcher-results p{
 .teams-container {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    /* align-items: center; */
     /* 상우하좌 */
-    padding: 20px 10px 23px 10px;
+    padding: 20px 10px 25px 10px;
     
    
 }
