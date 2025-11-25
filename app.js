@@ -126,5 +126,8 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 const HOST = '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
+  // 웹 서버 - nginx 설정에 ip 번호 치고 들어오면 -> 도메인 연결되게 코드 추가 해 놨음
   console.log(`✅ Server running at http://43.200.212.37:${PORT}`);
+  // 로컬
+  // console.log(`✅ Server running at http://localhost:${PORT}`);
 });

@@ -59,7 +59,11 @@
           (r.note || '').includes('그라운드사정');
 
         // ⬇ 리뷰 버튼은 취소 경기가 아닐 때만 표시
+        // 웹 서버 올라간 코드
         const reviewUrlBase = "https://fullcount.ai.kr/gameinfo_result?id=";
+
+        // 로컬
+        // const reviewUrlBase = "https://localhost/gameinfo_result?id=";
 
         const review =
           (!isCanceled && r.game_page_id) // review_url 대신 game_page_id가 존재하는지 확인
