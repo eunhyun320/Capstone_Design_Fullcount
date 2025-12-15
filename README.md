@@ -17,7 +17,7 @@ FullCount는 야구 입문자부터 팬까지 모두를 위한 챗봇 기반 야
 - Database : MySQL
 - Chatbot : Deppseek 오픈소스 활용하여 자연어 처리 기반 챗봇 연동
 - AI서버 : Together AI
-- 기타 : Git / GitHub, VS Code  
+- 기타 : Git / GitHub, VS Code, Notion
 
 ## 기획 배경  
 야구에 관심은 있지만 경기 규칙, 선수 정보, 관람 정보가 흩어져 있어 입문자와 초보 관람객이 정보를 얻기 어렵다는 문제의식에서 출발하였습니다.  
