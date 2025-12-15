@@ -152,9 +152,9 @@
   background: #092b68;
 }
 
-/* ===================== */
-/* 📱 모바일 버전 스타일 */
-/* ===================== */
+
+/* 모바일 버전 */
+
 @media (max-width: 768px) {
   .schedule-main {
     width: 95%;
@@ -166,9 +166,7 @@
     margin-top: 5px;
     border-top: 3px solid #000080;
     width: 100%;
-    /* 부모 영역 가득 */
     display: block;
-    /* 혹시 inline이면 표시 안 될 수 있음 */
     height: 0;
 
   }
@@ -229,7 +227,6 @@
 
   /* TV 열 완전히 제거 */
   .tbl th:nth-child(5),
-  /* TV */
   .tbl td:nth-child(5) {
     display: none !important;
     width: 0 !important;

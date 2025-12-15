@@ -7,13 +7,7 @@
   box-sizing: border-box;
 }
 
-/* 전역 변수 */
-/* :root { */
-/* --header-height: 100px; */
-/* 헤더 높이 */
-/* --team-width: 250px; */
-/* 스코어보드 상단 Team 칸 전체 폭 */
-/* } */
+
 
 /* 메인 구조 */
 main {
@@ -37,14 +31,10 @@ main {
     min-height: 100px;
     display: flex;
     flex-wrap: wrap;
-    /* 줄바꿈 허용 */
     gap: 16px;
-    /* 블록 간격 */
     align-items: flex-start;
-    /* 상단 정렬 */
     justify-content: space-between;
     overflow-anchor: none;
-    /* 새로고침 시 점프 방지 */
 
   }
 
@@ -56,17 +46,12 @@ main {
     max-width: 100%;
   }
 
-  /* 제목 */
-
-
+  
   .result_admin p {
     font-size: 32px;
     font-weight: bold;
     margin-bottom: 12px;
     text-align: left;
-
-    /* background-color: aqua; */
-
   }
 
   .scoreboard .review {
@@ -270,7 +255,6 @@ main {
 
   .teamA_pitcher_result tr:first-child td:first-child,
   .teamB_pitcher_result tr:first-child td:first-child {
-    /* background-color: rebeccapurple; */
     width: 100px;
   }
 

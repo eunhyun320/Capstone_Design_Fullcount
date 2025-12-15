@@ -14,15 +14,12 @@ body {
 /* PC 버전 */
 @media (min-width: 769px) {
 
-
   main {
     margin: 0 235px;
-    /* background-color: red; */
     height: auto;
   }
 
   .line1_rules {
-    /* margin-top: 10px; */
     border-top: 3px solid #000080;
     margin-bottom: 10px;
 
@@ -30,7 +27,6 @@ body {
   
   .rules_title {
     margin-top: 30px;
-    /* background-color: antiquewhite; */
   }
 
   .rules_title p {
@@ -43,25 +39,21 @@ body {
 
   .rules_gicho {
     margin-top: 30px;
-    /* background-color: wheat; */
   }
 
   .rules_gicho p:first-child {
     font-size: 25px;
     font-weight: bold;
-    /* background-color: blueviolet; */
     padding-bottom: 10px;
   }
 
   .rules_gicho p:last-child {
-    /* font-weight: bold; */
     font-size: 20px;
   }
 
 
 
   .rules_list {
-    /* background-color: aqua; */
     margin-top: 50px;
     font-size: 20px;
     margin-bottom: 30px;
@@ -70,13 +62,11 @@ body {
   .rules_list p {
     font-size: 25px;
     font-weight: bold;
-    /* background-color: aquamarine; */
     margin-bottom: 10px;
   }
 
   .rules_list ul {
     margin-left: 30px;
-    /* font-weight: bold; */
     font-size: 20px;
   }
 
@@ -91,7 +81,6 @@ body {
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 10px;
-    /* background-color: aqua; */
     width: 100%;
   }
 
@@ -99,7 +88,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* 세로 중앙 */
     gap: 20px;
     flex-wrap: wrap;
 
@@ -107,8 +95,6 @@ body {
 
   .field_img {
     flex: 1 1 40%;
-    /* 너비 비율 (40%) */
-    /* background-color: aquamarine; */
     position: relative;
     aspect-ratio: 1/1;
   }
@@ -116,7 +102,6 @@ body {
   .field_img img {
     width: 100%;
     height: auto;
-    /* object-fit: cover;   */
     position: absolute;
     inset: 0;
 
@@ -126,8 +111,6 @@ body {
 
   .field_info {
     flex: 1 1 40%;
-    /* 너비 비율 (50%) */
-    /* background-color: aquamarine; */
   }
 
   .field_info table {
@@ -155,22 +138,18 @@ body {
 @media (max-width: 768px) {
   main {
     margin: 0 20px;
-    /* background-color: red; */
     height: auto;
   }
 
-  
-
   .rules_title {
     margin-top: 20px;
-    /* background-color: antiquewhite; */
   }
 
   .line1_rules {
     
     border-top: 3px solid #000080;
-    width: 100%;          /* 부모 영역 가득 */
-    display: block;        /* 혹시 inline이면 표시 안 될 수 있음 */
+    width: 100%;         
+    display: block;       
     height: 0;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -192,18 +171,14 @@ body {
   .rules_gicho p:first-child {
     font-size: 25px;
     font-weight: bold;
-    /* background-color: blueviolet; */
-    /* padding-bottom: 10px; */
   }
 
   .rules_gicho p:last-child {
-    /* font-weight: bold; */
     font-size: 16px;
   }
 
 
   .rules_list {
-    /* background-color: aqua; */
     margin-top: 40px;
     font-size: 22px;
     margin-bottom: 30px;
@@ -211,18 +186,14 @@ body {
 
   .rules_list p {
     font-size: 25px;
-    font-weight: bold;
-    /* background-color: aquamarine; */
-    /* margin-bottom: 10px; */
+    font-weight: bold; 
   }
 
   .rules_list ul {
     margin-left: 20px;
-    /* font-weight: bold; */
     font-size: 16px;
     
   }
-
 
   .rules_position {
     margin-top: 40px;
@@ -232,26 +203,17 @@ body {
   .rules_position>.position_text {
     font-size: 25px;
     font-weight: bold;
-    /* margin-bottom: 10px; */
-    /* background-color: aqua; */
     width: 100%;
   }
 
 
-
-
-
   /*사진, 표 */
   .field_all {
-    
     justify-content: center;
     align-items: center;
-    /* 세로 중앙 */
-    
   }
 
   .field_img {
-    /* background-color: blue; */
     width: 100%;
     display: block;
     
@@ -260,23 +222,13 @@ body {
   .field_img img {
     width: 100%;
     height: auto;
-    /* object-fit: cover;   */
-    
-
-    
     display: block;
   }
-
-  /* .field_info {
-    
-    /* background-color: aquamarine; 
-  } */
 
   .field_info table {
     width: 100%;
     border-collapse: collapse;
     font-size: 16px;
-    
   }
 
   .field_info td {

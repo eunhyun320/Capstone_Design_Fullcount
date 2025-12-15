@@ -29,28 +29,22 @@ main.support-page .line1 {
 main.support-page .munhee {
     font-size: 28px;
     font-weight: bold;
-    /* margin: 0 0 10px; */
     margin-top: 30px;
     margin-bottom: 10px;
-    /* 좌측 정렬이므로 좌우 auto 제거 */
     display: block;
     width: auto;
-    /* fit-content 제거 */
     text-align: left;
-    /* 좌측 정렬 */
 }
 
 /* 안내 문단(불릿/들여쓰기 전역 영향 차단) */
 main.support-page ul {
     max-width: 900px;
     margin: 8px 0 22px;
-    /* 좌측 정렬: 좌우 auto 제거 */
     padding: 0;
     list-style: none;
     color: #555;
     line-height: 1.6;
     text-align: left;
-    /* 문단 좌정렬 고정 */
 }
 
 
@@ -59,11 +53,8 @@ main.support-page .container {
     display: flex;
     gap: 30px;
     justify-content: center;
-    /* 카드 내부 정렬 */
     width: fit-content;
-    /* 카드 묶음 너비만큼만 */
     margin: 20px auto 40px;
-    /* 묶음 자체를 화면 중앙 */
 }
 
 main.support-page .container a {
@@ -126,7 +117,6 @@ main.support-page .faq-question {
     font-weight: 500;
     color: #333;
     min-height: 48px;
-    /* 터치 영역 확보 */
     gap: 8px;
 }
 
@@ -153,7 +143,6 @@ main.support-page .faq-item.open .faq-answer {
 }
 
 /* ================== 반응형 ================== */
-/* 태블릿 이하 (<=768px) */
 @media (max-width: 768px) {
     :root {
         --header-h: 70px;
@@ -179,7 +168,6 @@ main.support-page .faq-item.open .faq-answer {
         gap: 10px;
         margin: 16px 0 28px;
         width: 100%;
-        /* fit-content 해제 */
     }
     
 
@@ -233,7 +221,7 @@ main.support-page .faq-item.open .faq-answer {
     }
 }
 
-/* 작은 모바일(<=400px) */
+/* 작은 모바일 */
 @media (max-width: 400px) {
     main.support-page {
         margin: 0 auto;

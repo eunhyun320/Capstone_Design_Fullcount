@@ -137,7 +137,6 @@
   padding: 0;
   background: transparent;
   overflow: auto;             /* 가로 스크롤 허용 */
-  /* z-index: 21; */
 }
 
 /* 정사각형 칩 */

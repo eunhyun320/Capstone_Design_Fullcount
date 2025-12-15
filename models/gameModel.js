@@ -109,7 +109,7 @@ exports.getGameDetailsById = async (scheduleId) => {
             gp.game_id AS page_id
         FROM game_schedule_list g
         LEFT JOIN game_page gp 
-            ON gp.game_id = g.id   -- ✅ 날짜 + 팀 매칭 제거, id로 단일 연결
+            ON gp.game_id = g.id   -- 날짜 + 팀 매칭 제거, id로 단일 연결
         WHERE g.id = ?
         LIMIT 1;
     `;
@@ -154,7 +154,7 @@ exports.getLineup = async (gameId, teamId) => {
     return pool.query(sql, [gameId, teamId]);
 };
 
-// 캘린더 - 검색용 키워드 추가 - 개발 완료 시 지울 예정
+// 캘린더 - 검색용 키워드 추가 
 exports.getSchedules = async (month) => {
     const sql = `
         SELECT
@@ -294,9 +294,9 @@ exports.findGameByDate = async (date) => {
 };
 
 
-/*1117 */
 
-// 🔹 id로 game_date 가져오기
+
+// id로 game_date 가져오기
 exports.findGameDateById = async (id) => {
     const sql = `
     SELECT game_date 
@@ -307,7 +307,7 @@ exports.findGameDateById = async (id) => {
     return rows[0] || null;
 };
 
-// 🔹 game_date 기준 이전/다음 경기 찾기
+// game_date 기준 이전/다음 경기 찾기
 exports.findPrevNextByDate = async (gameDate) => {
     // 이전 경기 (가장 가까운 과거)
     const prevSql = `

@@ -1,4 +1,4 @@
-// common/db.js (최종본)  // ← 파일명/폴더명은 너가 쓴 소문자 기준
+// common/db.js ← 파일명/폴더명은 소문자 기준
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 
@@ -25,14 +25,14 @@ const serverCfg = {
   queueLimit: 0,
 };
 
-// // APP_DB_TARGET=server 면 서버 DB, 아니면 로컬
+// APP_DB_TARGET=server 면 서버 DB, 아니면 로컬
 const target = (process.env.APP_DB_TARGET || 'local').toLowerCase();
 const cfg = target === 'server' ? serverCfg : localCfg;
 
-// // promise 기반 풀 생성
+// promise 기반 풀 생성
 const pool = mysql.createPool(cfg);
 
-// // 선택: 부팅 로그
+// 선택: 부팅 로그
 pool
   .query('SELECT DATABASE() AS db, @@hostname AS host, @@port AS port')
   .then(([rows]) => {
@@ -43,8 +43,7 @@ pool
     console.error('[DB] 연결 실패', e.message);
   });
 
-// // ✅ 이걸 그대로 export 하면 require('../common/db') 가
-// // 바로 pool 객체를 받고, pool.query(...) 사용 가능
+
 module.exports = pool;
 
 

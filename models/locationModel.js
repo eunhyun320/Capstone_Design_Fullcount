@@ -2,7 +2,7 @@
 const { allPoiData } = require('../Data/poiData');
 
 /**
- * 🏟️ POI 마커 데이터 (DB 대체용: 메모리 배열 사용)
+ * POI 마커 데이터 (DB 대체용: 메모리 배열 사용)
  * - NOTE: 프론트엔드에서 예상하는 필드 이름으로 데이터를 매핑합니다.
  */
 

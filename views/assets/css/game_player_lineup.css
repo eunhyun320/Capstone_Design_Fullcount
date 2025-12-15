@@ -1,16 +1,10 @@
 /* 공통 */
-/* .lineup-wrapper {
-  width: min(1100px, 96%);
-  margin: 20px auto 60px;
-  font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
-  color: #222;
-} */
+
 
 .lineup-title {
   text-align: center;
   font-size: 20px;
   font-weight: 800;
-  /* margin-bottom: 12px; */
   margin-top: 30px;
 }
 
@@ -61,12 +55,10 @@
   align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
-  /* 데스크톱에서도 줄바꿈 허용 */
 }
 
 .lineup-team {
   flex: 1 1 420px;
-  /* 넓으면 2열, 좁으면 1열 */
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
@@ -83,9 +75,7 @@
   font-size: 17px;
   text-align: center;
   margin: 0;
-  /* h2 기본 margin 제거 */
   border-radius: 12px 12px 0 0;
-  /* 위쪽 모서리만 둥글게 */
 }
 
 /* 표 래퍼: 작은 화면에서 가로 스크롤 허용 */
@@ -94,7 +84,6 @@
   border-collapse: collapse;
   table-layout: fixed;
   border-radius: 0;
-  /* 테이블 자체 둥근 모서리 제거 */
 }
 
 .lineup-team thead th {
@@ -208,7 +197,6 @@
   }
 
   .lineup-wrapper {
-    /* width: min(1100px, 96%); */
     margin: 20px 20px 20px 20px;
     font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
     color: #222;
@@ -219,18 +207,9 @@
 /* --------- 큰 화면(데스크톱) --------- */
 @media (min-width: 769px) {
 
-  
-  
   .lineup-wrapper {
-    /* width: min(1100px, 96%); */
-    /* margin-left: 50px; */
-    /* margin: 20px auto 60px; */
-    /* margin: 20px 20px; */
     font-family: "Pretendard", "Noto Sans KR", system-ui, -apple-system, sans-serif;
     color: #222;
-    /* margin: 0 auto; */
-    /* background-color: green; */
-    /* max-width: 1100px;    */
     margin: 0 auto;
     margin: 0 235px;
   }
@@ -280,7 +259,6 @@
     flex-wrap: nowrap;
     align-items: flex-start;
     gap: 40px;
-    /* background-color: blue; */
     width: min(1100px, 96%);
     margin: 0 auto;
     margin-top: 20px;
@@ -294,6 +272,5 @@
     color: #0B3D91;
     margin: 0 20px;
     margin-top: 60px;
-    /* 로고 공간만큼 아래로 */
   }
 }

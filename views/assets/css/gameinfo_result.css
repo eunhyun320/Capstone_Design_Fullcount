@@ -7,13 +7,6 @@
   box-sizing: border-box;
 }
 
-/* 전역 변수 */
-/* :root {
-   헤더 높이 
-  --header-height: 100px;  
-  /* 스코어보드 상단 Team 칸 전체 폭 */
-/* --team-width: 250px;      
-} */
 
 /* 메인 구조 */
 main {
@@ -23,37 +16,7 @@ main {
 
 
 
-/* 스코어보드 전체 */
-/* .scoreboard {
-  margin: 0 200px;          /* 좌우 여백 고정 
-  padding: 20px 24px;       /* 내부 여백 
-  border-radius: 8px;
-  min-height: 100px;
-  display: flex;
-  flex-wrap: wrap;          /* 줄바꿈 허용 
-  gap: 16px;                /* 블록 간격 
-  align-items: flex-start;  /* 상단 정렬 
-  justify-content: space-between;
-  overflow-anchor: none;    /* 새로고침 시 점프 방지 
-  text-align: center;
-} */
 
-/* 상단 텍스트/표 블록은 한 줄 전체 차지 */
-/* .scoreboard > .result,
-.scoreboard > .result_table,
-.scoreboard > .result_table_bottom {
-  flex: 1 1 100%;
-  max-width: 100%;
-}
-
-/* 제목 */
-/* .result p { */
-/* font-size: 32px; */
-/* font-weight: bold; */
-/* margin-bottom: 12px; 
-  text-align: left;
-  background-color: red;
-} */
 
 /* =========================
    1. 상단 스코어 테이블
@@ -261,7 +224,7 @@ main {
    반응형
    ========================= */
 
-/* ✅ PC 버전 (≥769px) */
+/* PC 버전 (≥769px) */
 @media (min-width: 769px) {
   .scoreboard {
     max-width: 1280px;
@@ -308,21 +271,12 @@ main {
   .date_review_group {
     display: flex;
     flex-direction: column;
-    /* 세로 스택 */
-    /* gap: 12px; */
-    /* 블록 사이 간격 */
     width: 100%;
-
-    /* 부모가 flex(row)일 때 한 줄 전체 확보 */
     flex: 1 1 100%;
     max-width: 100%;
-
-    /* 부모가 grid일 때 한 줄 전체 확보 */
     grid-column: 1 / -1;
-
   }
 
-  /*1117*/
   .result_date {
     text-align: center;
     display: flex;
@@ -350,10 +304,6 @@ main {
   }
 
   .result {
-    /* font-size: 32px; */
-    /* font-weight: bold; */
-    /* background-color: red; */
-    /* margin-left: -15px; */
     width: calc(100% + 15px);
   }
 
@@ -365,7 +315,6 @@ main {
 
   }
 
-  /*1116*/
   /* 오른쪽 정렬용 래퍼 */
   .select_date {
     position: relative;
@@ -388,7 +337,6 @@ main {
     padding: 0;
     cursor: pointer;
 
-    /* 클릭은 뒤의 input이 받게 하기 위해 이벤트 무시 */
     pointer-events: none;
   }
 
@@ -405,14 +353,12 @@ main {
     height: 100%;
 
     opacity: 0;
-    /* 보이지 않음 */
     border: none;
     background: transparent;
     margin: 0;
     padding: 0;
     cursor: pointer;
 
-    /* 중요! 브라우저 기본 스타일도 숨겨야 함 */
     appearance: none;
     -webkit-appearance: none;
   }
@@ -427,7 +373,7 @@ main {
 
 
 
-/* ✅ 모바일 버전 (≤768px) */
+/* 모바일 버전 (≤768px) */
 @media (max-width: 768px) {
   main {
     padding-top: 0;
@@ -437,15 +383,11 @@ main {
     margin-top: 5px;
     border-top: 3px solid #000080;
     width: 100%;
-    /* 부모 영역 가득 */
     display: block;
-    /* 혹시 inline이면 표시 안 될 수 있음 */
     height: 0;
-
   }
 
 
-  /*1117*/
   .result_date {
     display: flex;
     align-items: center;
@@ -477,7 +419,6 @@ main {
     font-weight: 600;
     cursor: pointer;
 
-    /* 모바일 기본 버튼 제거 */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -594,29 +535,22 @@ main {
     font-size: 13px;
   }
 
-  /* .result_table_bottom tr td:first-child {
-    width: 160px;
-  } */
+ 
   .result_table_bottom table td:first-child {
     width: 80px;
-    /* 원하는 만큼 줄이기 */
     white-space: nowrap;
-    /* 줄바꿈 방지 */
   }
 
   .result_table_bottom table td:last-child {
     width: auto;
-    /* 나머지 칸은 자동으로 채움 */
   }
 
   .teamA_pitcher_result table td:first-child,
   .teamB_pitcher_result table td:first-child {
-    /* background-color: red; */
     width: 70px;
   }
 
-  /*1116*/
-
+ 
   .date_review_group {
     display: flex;
     flex-direction: column;
@@ -644,7 +578,6 @@ main {
     padding: 0;
     cursor: pointer;
 
-    /* 클릭은 뒤의 input이 받게 하기 위해 이벤트 무시 */
     pointer-events: none;
   }
 
@@ -653,7 +586,6 @@ main {
     color: #000;
   }
 
-  /* 🔥 진짜 input: 완전히 숨기고 클릭만 받도록 */
   .calendar_input {
     position: absolute;
     inset: 0;
@@ -661,14 +593,11 @@ main {
     height: 100%;
 
     opacity: 0;
-    /* 보이지 않음 */
     border: none;
     background: transparent;
     margin: 0;
     padding: 0;
     cursor: pointer;
-
-    /* 중요! 브라우저 기본 스타일도 숨겨야 함 */
     appearance: none;
     -webkit-appearance: none;
   }

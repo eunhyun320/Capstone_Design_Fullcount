@@ -1,7 +1,6 @@
 /* ================================
-   플로팅 챗봇 CSS (최종본)
+   플로팅 챗봇 CSS 
    - 도킹형 모달 기준
-   - 기본 여백 10px 유지
    ================================ */
 
 :root {
@@ -219,7 +218,7 @@
   border-bottom-left-radius: 6px;
 }
 
-/* ========== (선택) 봇 아바타/버블을 쓰는 메인 DOM과 호환 ========== */
+/* ========== 봇 아바타/버블을 쓰는 메인 DOM과 호환 ========== */
 /* 메인 챗이 .fc-row/.fc-bubble/.fc-avatar 구조일 때도 자연스럽게 보이도록 */
 .fc-row {
   display: flex;
@@ -314,7 +313,6 @@
     height: 60px;
   }
 
-  /*1115*/
   /* 도킹형 모달 모바일 최적화 */
   .modal.dock .modal__dialog {
     right: 8px;
@@ -329,8 +327,6 @@
     width: calc(100vw - 16px);
     margin: 4vh auto 0;
   }
-
-  /* 채팅 로그 높이 조정 */
 
 
 
@@ -391,19 +387,14 @@
   /*1115*/
   .modal__body {
     padding: 14px;
-    /* height: 80vh;  ← 이 줄 삭제 */
-
     /* 헤더 + 푸터 만큼 빼고 최대 높이만 제한 */
     max-height: calc(65vh - 120px);
-    /* 숫자 120px은 헤더+푸터 합친 대략 높이, 필요하면 100~140 사이로 조정 */
-
     overflow-y: auto;
     /* 내용이 넘치면 안에서 스크롤 */
   }
 
   .chat-log {
     height: calc(45vh - 70px) !important;
-
     padding: 8px;
     gap: 8px;
   }
@@ -411,11 +402,8 @@
   /* 도킹형에서 배경 블러 */
   .modal.dock .modal__backdrop {
     display: block;
-    /* 숨기지 말고 보여주기 */
     background: rgba(0, 0, 0, 0.15);
-    /* 살짝 어두운 얇은 레이어 */
     backdrop-filter: blur(4px);
-    /* 배경 블러 */
     -webkit-backdrop-filter: blur(4px);
     /* iOS/Safari용 */
   }

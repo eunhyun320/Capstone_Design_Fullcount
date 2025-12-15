@@ -121,8 +121,8 @@ body {
 }
 
 .back a:hover {
-    color: #333; /* 호버 시에도 동일한 색상 유지 */
-    background-color: #ededed; /* 호버 시 배경색만 변경 */
+    color: #333; 
+    background-color: #ededed; 
 }
 
 /* 반응형 */

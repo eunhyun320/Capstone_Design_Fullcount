@@ -168,7 +168,7 @@
             console.log("----------------------------");
 
             const { game } = data; // 'data'에서 'game' 객체를 비구조화
-            // --- ★ 데이터가 존재하면 무조건 경기 종료로 간주 (200 OK) ★ ---
+            // --- 데이터가 존재하면 무조건 경기 종료로 간주 (200 OK) ---
             // const { game } = await response.json();
 
             statusChip.textContent = '경기 종료';
@@ -203,7 +203,7 @@
                 cardScheduled.style.display = 'block';
                 cardScheduled.classList.add('card-height-scheduled');
                 resultHeader.classList.add('status-scheduled');
-                return; // ✅ 예정 경기니까 여기서 끝
+                return; // 예정 경기니까 여기서 끝
             } else {
                 cardNoGame.style.display = 'block';
                 statusChip.textContent = '경기 정보 없음';
@@ -243,7 +243,7 @@
         alert("경기 정보를 가져오는 중 오류가 발생했습니다.");
     }
 };
-            // finishedHomePitcherContainer.innerHTML = '';
+        
 
             // 투수 정보 바인딩: 실제 DB 데이터(game.win_pitcher, game.lose_pitcher, game.save_pitcher) 사용
             finishedAwayPitcherContainer.innerHTML = ''; // 초기화

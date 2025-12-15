@@ -370,9 +370,9 @@ exports.getGameByDate = async (req, res) => {
 
 
 
-    // /game/details?gameId=123 요청을 처리합니다.
+    // /game/details?gameId=123 요청을 처리
     exports.getGameDetails = async (req, res) => {
-      // 쿼리 파라미터에서 gameId를 추출합니다. (예: /game/details?gameId=123)
+      // 쿼리 파라미터에서 gameId를 추출 (예: /game/details?gameId=123)
       const gameId = req.query.gameId;
 
       if (!gameId) {
@@ -382,7 +382,7 @@ exports.getGameByDate = async (req, res) => {
 
       try {
         // gameModel에서 해당 ID의 상세 데이터를 조회하는 함수 호출
-        // 이 함수는 gameModel에 정의되어 있어야 합니다.
+        // 이 함수는 gameModel에 정의되어 있어야 함
         const details = await gameModel.getGameDetailsById(gameId);
 
         if (!details) {
@@ -419,7 +419,7 @@ exports.getGameByDate = async (req, res) => {
   }
 };
 exports.getGameDetails = async (req, res) => {
-  // 쿼리 파라미터에서 gameId를 추출합니다. (예: /game/details?gameId=123)
+  // 쿼리 파라미터에서 gameId를 추출 (예: /game/details?gameId=123)
   const gameId = req.query.gameId;
 
   if (!gameId) {
@@ -429,7 +429,7 @@ exports.getGameDetails = async (req, res) => {
 
   try {
     // gameModel에서 해당 ID의 상세 데이터를 조회하는 함수 호출
-    // 이 함수는 gameModel에 정의되어 있어야 합니다.
+    // 함수는 gameModel에 정의되어 있어야 함
     const details = await gameModel.getGameDetailsById(gameId);
 
     if (!details) {
@@ -437,8 +437,7 @@ exports.getGameDetails = async (req, res) => {
       return res.status(404).send('해당 경기의 상세 정보를 찾을 수 없습니다.');
     }
 
-    // TODO: 상세 페이지를 렌더링하거나 (HTML 응답), JSON으로 상세 데이터를 반환합니다 (API 응답).
-    // 현재 라우트는 API (router.get('/game/details', ...))로 등록되어 있을 가능성이 높으므로 JSON 응답을 유지합니다.
+  
     res.json({ gameId: gameId, details: details });
 
   } catch (error) {
@@ -476,8 +475,6 @@ exports.getGameIdByDate = async (req, res) => {
 
 
 // 날짜로 경기 검색 (GET /game/findByDate)
-// controllers/gameController.js
-
 
 exports.findByDate = async (req, res) => {
   const { date } = req.query;
@@ -506,7 +503,7 @@ exports.findByDate = async (req, res) => {
   }
 };
 
-/*1117 */
+
 exports.getNavById = async (req, res) => {
   const { id } = req.params;
 
@@ -517,7 +514,7 @@ exports.getNavById = async (req, res) => {
       return res.status(404).json({ success: false, message: 'game not found' });
     }
 
-    const gameDate = game.game_date; // Date 객체든 문자열이든 그대로 넘겨도 됨 (MySQL)
+    const gameDate = game.game_date; // Date 객체든 문자열이든 그대로 넘겨도 됨 
 
     // 2) 이전/다음 경기 찾기
     const nav = await gameModel.findPrevNextByDate(gameDate);

@@ -45,14 +45,13 @@ exports.getMessage = async (req, res) => {
       const P_text = P_resp.data.choices[0].message?.content || '';
       const P_content = P_extractJson(P_text);
       if (!P_content) {
-        // 개발 중: 원문 일부를 보여주어 왜 실패했는지 바로 확인
+        // 개발 중 원문 일부를 보여주어 왜 실패했는지 바로 확인
         return P_sendResponse(res, 500, 'LLM API Response Error: Code(3)', {
           sample: P_text.slice(0, 400)
         });
       }
 
 
-      // TTS는 PHP에서도 주석 처리되어 있어 동일하게 비활성(원하면 services에서 enable)
       P_content.audio_url = '';
 
       const P_messagesLog = [
